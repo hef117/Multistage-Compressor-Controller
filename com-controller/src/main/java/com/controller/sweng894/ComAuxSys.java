@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ComAuxSys {
 	// Interface to the Compressor controller -- is the client should pass sensor
-	// parameters to detects alarms.
+	// parameters to detects alarms  .
 
 	
 		void detectAlarm();
