@@ -13,31 +13,44 @@ public interface ComAuxSys {
 	}
 	
 //==========compressor composite systems===============================================================//
-	// composite implementing the compressor controller interface
 	class Compsite implements ComAuxSys {
-
-		List<ComAuxSys> auxsystems = new ArrayList<>();
-
-		// add the the first aux system
-		public void addcomponent(Compsite Auxcooling) {
-			auxsystems.add(Auxcooling);
-
-		}
+		
+		
+		private List<ComAuxSys> auxsystems = new ArrayList<ComAuxSys>();
 
 		@Override
-		public void detectAlarm() {
-
+		public void detectAlarm() 
+		{
+			// 
+              for(ComAuxSys c :auxsystems) {
+            	  System.out.println(c);
+		        c.detectAlarm();
+				}
 		}
+		// add the the aux system
+		public void addsys(ComAuxSys c) {
+			
+			auxsystems.add(c);
+		}
+		
+		
 
+		
 		@Override
 		public void detectPermssive() {
-			// TODO Auto-generated method stub
+	//		TODO Auto-generated method stub
 			
-		}            
-	}
+		}
+		
+		
+		}
+
+           
+	
+
 //======================================Compressor vibration alarm leaf=======================================//
 	//The compressor Vibration Alarms module is considered a leaf object since it has no final elements
-	class AuxVibAlarm implements ComAuxSys {
+	class HighAlarm implements ComAuxSys {
 		
 		private String SensorTag;// vibration sensor tag number/compressor stage 
 		private int VT; // Vibration Sensor reading 
@@ -46,7 +59,7 @@ public interface ComAuxSys {
 		private int VT_STAT; // sensor integrity status;
 		private String ALM_DSCRIP; // Annunciator alarm description 
 
-		public AuxVibAlarm (String SensorTag, int VT, int VSH, int VAH, int VT_STAT, String ALM_DSCRIP) {
+		public HighAlarm (String SensorTag, int VT, int VSH, int VAH, int VT_STAT, String ALM_DSCRIP) {
 			this.SensorTag = SensorTag;
 			this.VT = VT;
 			this.VSH = VSH;
@@ -56,31 +69,33 @@ public interface ComAuxSys {
 		}
 
 		@Override
-		public void detectAlarm() {
+		public void detectAlarm( ) {
 			//System.out.println(VT + " " + VSH + " " + VAH + " " + VT_STAT + " " + ALM_DSCRIP + " ");
 
-			{
-				if (VT_STAT == 1 && VT > VSH) {
-					ALM_DSCRIP = "Hi vibration alarm";
+			
+				if (VT_STAT == 1 && VT >= VSH) {
+					ALM_DSCRIP = "High alarm";
 					VAH = 1;
-					System.out.println(SensorTag+" "+"Hi vibration alarm detected");
-					if (VT_STAT != 1) {
-						ALM_DSCRIP = SensorTag+" "+("SensorTag Sensor problem ");
 					}
-				} else
-					System.out.println("No alarm ");
-			}
-
+				else if (VT_STAT !=1) {
+						ALM_DSCRIP = "Sensor problem call Tech ";}
+				else if (VT_STAT ==1 && VT<VSH) {
+					 ALM_DSCRIP = "NO ALARM";
+					 VAH = 0;
+					}
+				System.out.println(SensorTag+" "+ALM_DSCRIP);
+				System.out.println (SensorTag+" "+"Alarm Status ="+VAH) ;
 		}
-		
+				
+	
 		@Override
 		public void detectPermssive(){}
 	}
 		
- 
+	
 //=================================The compressor Vibration Permissives leaf============================//
 		
-		//The compressor Vibration Alarms module is considered a leaf object since it has no final elements
+		//The compressor Vibration permissive  module is considered a leaf object since it has no other elements 
 		class AuxVibPermissive  implements ComAuxSys {
 			
 			private String SensorTag;// vibration sensor tag number/compressor stage 
@@ -99,20 +114,21 @@ public interface ComAuxSys {
 
 			@Override
 			public void detectPermssive () {
-				//System.out.println(SensorTag + " " + VT_STAT + " " + VPH + " " + C_STAT + " " + PERM_DSCRIP + " ");
+				// When the machine is not running, check each vibration sensors transmitter status,
+				// Set VPH to high to prevent the machine from running until the sensor is fixed. 
+				// Do not trip the machine if the machine is running and the sensor goes bad - the alarm logic will set the alarm. 
 
 				{
 					if (C_STAT == 0 && VT_STAT !=1 ) {
 						PERM_DSCRIP = "Permissive not granted check sensor ";
 						VPH = 1;
-						System.out.println(SensorTag+" "+PERM_DSCRIP);
 						}
 					
 					else
 						PERM_DSCRIP = "Permissive granted";
-					    System.out.println(SensorTag+" "+PERM_DSCRIP);
 				}
-
+				System.out.println(SensorTag+" "+PERM_DSCRIP);
+				System.out.println(SensorTag+" "+"PERMISSIVE  STATUS =" + VPH );
 			}
 
 			@Override
