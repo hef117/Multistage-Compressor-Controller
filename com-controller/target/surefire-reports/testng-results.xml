@@ -2,35 +2,35 @@
 <testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2022-06-12T19:36:47 CDT" name="Surefire suite" finished-at="2022-06-12T19:36:47 CDT" duration-ms="56">
+  <suite started-at="2022-06-14T13:51:10 CDT" name="Surefire suite" finished-at="2022-06-14T13:51:10 CDT" duration-ms="58">
     <groups>
     </groups>
-    <test started-at="2022-06-12T19:36:47 CDT" name="Surefire test" finished-at="2022-06-12T19:36:47 CDT" duration-ms="56">
+    <test started-at="2022-06-14T13:51:10 CDT" name="Surefire test" finished-at="2022-06-14T13:51:10 CDT" duration-ms="58">
       <class name="com.controller.sweng894.ComControllerTest">
-        <test-method signature="AuxOilsystemHighalarms1()" started-at="2022-06-12T19:36:47 CDT" name="AuxOilsystemHighalarms1" finished-at="2022-06-12T19:36:47 CDT" duration-ms="8" status="PASS">
+        <test-method signature="AuxOilsystemHighalarms1()" started-at="2022-06-14T13:51:10 CDT" name="AuxOilsystemHighalarms1" finished-at="2022-06-14T13:51:10 CDT" duration-ms="8" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- AuxOilsystemHighalarms1 -->
-        <test-method signature="comDischargeHighalarms1()" started-at="2022-06-12T19:36:47 CDT" name="comDischargeHighalarms1" finished-at="2022-06-12T19:36:47 CDT" duration-ms="8" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- comDischargeHighalarms1 -->
-        <test-method signature="vibpermissive()" started-at="2022-06-12T19:36:47 CDT" name="vibpermissive" finished-at="2022-06-12T19:36:47 CDT" duration-ms="8" status="PASS">
+        <test-method signature="vibpermissive()" started-at="2022-06-14T13:51:10 CDT" name="vibpermissive" finished-at="2022-06-14T13:51:10 CDT" duration-ms="8" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- vibpermissive -->
-        <test-method signature="comSuctionHighalarms1()" started-at="2022-06-12T19:36:47 CDT" name="comSuctionHighalarms1" finished-at="2022-06-12T19:36:47 CDT" duration-ms="9" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- comSuctionHighalarms1 -->
-        <test-method signature="AuxcoolingHighalarms1()" started-at="2022-06-12T19:36:47 CDT" name="AuxcoolingHighalarms1" finished-at="2022-06-12T19:36:47 CDT" duration-ms="8" status="PASS">
+        <test-method signature="AuxcoolingHighalarms1()" started-at="2022-06-14T13:51:10 CDT" name="AuxcoolingHighalarms1" finished-at="2022-06-14T13:51:10 CDT" duration-ms="9" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- AuxcoolingHighalarms1 -->
-        <test-method signature="vibalarm()" started-at="2022-06-12T19:36:47 CDT" name="vibalarm" finished-at="2022-06-12T19:36:47 CDT" duration-ms="8" status="PASS">
+        <test-method signature="comDischargeHighalarms1()" started-at="2022-06-14T13:51:10 CDT" name="comDischargeHighalarms1" finished-at="2022-06-14T13:51:10 CDT" duration-ms="8" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- comDischargeHighalarms1 -->
+        <test-method signature="vibalarm()" started-at="2022-06-14T13:51:10 CDT" name="vibalarm" finished-at="2022-06-14T13:51:10 CDT" duration-ms="10" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- vibalarm -->
+        <test-method signature="comSuctionHighalarms1()" started-at="2022-06-14T13:51:10 CDT" name="comSuctionHighalarms1" finished-at="2022-06-14T13:51:10 CDT" duration-ms="9" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- comSuctionHighalarms1 -->
       </class> <!-- com.controller.sweng894.ComControllerTest -->
     </test> <!-- Surefire test -->
   </suite> <!-- Surefire suite -->

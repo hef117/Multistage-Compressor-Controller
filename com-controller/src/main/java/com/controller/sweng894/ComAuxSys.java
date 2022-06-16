@@ -8,7 +8,8 @@ public interface ComAuxSys {
 	// parameters to detects alarms  .
 
 	
-		void detectAlarm();
+		void detectHighAlarm();
+		void detectLowAlarm();
 		void detectPermssive();
 	}
 	
@@ -19,12 +20,12 @@ public interface ComAuxSys {
 		private List<ComAuxSys> auxsystems = new ArrayList<ComAuxSys>();
 
 		@Override
-		public void detectAlarm() 
+		public void detectHighAlarm() 
 		{
 			// 
               for(ComAuxSys c :auxsystems) {
             	  System.out.println(c);
-		        c.detectAlarm();
+		        c.detectHighAlarm();
 				}
 		}
 		// add the the aux system
@@ -41,57 +42,115 @@ public interface ComAuxSys {
 	//		TODO Auto-generated method stub
 			
 		}
-		
-		
+		@Override
+		public void detectLowAlarm() {
+			// TODO Auto-generated method stub
+			
 		}
-
-           
-	
-
-//======================================Compressor vibration alarm leaf=======================================//
+		
+		
+}
+//======================================Compressor High alarm leaf=======================================//
 	//The compressor Vibration Alarms module is considered a leaf object since it has no final elements
 	class HighAlarm implements ComAuxSys {
 		
 		private String SensorTag;// vibration sensor tag number/compressor stage 
-		private int VT; // Vibration Sensor reading 
-		private int VSH; // Operator alarm Set point
-		private int VAH; // Annunciator Alarm flag
-		private int VT_STAT; // sensor integrity status;
+		private int Sensor; // Vibration Sensor reading 
+		private int Sensor_SP; // Operator alarm Set point
+		private int sensor_alarm_flag; // Annunciator Alarm flag
+		private int sensor_STAT; // sensor integrity status;
 		private String ALM_DSCRIP; // Annunciator alarm description 
 
-		public HighAlarm (String SensorTag, int VT, int VSH, int VAH, int VT_STAT, String ALM_DSCRIP) {
+		public HighAlarm (String SensorTag, int Sensor, int Sensor_SP, int sensor_alarm_flag, int sensor_STAT, String ALM_DSCRIP) {
 			this.SensorTag = SensorTag;
-			this.VT = VT;
-			this.VSH = VSH;
-			this.VAH = VAH;
-			this.VT_STAT = VT_STAT;
+			this.Sensor = Sensor;
+			this.Sensor_SP = Sensor_SP;
+			this.sensor_alarm_flag = sensor_alarm_flag;
+			this.sensor_STAT = sensor_STAT;
 			this.ALM_DSCRIP = ALM_DSCRIP;
 		}
 
 		@Override
-		public void detectAlarm( ) {
+		public void detectHighAlarm( ) {
 			//System.out.println(VT + " " + VSH + " " + VAH + " " + VT_STAT + " " + ALM_DSCRIP + " ");
 
 			
-				if (VT_STAT == 1 && VT >= VSH) {
+				if (sensor_STAT == 1 && Sensor >= Sensor_SP) {
 					ALM_DSCRIP = "High alarm";
-					VAH = 1;
+					sensor_alarm_flag = 1;
 					}
-				else if (VT_STAT !=1) {
+				else if (sensor_STAT !=1) {
 						ALM_DSCRIP = "Sensor problem call Tech ";}
-				else if (VT_STAT ==1 && VT<VSH) {
+				else if (sensor_STAT ==1 && Sensor < Sensor_SP) {
 					 ALM_DSCRIP = "NO ALARM";
-					 VAH = 0;
+					 sensor_alarm_flag = 0;
 					}
 				System.out.println(SensorTag+" "+ALM_DSCRIP);
-				System.out.println (SensorTag+" "+"Alarm Status ="+VAH) ;
+				System.out.println (SensorTag+" "+"Alarm Status ="+sensor_alarm_flag) ;
 		}
 				
 	
 		@Override
 		public void detectPermssive(){}
+
+		@Override
+		public void detectLowAlarm() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
+//================================= The Compressor low alarm leaf=======================================//
+	
+//The compressor  Alarms module is considered a leaf object since it has no other task to perform expect solve the alarm logic
+	
+		class LowAlarm implements ComAuxSys {
+			
+			private String SensorTag;// sensor tag number/compressor stage 
+			private int Sensor; //  Sensor reading 
+			private int Sensor_SP; // Operator alarm Set point
+			private int sensor_alarm_flag; // Annunciator Alarm flag
+			private int sensor_STAT; // sensor integrity status;
+			private String ALM_DSCRIP; // Annunciator alarm description 
+
+			public LowAlarm (String SensorTag, int Sensor, int Sensor_SP, int sensor_alarm_flag, int sensor_STAT, String ALM_DSCRIP) {
+				this.SensorTag = SensorTag;
+				this.Sensor = Sensor;
+				this.Sensor_SP = Sensor_SP;
+				this.sensor_alarm_flag = sensor_alarm_flag;
+				this.sensor_STAT = sensor_STAT;
+				this.ALM_DSCRIP = ALM_DSCRIP;
+			}
+
+			@Override
+			public void detectLowAlarm( ) {
+				//System.out.println(VT + " " + VSH + " " + VAH + " " + VT_STAT + " " + ALM_DSCRIP + " ");
+
+				
+					if (sensor_STAT == 1 && Sensor < Sensor_SP) {
+						ALM_DSCRIP = "Low alarm";
+						sensor_alarm_flag = 1;
+						}
+					else if (sensor_STAT !=1) {
+							ALM_DSCRIP = "Sensor problem call Tech ";}
+					else if (sensor_STAT ==1 && Sensor >= Sensor_SP) {
+						 ALM_DSCRIP = "NO ALARM";
+						 sensor_alarm_flag = 0;
+						}
+					System.out.println(SensorTag+" "+ALM_DSCRIP);
+					System.out.println (SensorTag+" "+"Alarm Status ="+sensor_alarm_flag) ;
+			}
+					
 		
+			@Override
+			public void detectPermssive(){}
+
+			@Override
+			public void detectHighAlarm() {
+				// TODO Auto-generated method stub
+				
+			}
+		}
+
 	
 //=================================The compressor Vibration Permissives leaf============================//
 		
@@ -132,7 +191,13 @@ public interface ComAuxSys {
 			}
 
 			@Override
-			public void detectAlarm() {
+			public void detectHighAlarm() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void detectLowAlarm() {
 				// TODO Auto-generated method stub
 				
 			}
