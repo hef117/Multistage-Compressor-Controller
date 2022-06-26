@@ -134,4 +134,52 @@ public class ComControllerTest {
 		compsite8.addsys(auxcooling);
 		auxcooling.detectLowShutdown();
 	}
+//==============================UC-5 Compressor Drive==========//
+
+	// assert startup command
+	
+		@Test
+		public void ComDriveStart() {
+			
+			var driveStart = new ComDrive("Start The Compressor", 1,0, 1, 0,0," ");
+			//(String comRequest: Start The Compressor , Start command =1,Stop command=0, permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+			
+			int HIS500S = driveStart.comDriveStartStop();
+			assertTrue(HIS500S ==1);
+		}
+	
+	// assert shutdown command
+		@Test
+		public void ComDriveStop() {
+			
+			var driveStart = new ComDrive("Stop The Compressor", 0,1, 1, 0,0," ");
+			//(String comRequest: Start The Compressor , Start command =1,Stop command=1, permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+			
+			int HIS500S = driveStart.comDriveStartStop();
+			assertTrue(HIS500S ==0);
+		}
+		
+		@Test
+		public void ComDriveShutdown() {
+			
+			var driveStart = new ComDrive("Start The Compressor", 1,0, 1, 1,0," ");
+			//(String comRequest: Start The Compressor , Start command =1,Stop command=1, permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+			
+			int HIS500S = driveStart.comDriveStartStop();
+			assertTrue(HIS500S ==0);
+		}
+		
+		@Test
+		public void ComDrivePermssive() {
+			
+			var driveStart = new ComDrive("Start The Compressor", 1,0, 1, 0,0," ");
+			//(String comRequest: Start The Compressor , Start command =1,Stop command=1, permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+			
+			int HIS500S = driveStart.comDriveStartStop();
+			assertTrue(HIS500S !=1);
+		}
+		
+
+	
+	
 }

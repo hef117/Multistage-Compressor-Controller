@@ -2,6 +2,7 @@ package com.controller.sweng894;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public interface ComAuxSys {
 	// Interface to the Compressor controller -- is the client should pass sensor
@@ -9,10 +10,12 @@ public interface ComAuxSys {
 
 	
 		void detectHighAlarm();
+		int comDriveStartStop();
 		void detectLowAlarm();
 		void detectPermssive();
 		void detectHighShutdown();
 		void detectLowShutdown();
+		//void comdriveStartStop();
 	}
 	
 //==========compressor composite systems===============================================================//
@@ -74,6 +77,14 @@ public interface ComAuxSys {
 		public void detectPermssive() {
 	    //	TODO Auto-generated method stub
 			
+		}
+
+	
+
+		@Override
+		public int comDriveStartStop() {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 		
@@ -145,6 +156,14 @@ public interface ComAuxSys {
 			// TODO Auto-generated method stub
 			
 		}
+
+		
+
+		@Override
+		public int comDriveStartStop() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 //================================= The Compressor low alarm leaf=======================================//
 	
@@ -212,26 +231,34 @@ public interface ComAuxSys {
 				// TODO Auto-generated method stub
 				
 			}
+
+			
+
+			@Override
+			public int comDriveStartStop() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
 		}
 
 	
-//=================================The compressor Vibration Permissives leaf============================//
+//=================================The compressor Permissive leaf============================//
 		
-		//The compressor Vibration permissive  module is considered a leaf object since it has no other elements 
+		//The compressor permissive  module is considered a leaf object since it has no other elements 
 		class AuxVibPermissive  implements ComAuxSys {
 			
-			private String   SensorTag;   // sensor tag number/compressor stage 
-			private int      VPH;         // Annunciator Permissive flag
-			private int      VT_STAT;     // sensor integrity status;
+			private String   sensorTag;   // sensor tag number/compressor stage 
+			private int      sensor_permis_flag;         // Annunciator Permissive flag
+			private int      sensor_STAT;     // sensor integrity status;
 			private int      C_STAT;      // COMPRESSOR STATUS = 1 running, 0 stopped, 2 failed to stop
 			private String   PERM_DSCRIP; // Annunciator permissive description 
 
-			public  AuxVibPermissive (String SensorTag, int VT_STAT, int VPH, int C_STAT, String PERM_DSCRIP) {
-				this.SensorTag       = SensorTag;
-				this.VT_STAT         = VT_STAT;
-				this.VPH             = VPH;
-				this.C_STAT          = C_STAT;
-				this.PERM_DSCRIP     = PERM_DSCRIP;
+			public  AuxVibPermissive (String sensorTag, int sensor_STAT, int sensor_permis_flag, int C_STAT, String PERM_DSCRIP) {
+				this.sensorTag           = sensorTag;
+				this.sensor_STAT         = sensor_STAT;
+				this.sensor_permis_flag  = sensor_permis_flag;
+				this.C_STAT              = C_STAT;
+				this.PERM_DSCRIP         = PERM_DSCRIP;
 			}
 
 			@Override
@@ -240,21 +267,23 @@ public interface ComAuxSys {
 				// set VPH to high to prevent the machine from starting until the sensor is fixed. 
 				// Do not trip the machine if the machine is running and the sensor goes bad.
 				// The alarm logic will notify the operator by setting the sensor alarm flag. 
-
+				System.out.println("Input data permissive leaf:"+ sensorTag +"Sensor integrity:"+" "+sensor_STAT + " " +"Compressor Status:"+" "+C_STAT+" "+PERM_DSCRIP);
 				{
-					if (C_STAT == 0 && VT_STAT !=1 ) {
+					if (C_STAT == 0 && sensor_STAT !=1 ) {
 						PERM_DSCRIP = "Permissive not granted check sensor ";
-						VPH = 1;
-						}
+						sensor_permis_flag = 0;
+					}
 					
-					else
+					else if (C_STAT == 1|| sensor_STAT ==1 ) {
 						PERM_DSCRIP = "Permissive granted";
+					    sensor_permis_flag = 1;
 				}
-				System.out.println(SensorTag+" "+PERM_DSCRIP);
-				System.out.println(SensorTag+" "+"PERMISSIVE  STATUS =" + VPH );
+				System.out.println(sensorTag+" "+PERM_DSCRIP);
+				System.out.println(sensorTag+" "+"PERMISSIVE  STATUS =" + sensor_permis_flag);
 				System.out.println("================================");
+				}
 			}
-
+			
 			@Override
 			public void detectHighAlarm() {
 				// TODO Auto-generated method stub
@@ -277,6 +306,14 @@ public interface ComAuxSys {
 			public void detectLowShutdown() {
 				// TODO Auto-generated method stub
 				
+			}
+
+			
+
+			@Override
+			public int comDriveStartStop() {
+				// TODO Auto-generated method stub
+				return 0;
 			}
 
 		}
@@ -348,6 +385,14 @@ public interface ComAuxSys {
 				// TODO Auto-generated method stub
 				
 			}
+
+			
+
+			@Override
+			public int comDriveStartStop() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
 		}
 //========================================= Shutdown Low=====================================//
 			
@@ -418,8 +463,113 @@ public interface ComAuxSys {
 					// TODO Auto-generated method stub
 					
 				}
+
+				@Override
+				public int comDriveStartStop() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+			}
+
+//===================================Compressor Drive=====================================//
 				
+		//The compressor Low shutdown module.
+				class ComDrive implements ComAuxSys {
+					
+					private String   comRequest;// Command to  
+					private int      cmdStart; //Sensor reading 
+					private int      cmdStop; // Operator Set point
+					private int      permissClear; // Annunciator Alarm flag
+					private int      shutDwnClear; // sensor integrity status;
+					private int      C_Status;
+					private String   DriverFeedBack; // Annunciator alarm description
+					private String   cmdMessage; // Annunciator alarm description
+
+			    public ComDrive 
+			    (String comRequest, int cmdStart, int cmdStop, int permissClear, int shutDwnClear,int C_Status,String DriverFeedBack) 
+
+					{
+						this.comRequest           = comRequest;
+						this.cmdStart             = cmdStart;
+						this.cmdStop              = cmdStop;
+						this.permissClear         = permissClear;
+						this.shutDwnClear         = shutDwnClear;
+						this.C_Status             = C_Status;
+						//this.cmdMessage           = cmdMessage;
+						this.DriverFeedBack       = DriverFeedBack;
+					}
+
+			    @Override
+				public int comDriveStartStop() {
+				//System.out.println("Input data to lOW shutdown:"+  + comRequest +sensor +" "+sensor_eng+"  Setpoint: "+ sensor_SP+" "+sensor_eng+"  "+"Sensor integrity:"+" "+sensor_STAT + " " + SD_DSCRIP);	
+		
+							if (permissClear == 1 && shutDwnClear==0 && cmdStart==1) {
+								
+								C_Status=1;
+								
+								cmdMessage = "Com Driver is energized";
+		
+							}else if 
+							(shutDwnClear!= 0){
+									
+									C_Status=0;
+									
+									cmdMessage = "Com can not be started";
+							}else if 
+							(C_Status==0 && permissClear !=1){
+									
+									C_Status=0;
+									
+									cmdMessage = "Com can not be started";
+							}
+							else if 
+							(C_Status ==1&& shutDwnClear==1|| cmdStop==1) {
+                                
+								C_Status=0;
+								
+								if (shutDwnClear==1) {
+								cmdMessage = "Com Driver is de-energized - shutdown triggered";
+								} 
+								else if (cmdStop==1) {
+									cmdMessage = "Com Driver is de-energized - manual command";
+								}
+							}
+							System.out.println ("Opertor Command Drive:"+" "+comRequest);
+							System.out.println ("Compressor Driver Status:"+cmdMessage);
+							System.out.println("================================");
+							return C_Status;
+
+							
+					}
+							
+				
+					@Override
+					public void detectHighAlarm() {
+						// TODO Auto-generated method stub
+						
+					}
+					@Override
+					public void detectLowAlarm() {
+						// TODO Auto-generated method stub
+						
+					}
+					@Override
+					public void detectPermssive(){
+						// TODO Auto-generated method stub
+						
+					}
+					
+					public void detectHighShutdown(){
+						// TODO Auto-generated method stub
+						}
+
+
+					@Override
+					public void detectLowShutdown() {
+						// TODO Auto-generated method stub
+						
+					}				
+	}
 				
 
-}	
 
