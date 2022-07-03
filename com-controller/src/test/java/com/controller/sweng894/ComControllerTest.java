@@ -159,6 +159,7 @@ public class ComControllerTest {
 			assertTrue(HIS500S ==0);
 		}
 		
+		// assert shutdown event
 		@Test
 		public void ComDriveShutdown() {
 			
@@ -169,17 +170,197 @@ public class ComControllerTest {
 			assertTrue(HIS500S ==0);
 		}
 		
+		// assert permissive not okay
 		@Test
 		public void ComDrivePermssive() {
 			
-			var driveStart = new ComDrive("Start The Compressor", 1,0, 1, 0,0," ");
+			var driveStart = new ComDrive("Start The Compressor", 1,0, 0, 0,0," ");
 			//(String comRequest: Start The Compressor , Start command =1,Stop command=1, permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
 			
 			int HIS500S = driveStart.comDriveStartStop();
 			assertTrue(HIS500S !=1);
 		}
 		
+//==============================UC-4 Auxiliary System Tripped.==========//
 
+// T4.2: assert overall permissive okay word for each case  for all three stage as follows: (VPH100,VPH200,VPH300)
+				
+		@Test
+				public void ComAuxOverallPermissiveAssertion() {
+			        int permissWord=0;
+					var ComAuxStatusPermiss = new ComAuxStatus();
+				
+					//assert all 3 stages permissive okay
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(1,1,1);
+					assertTrue(permissWord ==1);
+					//assert stage-1 permissive not okay
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(0,1,1);
+					assertFalse(permissWord ==1);
+					//assert stage-1 okay and two not okay 
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(1,0,1);
+					assertFalse(permissWord ==1);
+					//assert stage-1 okay and two okay, and 3 not okay 
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(1,1,0);
+					assertFalse(permissWord ==1);	
+					//assert all three stages not okay
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(0,0,0);
+					assertFalse(permissWord ==1);
+					
+				}
 	
-	
+// T4.1 Send the trip pattern to the overall shutdown ComAuxStatus shutdown and assert the return statement shutdownword.
+				@Test
+				public void ComAuxOverallShutdownWordAssertion() {
+					int shutdownWord=0;
+					var ComAuxStatusShutdown = new ComAuxStatus();
+    
+	// All cases should set to true the overall shutdownword except the last case- it should clear the shutdown word. 
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(1,1,1,1,1,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,1,1,1,1,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,1,1,1,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,1,1,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,1,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,1,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,1,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,0,1,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,0,0,1,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,0,0,0,1,1);
+					assertFalse(shutdownWord ==0);
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,0,0,0,0,1);
+					assertFalse(shutdownWord ==0);
+				    shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0,0,0,0,0,0,0,0,0,0,0);
+				    assertTrue(shutdownWord ==0);
+				}
+
+//==================================== integrate test UC4 and UC-5===============================//				
+				@Test
+				public void ComDriveStartIngeration() {
+
+					int shutdownWord = 0;
+					// call to clear all shutdown
+					var ComAuxStatusShutdown = new ComAuxStatus();
+					shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+					assertTrue(shutdownWord == 0);
+
+					// call to clear all permissives
+					int permissWord = 0;
+					var ComAuxStatusPermiss = new ComAuxStatus();
+					permissWord = ComAuxStatusPermiss.AuxSysPermiss(1, 1, 1);
+					assertTrue(permissWord == 1);
+
+					// attempt to start the compressor
+					var driveStart = new ComDrive("Start The Compressor", 1, 0, permissWord, shutdownWord, 0, " ");
+					// (String comRequest: Start The Compressor , Start command =1,Stop command=0,
+					// permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+					// Since there is no active shutdown and all permissives are cleared the
+					// comporessor feedback should be on
+					int HIS500S = driveStart.comDriveStartStop();
+					assertTrue(HIS500S == 1);
+				}
+//==================================== integrate test UC4 and UC-5===============================//	
+				
+				@Test
+				public void ComDriveStartIngerationTripAndPermissiveDetection() {
+
+					int shutdownWord = 0;
+					int permissWord = 0;
+
+					for (int i = 0; i <= 5; i++) {
+						if (i <= 1) {
+							// call to clear all shutdown
+							var ComAuxStatusShutdown = new ComAuxStatus();
+							shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+							assertTrue(shutdownWord == 0);
+
+							// call to clear all permissives
+
+							var ComAuxStatusPermiss = new ComAuxStatus();
+							permissWord = ComAuxStatusPermiss.AuxSysPermiss(1, 1, 1);
+							assertTrue(permissWord == 1);
+
+							// attempt to start the compressor
+							var driveStart = new ComDrive("Start The Compressor", 1, 0, permissWord, shutdownWord, 0,
+									" ");
+							// (String comRequest: Start The Compressor , Start command =1,Stop command=0,
+							// permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+							// Since there is no active shutdown and all permissives are cleared the
+							// comporessor feedback should be on
+							int HIS500S = driveStart.comDriveStartStop();
+							assertTrue(HIS500S == 1);
+
+						}
+						if (i == 2) {
+							// call to clear all shutdown but PAHH2500 last word in method call
+							var ComAuxStatusShutdown = new ComAuxStatus();
+							shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+							assertTrue(shutdownWord == 1);
+
+							// attempt to start the compressor
+							var driveStart = new ComDrive("Start The Compressor", 1, 0, permissWord, shutdownWord, 0," ");
+							// (String comRequest: Start The Compressor , Start command =1,Stop command=0,
+							// permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+							// Since there is no active shutdown and all permissives are cleared the
+							// comporessor feedback should be on
+							int HIS500S = driveStart.comDriveStartStop();
+							assertFalse(HIS500S == 1);
+
+						}
+						if (i == 4) {
+							// call to clear all shutdown
+							var ComAuxStatusShutdown = new ComAuxStatus();
+							shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+							assertTrue(shutdownWord == 0);
+
+							// call to clear all permissives
+
+							var ComAuxStatusPermiss = new ComAuxStatus();
+							permissWord = ComAuxStatusPermiss.AuxSysPermiss(1, 1, 1);
+							assertTrue(permissWord == 1);
+
+							// attempt to restart the compressor
+							var driveStart = new ComDrive("Start The Compressor", 1, 0, permissWord, shutdownWord, 0,
+									" ");
+							// (String comRequest: Start The Compressor , Start command =1,Stop command=0,
+							// permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+							// Since there is no active shutdown and all permissives are cleared the
+							// comporessor feedback should be on
+							int HIS500S = driveStart.comDriveStartStop();
+							assertTrue(HIS500S == 1);
+
+						}
+						if (i == 5) {
+							// call to clear all shutdown
+							var ComAuxStatusShutdown = new ComAuxStatus();
+							shutdownWord = ComAuxStatusShutdown.AuxSysTrip(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+							assertTrue(shutdownWord == 0);
+							
+							var driveStart = new ComDrive("Start The Compressor", 1, 0, permissWord, shutdownWord, 0," ");
+							int HIS500S = driveStart.comDriveStartStop();
+							assertTrue(HIS500S == 1);
+							// call to clear all permissives
+
+							var ComAuxStatusPermiss = new ComAuxStatus();
+							permissWord = ComAuxStatusPermiss.AuxSysPermiss(1, 1, 0);
+							assertFalse(permissWord == 1);
+
+							// attempt to start the compressor
+							
+							// (String comRequest: Start The Compressor , Start command =1,Stop command=0,
+							// permissive Clear=1, int shutDwnClear,int C_Status,String DriverFeedBack
+							// Since there is no active shutdown and all permissives are cleared the
+							// comporessor feedback should be on
+							//HIS500S = driveStart.comDriveStartStop();
+							assertTrue(HIS500S == 1);
+						}
+					}				
+				}
 }
