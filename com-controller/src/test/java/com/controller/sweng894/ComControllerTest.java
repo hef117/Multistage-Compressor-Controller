@@ -53,7 +53,7 @@ public class ComControllerTest {
 
 		var compsite1 = new Compsite();
 
-		ComAuxSys auxcooling = new HighAlarm("PT100 Compressor Cooling Pressure", 1000, 500, 1, 1,"Check for high alarm", "PSIG");
+		ComAuxSys auxcooling = new HighAlarm("PT100 Compressor Cooling Pressure", 10, 500, 1, 1,"Check for high alarm", "PSIG");
 		compsite1.addsys(auxcooling);
 		auxcooling.detectHighAlarm();
 	}
@@ -363,4 +363,152 @@ public class ComControllerTest {
 						}
 					}				
 				}
-}
+	//==============================UC-6 & UC-7 Auxiliary System Alarm disabled/ Enabling Tests==============//	
+				
+				// assert comAlmStatus class unit test 
+				int[] alarmflagIN = new int[16]; // test inputs
+				int[] alarmflagOT = new int[16]; // test outputs
+				@Test
+				public void ALarmDisabledReEnabled() {
+					// UC-7 T7.1
+					alarmflagIN[0]=1;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					alarmflagIN[2]=1;// alarm low flag
+					alarmflagIN[3]=1;// alarm high flag 	
+					// assert auxiliary system alarm disabled : disable command =1,enable command =0, alarm high is present and alarm low present 
+					var alarmStatusCall = new ComAlmStatus();
+					alarmflagOT = alarmStatusCall.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]); 
+					assertTrue (alarmflagOT[0]==2);
+					assertTrue (alarmflagOT[1]==2);
+					
+					// UC-6 T6.1
+					// assert auxiliary system alarm disabled : disable command =0,enable command =1, alarm high is present and alarm low present 
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=1;// Enable command
+					alarmflagIN[2]=1;// 
+					alarmflagIN[3]=1;// 
+					alarmflagOT = alarmStatusCall.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					// assert alarms are not disabled
+					assertFalse (alarmflagOT[0]==2);
+					assertFalse (alarmflagOT[1]==2);
+					// assert the that the controller resumed forwarding the alarms values to the web portal after enable is set
+					assertTrue (alarmflagOT[0]==1);
+					assertTrue (alarmflagOT[1]==1);
+					
+					// UC-6 UC-7 T6.2 T7.2
+					// assert neither disable nor enable are set, but both alarms low & high are present
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					alarmflagIN[2]=1;// Disable Command
+					alarmflagIN[3]=1;// Enable command
+					 
+					alarmflagOT = alarmStatusCall.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					// assert neither disable command is set nor enable command is set.
+					assertFalse (alarmflagOT[0]==2);
+					assertFalse (alarmflagOT[1]==2);
+					// assert the controller resumed forwarding the current alarm value to the web portal
+					assertTrue (alarmflagOT[0]==1);
+					assertTrue (alarmflagOT[1]==1);
+					
+					// UC-6 UC-7 T6.3 T7.3
+					// assert neither alarm disable command is set, nor alarm enable command is set; and no alarms are present
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					alarmflagIN[2]=0;// low alarm flag
+					alarmflagIN[3]=0;// high alarm flag
+					 
+					alarmflagOT = alarmStatusCall.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					
+					assertFalse (alarmflagOT[0]==2);
+					assertFalse (alarmflagOT[1]==2);
+					// assert the controller resumed forwarding the current alarm value to the web portal
+					assertTrue (alarmflagOT[0]==0);
+					assertTrue (alarmflagOT[1]==0);
+					
+					// assert neither alarm disable command is set nor alarm enable command is set and an alarm low is set
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					alarmflagIN[2]=1;// low alarm flag
+					alarmflagIN[3]=0;// high alarm flag
+					 
+					alarmflagOT = alarmStatusCall.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					
+					assertFalse (alarmflagOT[0]==2);
+					assertFalse (alarmflagOT[1]==2);
+					// assert the controller resumed forwarding the current alarm value to the web portal
+					assertTrue (alarmflagOT[0]==1);
+					assertFalse (alarmflagOT[1]==1);
+				}
+///===================== Integrate UC-1 for the high alarm detected case with UC-7 alarm disabled==================================///				
+				@Test
+				public void HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator() {
+					
+					// Call the alarm routing UC-1 with alarm parameters 1000 psig and setpoint of 500 psig.
+
+
+					var compsite1 = new Compsite();
+
+					ComAuxSys auxcooling = new HighAlarm("PT100 Compressor Cooling Pressure", 1000, 500, 1, 1,"Check for high alarm", "PSIG");
+					compsite1.addsys(auxcooling);
+					alarmflagIN[3]= auxcooling.detectHighAlarm();
+					assertTrue (alarmflagIN[3]==1);// a high alarm should be set 
+					
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=1;// Enable command
+					
+					//Since alarm is enable assert that the web portal will get a value of 1 for high alarm and 0 for low alarm
+					var alarmsEnable = new ComAlmStatus();
+					alarmflagOT = alarmsEnable.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					assertFalse (alarmflagOT[0]==1);
+					assertTrue  (alarmflagOT[1]==1);
+					
+					alarmflagIN[0]=1;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					
+					//Since alarm is enable assert that the web portal will get a value of 1 for high alarm and 0 for low alarm
+					var Alarmsdisabled = new ComAlmStatus();
+					alarmflagOT = Alarmsdisabled.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					assertTrue (alarmflagOT[0]==2);
+					assertTrue  (alarmflagOT[1]==2);
+					
+				}
+///===================== Integrate UC-1 for the low alarm detected case with UC-7 alarm disabled==================================================///				
+				@Test
+				public void LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator() {
+					// Call the alarm method with low process value and high set-point to generate low alarm
+
+
+					var compsite1 = new Compsite();
+
+					ComAuxSys auxcooling = new LowAlarm("PT100 Compressor Cooling Pressure", 100, 500, 1, 1,"Check for high alarm", "PSIG");
+					compsite1.addsys(auxcooling);
+					alarmflagIN[2]= auxcooling.detectLowAlarm();
+					assertTrue (alarmflagIN[2]==1); // low alarm flag should be set
+					
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=1;// Enable command
+					// Assert alarm logic for low alarm active and high alarm inactive.	
+					var Alarmenabled = new ComAlmStatus();
+					alarmflagOT = Alarmenabled.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					assertTrue  (alarmflagOT[0]==1);
+					assertFalse (alarmflagOT[1]==1);
+				
+					alarmflagIN[0]=1;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					
+					//Since alarm is enable assert that the web portal will get a value of 1 for high alarm and 0 for low alarm
+					var Alarmsdisabled = new ComAlmStatus();
+					alarmflagOT = Alarmsdisabled.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					assertTrue (alarmflagOT[0]==2);
+					assertTrue  (alarmflagOT[1]==2);
+					
+					alarmflagIN[0]=0;// Disable Command
+					alarmflagIN[1]=0;// Enable command
+					// Assert alarm logic for low alarm active and high alarm inactive.	
+					var alarmReEnabled = new ComAlmStatus();
+					alarmflagOT = alarmReEnabled.alarmStatus(alarmflagIN[0],alarmflagIN[1],alarmflagIN[2],alarmflagIN[3]);
+					assertTrue  (alarmflagOT[0]==1);
+					assertFalse (alarmflagOT[1]==1);
+				}
+		}
+				

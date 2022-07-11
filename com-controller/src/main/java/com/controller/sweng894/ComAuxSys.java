@@ -129,6 +129,7 @@ class HighAlarm implements ComAuxSys {
 			ALM_DSCRIP = "Sensor problem call Tech ";
 		} else if (Sensor < Sensor_SP) {
 			ALM_DSCRIP = "Alarm cleared";
+			sensor_alarm_flag = 0;
 		}
 
 		System.out.println(SensorTag + " " + Sensor + " " + Sensor_eng);
