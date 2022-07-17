@@ -8,7 +8,7 @@ import com.sun.tools.javac.Main;
 
 public class ComControllerTest {
 
-// assert vibration system alarms	
+//// assert vibration system alarms	
 	@Test
 	public void highalarmleaf() {
 		// Test the vibration alarm leaf for all 3 stages
@@ -510,5 +510,5 @@ public class ComControllerTest {
 					assertTrue  (alarmflagOT[0]==1);
 					assertFalse (alarmflagOT[1]==1);
 				}
-		}
-				
+
+}
