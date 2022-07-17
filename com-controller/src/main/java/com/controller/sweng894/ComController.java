@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ComController {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
         // alarm disable requests 
 		int Stg1VibDisableReq = 0;
 		int Stg2VibDisableReq = 0;
@@ -13,14 +13,77 @@ public class ComController {
 		int auxoilDisableReq = 0;
 		int suctionDisableReq = 0;
 		int dischargeDisableReq = 0;
+		int[] TransmitterReading = new int[7]; // test inputs
+		
+		int HIS500=0 ; // Compressor start/stop status 0= stopped, 1= ready to start, 2= Running
+		  // overall shutdown word
+	
+		int HIS500_STR = 0; // Compressor start command
+		int HIS500_STP = 0; // Compressor stop command
+		int HIS500_LOAD = 0; // Compressor loading status 0= unloaded, 1 = loading, 2 = loaded, 3 unloading,
+		String comRequest = " ";
+		String driveFeedBack = " ";			
+		
+		// The following 7 variables are for instruments increment readings - for simulation purposes only reading simulation only
+		int VT100_increment=0; 
+		int VT200_increment=0; 
+		int VT300_increment=0;
+		int PT100_increment=0; 
+		int TT100_increment=0; 
+		int PT500_increment=0; 
+		int PT2500_increment=0;
+		//---------------------//
 
-		while (true) {
+		// Issue Start command
+		System.out.println("Input 0 to reset the overall shutdown word");
+		Scanner resetshutdownword = new Scanner(System.in);
+		int shutdownWord = resetshutdownword.nextInt();		
+
+		// Issue Start command
+		System.out.println("Input an Integer value between 0 and 10 for stage-1 vibration raise");
+		Scanner TransmitterIncreament = new Scanner(System.in);
+		VT100_increment = TransmitterIncreament.nextInt();
+		System.out.println("Input an Integer value between 0 and 10 for stage-2 vibration raise");
+		VT200_increment = TransmitterIncreament.nextInt();
+		System.out.println("Input an Integer value between 0 and 10 for stage-3 vibration raise");
+		VT300_increment = TransmitterIncreament.nextInt();
+		
+		System.out.println("Input an Integer value between 0 and 10 Psig for Cooling System Pressure raise");
+		PT100_increment = TransmitterIncreament.nextInt();
+		
+		System.out.println("Input an Integer value between 0 and 10 DegC for oil System temperature raise");
+		TT100_increment = TransmitterIncreament.nextInt();
+		
+		System.out.println("Input an Integer value between 0 and 10 Psig for Suction Pressure raise");
+		PT500_increment = TransmitterIncreament.nextInt();
+		
+		System.out.println("Input an Integer value between 0 and 10 Psig for Discharge pressure raise");
+		PT2500_increment = TransmitterIncreament.nextInt();
+		
+		
+		
+		
+		System.out.println("Input 1 to start the machine");
+		Scanner compStart = new Scanner(System.in);
+		HIS500_STR = compStart.nextInt();		System.out.println("DISABLE ALARM FLAG=" + Stg1VibDisableReq);
+		
+		
+		
+		while (HIS500_STR==1 && shutdownWord==0) {
+			
+			int permissWord = 0; // overall permissive word	
+			// Call the simulation class simulate the compressor variables 
+			ComSimulation sim= new ComSimulation();
+			TransmitterReading= sim.comTransmitterSim(HIS500,VT100_increment, VT200_increment, VT300_increment,
+					PT100_increment,TT100_increment,  PT500_increment, PT2500_increment);
+			//System.out.println("VIBRATION Simulation:"+"STAG-1:"+ TransmitterReading[0]+"STAG-2:"+ TransmitterReading[1]+"STAG-3:"+ TransmitterReading[2]);
+	        
 
 //		System instrumentation tags "V" for vibration, "P" for pressure,  "T" for temperature, "F" for flow,// 
 
 			// Stage-1 I/O instruments
 			String VT100 = "1ST Stage Vibration Sensor";
-			int VI100 = 1; // First Stage Vibration sensor reading
+			int VI100 = TransmitterReading[0]; // First Stage Vibration sensor reading
 			int VSH100 = 5; // First Stage vibration alarm set-point
 			int VSL100 = 2; //
 			int VSHH100 = 10; // Shutdown high set-point
@@ -37,7 +100,7 @@ public class ComController {
 
 			// Stage-2 I/O instruments
 			String VT200 = "2ND Stage Vibration Sensor";
-			int VI200 = 2; // Stage Vibration sensor reading
+			int VI200 = TransmitterReading[1]; // Stage Vibration sensor reading
 			int VSH200 = 6; // vibration high alarm set-point
 			int VSL200 = 3; //
 			int VSHH200 = 7; // Shutdown high set-point
@@ -54,7 +117,7 @@ public class ComController {
 
 			// Stage-3 I/O instruments
 			String VT300 = "3RD Stage Vibration Sensor";
-			int VI300 = 5; // Stage Vibration sensor reading
+			int VI300 = TransmitterReading[2]; // Stage Vibration sensor reading
 			int VSH300 = 4; // vibration high alarm set-point
 			int VSL300 = 2; //
 			int VSHH300 = 6; // Shutdown high set-point
@@ -83,7 +146,7 @@ public class ComController {
 			// Auxiliary Systems instrumentation tags
 
 			String PT100 = "PT100 Compressor Cooling Pressure";
-			int PI100 = 31; // Sensor Reading
+			int PI100 = TransmitterReading[3]; // Sensor Reading
 			int PSH100 = 30; // Alarm High set-point
 			int PSL100 = 15; // Alarm low set point
 			int PSHH100 = 35; // Shutdown high set-point
@@ -101,7 +164,7 @@ public class ComController {
 			String PT100_ENG = "PSIG";
 
 			String TT100 = "TT100 Oil System Temperature";
-			int TI100 = 185;
+			int TI100 = TransmitterReading[4];
 			int TSH100 = 210;
 			int TSL100 = 190;
 			int TSHH100 = 220;
@@ -119,11 +182,11 @@ public class ComController {
 			String OilSystem = "Compressor Oil System";
 
 			String PT500 = "PT500 Compressor Suction Pressure";
-			int PI500 = 41;
+			int PI500 = TransmitterReading[5];
 			int PSH500 = 40;
-			int PSL500 = 30;
+			int PSL500 = 1;
 			int PSHH500 = 42;
-			int PSLL500 = 20;
+			int PSLL500 = 3;
 			int PAH500 = 0;
 			int PAL500 = 0;
 			int PAHH500 = 0;
@@ -136,11 +199,11 @@ public class ComController {
 			String PT500_ENG = "PSIG";
 
 			String PT2500 = "PT2500 Compressor discharge Pressure";
-			int PI2500 = 450;
+			int PI2500 = TransmitterReading[6];
 			int PSH2500 = 400;
 			int PSL2500 = 300;
 			int PSHH2500 = 420;
-			int PSLL2500 = 200;
+			int PSLL2500 = 5;
 			int PAH2500 = 0;
 			int PAL2500 = 0;
 			int PAHH2500 = 0;
@@ -158,23 +221,15 @@ public class ComController {
 
 //=====================Drive======================//
 
-			int shutdownWord = 0; // overall shutdown word
-			int permissWord = 0; // overall permissive word
-			int HIS500 = 0; // Compressor start/stop status 0= stopped, 1= ready to start, 2= Running
-			int HIS500_STR = 1; // Compressor start command
-			int HIS500_STP = 0; // Compressor stop command
-			int HIS500_LOAD = 0; // Compressor loading status 0= unloaded, 1 = loading, 2 = loaded, 3 unloading,
-
-			String comRequest = " ";
-			String driveFeedBack = " ";
 
 //========leaf Events ( alarms, Permissive, and Shutdown)=================//
 			int[] AlmStatusFlags = new int[2];
 
-			System.out.println("Input 1 to disable stage-1 vibration alarms/ Input 0 to Enable Them");
-			Scanner disableAlarm = new Scanner(System.in);
-			Stg1VibDisableReq = disableAlarm.nextInt();
-			System.out.println("DISABLE ALARM FLAG=" + Stg1VibDisableReq);
+			// Enable this code for alarm disabling simulation
+//			System.out.println("Input 1 to disable stage-1 vibration alarms/ Input 0 to Enable Them");
+//			Scanner disableAlarm = new Scanner(System.in);
+			Stg1VibDisableReq = 0;//disableAlarm.nextInt();
+//			System.out.println("DISABLE ALARM FLAG=" + Stg1VibDisableReq);
 		
 			ComAlmStatusVIB alarmStatusVIB = new ComAlmStatusVIB();
 
@@ -208,7 +263,7 @@ public class ComController {
 			System.out.println("================================");
 			// ===========================STAGE-2======================================================================//
 			System.out.println("Input 1 to disable stage-2 vibration alarms/ Input 0 to Enable Them");
-			Stg2VibDisableReq = disableAlarm.nextInt();
+			Stg2VibDisableReq =0;// disableAlarm.nextInt();
 			flag = Vibs.leafevent(VT200, VI200, VSH200, VSHH200, VSL200, VAH200, VAHH200, VAL200, VPH200, VT200_STAT,
 					HIS500, VAH200_Discrp, VAHH200_Discrp_SD, VAL200_Discrp_LO, VPH200_Discrp, VT200_ENG);
 			if (Stg2VibDisableReq != 1) {
@@ -232,7 +287,7 @@ public class ComController {
 			System.out.println("================================");
 			// =================================STAGE-3========================================================//
 			System.out.println("Input 1 to disable stage-3 vibration alarms/ Input 0 to Enable Them");
-			Stg3VibDisableReq = disableAlarm.nextInt();
+			Stg3VibDisableReq =0;// disableAlarm.nextInt();
 			flag = Vibs.leafevent(VT300, VI300, VSH300, VSHH300, VSL300, VAH300, VAHH300, VAL300, VPH300, VT300_STAT,
 					HIS500, VAH300_Discrp, VAHH300_Discrp_SD, VAL300_Discrp_LO, VPH300_Discrp, VT300_ENG);
 			if (Stg3VibDisableReq != 1) {
@@ -259,7 +314,7 @@ public class ComController {
 //=======Composite Event( Auxiliary System Alarms and Shutdowns=============//		
 //=========== auxcooling events=============================================//
 			System.out.println("Input 1 to disable cooling system alarms/ Input 0 to Enable Them");
-			auxcoolingDisableReq = disableAlarm.nextInt();
+			auxcoolingDisableReq = 0;//disableAlarm.nextInt();
 			ComAlmStatusAuxCooling auxcoolingalarmstatus = new ComAlmStatusAuxCooling();
 			
 			int[] flagCompsite = new int[4];
@@ -292,7 +347,7 @@ public class ComController {
 			System.out.println("================================");
 //=========== auxiliary oil system events===========================================================//
 			System.out.println("Input 1 to disable Oil system alarms/ Input 0 to Enable Them");
-			auxoilDisableReq = disableAlarm.nextInt();
+			auxoilDisableReq =0;// disableAlarm.nextInt();
 			ComAlmStatusAuxOil auxoilalarmstatus = new ComAlmStatusAuxOil();
 			
 			ComAuxSys auxoil = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,
@@ -322,7 +377,7 @@ public class ComController {
 			System.out.println("================================");
 //=========== Suction pressure events=============================================//
 			System.out.println("Input 1 to disable Compressor Suction alarms/ Input 0 to Enable Them");
-			suctionDisableReq = disableAlarm.nextInt();
+			suctionDisableReq = 0;//disableAlarm.nextInt();
 			ComAlmStatusSuction  suctionalarmstatus = new ComAlmStatusSuction();
 			
 			ComAuxSys comSuction = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,
@@ -353,7 +408,7 @@ public class ComController {
 			System.out.println("================================");
 //================== Compressor discharge events=============================================//
 			System.out.println("Input 1 to disable Compressor Discharge alarms/ Input 0 to Enable Them");
-			dischargeDisableReq = disableAlarm.nextInt();
+			dischargeDisableReq = 0;//disableAlarm.nextInt();
 			ComAlmStatusDischarge  dischargealarmstatus = new ComAlmStatusDischarge();
 			
 			ComAuxSys comDischarge = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,
