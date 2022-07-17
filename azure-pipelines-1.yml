@@ -10,6 +10,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/MyApp/**/site/cobertura/coverage.xml'
 - task: Maven@3
   inputs:
     mavenPomFile: 'com-controller/pom.xml'
