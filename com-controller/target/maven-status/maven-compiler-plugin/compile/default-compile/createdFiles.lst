@@ -1,5 +1,4 @@
 com\controller\sweng894\ComAuxSys.class
-com\controller\sweng894\AuxVibPermissive.class
-com\controller\sweng894\AuxVibAlarm.class
-com\controller\sweng894\Compsite.class
 com\controller\sweng894\ComController.class
+com\controller\sweng894\AuxVibPermissive.class
+com\controller\sweng894\Compsite.class
