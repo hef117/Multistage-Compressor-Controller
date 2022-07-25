@@ -2,10 +2,16 @@ package com.controller.sweng894;
 
 import java.util.Scanner;
 
-public class ComController {
+import javax.swing.JFrame;
 
+public class ComController {
+	
+	
 	public static void main(String[] args) throws InterruptedException {
-        // alarm disable requests 
+		
+
+        
+		// alarm disable requests 
 		int Stg1VibDisableReq = 0;
 		int Stg2VibDisableReq = 0;
 		int Stg3VibDisableReq = 0;
@@ -13,16 +19,27 @@ public class ComController {
 		int auxoilDisableReq = 0;
 		int suctionDisableReq = 0;
 		int dischargeDisableReq = 0;
-		int[] TransmitterReading = new int[7]; // test inputs
+		
 		
 		int HIS500=0 ; // Compressor start/stop status 0= stopped, 1= ready to start, 2= Running
 		  // overall shutdown word
 	
-		int HIS500_STR = 0; // Compressor start command
+		int HIS500_STR=0; // Compressor start command
 		int HIS500_STP = 0; // Compressor stop command
 		int HIS500_LOAD = 0; // Compressor loading status 0= unloaded, 1 = loading, 2 = loaded, 3 unloading,
+		int shutdownWord=1;
 		String comRequest = " ";
 		String driveFeedBack = " ";			
+		
+		System.out.println("command="+shutdownWord);
+		//======== User Interface start=====//	
+		ComFrame myframe= new ComFrame();
+		Thread.sleep(1000);
+		shutdownWord=myframe.Resetcommand;
+		System.out.println("shutdownWord="+shutdownWord);
+		Thread.sleep(1000);
+		HIS500_STR=myframe.Startcommand;
+		System.out.println("HIS500_STR="+HIS500_STR);
 		
 		// The following 7 variables are for instruments increment readings - for simulation purposes only reading simulation only
 		int VT100_increment=0; 
@@ -32,56 +49,45 @@ public class ComController {
 		int TT100_increment=0; 
 		int PT500_increment=0; 
 		int PT2500_increment=0;
-		//---------------------//
+		
+		 do {
+			Thread.sleep(2000);
+			shutdownWord=myframe.Resetcommand;
+			HIS500_STR=myframe.Startcommand;
+			System.out.println("HIS500_STR="+myframe.Startcommand);
+			HIS500_STP=myframe.Stopcommand;
+			System.out.println("HIS500_STP="+myframe.Stopcommand);
 
-		// Issue Start command
-		System.out.println("Input 0 to reset the overall shutdown word");
-		Scanner resetshutdownword = new Scanner(System.in);
-		int shutdownWord = resetshutdownword.nextInt();		
-
-		// Issue Start command
-		System.out.println("Input an Integer value between 0 and 10 for stage-1 vibration raise");
-		Scanner TransmitterIncreament = new Scanner(System.in);
-		VT100_increment = TransmitterIncreament.nextInt();
-		System.out.println("Input an Integer value between 0 and 10 for stage-2 vibration raise");
-		VT200_increment = TransmitterIncreament.nextInt();
-		System.out.println("Input an Integer value between 0 and 10 for stage-3 vibration raise");
-		VT300_increment = TransmitterIncreament.nextInt();
-		
-		System.out.println("Input an Integer value between 0 and 10 Psig for Cooling System Pressure raise");
-		PT100_increment = TransmitterIncreament.nextInt();
-		
-		System.out.println("Input an Integer value between 0 and 10 DegC for oil System temperature raise");
-		TT100_increment = TransmitterIncreament.nextInt();
-		
-		System.out.println("Input an Integer value between 0 and 10 Psig for Suction Pressure raise");
-		PT500_increment = TransmitterIncreament.nextInt();
-		
-		System.out.println("Input an Integer value between 0 and 10 Psig for Discharge pressure raise");
-		PT2500_increment = TransmitterIncreament.nextInt();
-		
-		
-		
-		
-		System.out.println("Input 1 to start the machine");
-		Scanner compStart = new Scanner(System.in);
-		HIS500_STR = compStart.nextInt();		System.out.println("DISABLE ALARM FLAG=" + Stg1VibDisableReq);
-		
-		
-		
-		while (HIS500_STR==1 && shutdownWord==0) {
+			// Simulation values.
+			VT100_increment = 0;
+			VT200_increment = 0;
+			VT300_increment = 0; 			
+			PT100_increment = 0;
+			TT100_increment = 0; 
+			PT500_increment = 0;
+			PT2500_increment= 0; 
 			
-			int permissWord = 0; // overall permissive word	
+			int[] TransmitterReading = new int[7]; // test inputs	
+			
+	        int permissWord = 0; // overall permissive word	
 			// Call the simulation class simulate the compressor variables 
 			ComSimulation sim= new ComSimulation();
 			TransmitterReading= sim.comTransmitterSim(HIS500,VT100_increment, VT200_increment, VT300_increment,
 					PT100_increment,TT100_increment,  PT500_increment, PT2500_increment);
-			//System.out.println("VIBRATION Simulation:"+"STAG-1:"+ TransmitterReading[0]+"STAG-2:"+ TransmitterReading[1]+"STAG-3:"+ TransmitterReading[2]);
-	        
 
-//		System instrumentation tags "V" for vibration, "P" for pressure,  "T" for temperature, "F" for flow,// 
-
-			// Stage-1 I/O instruments
+			String transmtag = "initialized";
+			int transmreading = 0; // sensor reading
+			int setpoint = 0; // Alarm OR Shutdown set-point
+			int alarmFlag = 0; // alarm flag
+			int transmitter_status = 0; // sensor signal integrity
+			int c_status = 0; // compressor status
+			String alarm_Discrp = "ALARM logic initilized ";
+			String perm_Discrp = "PERMISSIVE logic initilized ";
+			String transm_eng = "engineering unit";
+			String SD_transm_eng = "";
+			
+			
+			
 			String VT100 = "1ST Stage Vibration Sensor";
 			int VI100 = TransmitterReading[0]; // First Stage Vibration sensor reading
 			int VSH100 = 5; // First Stage vibration alarm set-point
@@ -132,17 +138,7 @@ public class ComController {
 			String VPH300_Discrp = "Check for permissive*";
 			String VT300_ENG = "mils";
 
-			String transmtag = "initialized";
-			int transmreading = 0; // sensor reading
-			int setpoint = 0; // Alarm OR Shutdown set-point
-			int alarmFlag = 0; // alarm flag
-			int transmitter_status = 0; // sensor signal integrity
-			int c_status = 0; // compressor status
-			String alarm_Discrp = "ALARM logic initilized ";
-			String perm_Discrp = "PERMISSIVE logic initilized ";
-			String transm_eng = "engineering unit";
-			String SD_transm_eng = "";
-
+			
 			// Auxiliary Systems instrumentation tags
 
 			String PT100 = "PT100 Compressor Cooling Pressure";
@@ -212,13 +208,15 @@ public class ComController {
 			String PAH2500_Discrp = "Check for high alarm";
 			String PAL2500_Discrp_LO = "Check for low alarm";
 			String PAHH2500_Discrp_SD = "Check for high shutdown";
+//
+//			String PALL2500_Discrp_SD = "Check for low shutdown";
+//			String DischSystem = "Compressor discharge";
+//			String PT2500_Discrp = " ";
+//			String PT2500_ENG = "PSIG";
+//			String CompositeTag = "    ";
 
-			String PALL2500_Discrp_SD = "Check for low shutdown";
-			String DischSystem = "Compressor discharge";
-			String PT2500_Discrp = " ";
-			String PT2500_ENG = "PSIG";
-			String CompositeTag = "    ";
-
+	
+	       
 //=====================Drive======================//
 
 
@@ -228,8 +226,8 @@ public class ComController {
 			// Enable this code for alarm disabling simulation
 //			System.out.println("Input 1 to disable stage-1 vibration alarms/ Input 0 to Enable Them");
 //			Scanner disableAlarm = new Scanner(System.in);
-			Stg1VibDisableReq = 0;//disableAlarm.nextInt();
-//			System.out.println("DISABLE ALARM FLAG=" + Stg1VibDisableReq);
+			Stg1VibDisableReq = myframe.Stg1VibDisableReq;
+
 		
 			ComAlmStatusVIB alarmStatusVIB = new ComAlmStatusVIB();
 
@@ -463,7 +461,9 @@ public class ComController {
 			HIS500 = drive.comDriveStartStop();
 
 			System.out.println("Compressor Drive Status HIS500=" + HIS500);
-
-		}
+			//=============================================================================================//
+		}while (myframe.Resetcommand==0);
+		
 	}
+
 }
