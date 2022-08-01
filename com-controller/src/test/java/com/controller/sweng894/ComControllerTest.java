@@ -510,5 +510,5 @@ public class ComControllerTest {
 					assertTrue  (alarmflagOT[0]==1);
 					assertFalse (alarmflagOT[1]==1);
 				}
-
+				
 }
