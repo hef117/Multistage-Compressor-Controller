@@ -510,5 +510,68 @@ public class ComControllerTest {
 					assertTrue  (alarmflagOT[0]==1);
 					assertFalse (alarmflagOT[1]==1);
 				}
-				
-}
+	///===================== UC-8 auto loading permissive tests ==================================================///				
+			int[] loadPermissiveFlags = new int[10]; // test inputs
+				@Test
+				public void AutoLoadingPermissivesTest() {
+					var autolaodPermissive = new ComAutoLoad();
+					for (int i = 0; i <= 5; i++) {
+						
+						if (i <= 0) {
+					//int comStatus, boolean startupPeriodDone, int shutdownWord
+					loadPermissiveFlags= autolaodPermissive.comAutoLoadPermissives(0,false, 1);
+					assertTrue  (loadPermissiveFlags[9]==0);
+					assertTrue  (loadPermissiveFlags[0]==0);
+						}
+						if (i <= 1) {
+					loadPermissiveFlags= autolaodPermissive.comAutoLoadPermissives(1,false,0);
+					assertTrue  (loadPermissiveFlags[9]==0);
+					
+					}if (i <= 2) {
+						loadPermissiveFlags= autolaodPermissive.comAutoLoadPermissives(1,true,1);
+						assertTrue  (loadPermissiveFlags[9]==0);
+						
+					}
+					if (i <= 3) {
+						loadPermissiveFlags= autolaodPermissive.comAutoLoadPermissives(1,true,0);
+						assertTrue  (loadPermissiveFlags[9]==1);
+						
+					}
+		
+        }
+					
+   }
+//======================== UC-8 Autoloadign sequenct test=================================//			
+				int[] AutoLoadingResult = new int[3];
+				@Test
+				public void AutoLoadingRamp() throws Exception {
+					var autolaodRamp = new ComAutoLoad();
+					AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410,AutoLoadingResult[0],10,AutoLoadingResult[1],1,AutoLoadingResult[2],2,400000);
+					assertTrue  (AutoLoadingResult[0]>=0);
+					assertTrue  (AutoLoadingResult[1]<100);
+					assertTrue  (AutoLoadingResult[2]>=0);
+					AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410, AutoLoadingResult[0],12, AutoLoadingResult[1],5,AutoLoadingResult[2],12,400);
+					assertTrue  (AutoLoadingResult[0]>5);
+					assertTrue  (AutoLoadingResult[1]<98);
+					assertTrue  (AutoLoadingResult[2]>2);
+							
+					AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410, AutoLoadingResult[0],12, AutoLoadingResult[1],7,AutoLoadingResult[2],12,400);
+							assertTrue  (AutoLoadingResult[0]>10);
+							assertTrue  (AutoLoadingResult[1]<=90);
+							assertTrue  (AutoLoadingResult[2]>=3);
+							AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410, AutoLoadingResult[0],20, AutoLoadingResult[1],10,AutoLoadingResult[2],20,400);
+							assertTrue  (AutoLoadingResult[0]>14);
+							assertTrue  (AutoLoadingResult[1]<=80);
+							assertTrue  (AutoLoadingResult[2]>=5);
+							AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410, AutoLoadingResult[0],50, AutoLoadingResult[1],25,AutoLoadingResult[2],50,400);
+							assertTrue  (AutoLoadingResult[0]>14);
+							assertTrue  (AutoLoadingResult[1]<=70);
+							assertTrue  (AutoLoadingResult[2]>=10);
+							AutoLoadingResult= autolaodRamp.comAutoLoadingRamp(1, 1,0, 15,0,410, AutoLoadingResult[0],90, AutoLoadingResult[1],45,AutoLoadingResult[2],90,400);
+							assertTrue  (AutoLoadingResult[0]>50);
+							assertTrue  (AutoLoadingResult[1]<=50);
+							assertTrue  (AutoLoadingResult[2]>=20);
+
+        }
+					
+   }

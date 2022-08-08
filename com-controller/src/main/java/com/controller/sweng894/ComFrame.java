@@ -1,5 +1,6 @@
 package com.controller.sweng894;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
 public class ComFrame extends JFrame implements ActionListener {
@@ -32,12 +34,15 @@ public class ComFrame extends JFrame implements ActionListener {
     int AuxoilDisableReq =0;
     int SuctionDisableReq =0;
     int DischargeDisableReq =0;
+    String HSLD="100";
+    int HSLDSP=100;
     
     
 //	Compressor command buttons
 	JButton Reset_Button;
 	JButton Start_Button;
 	JButton Stop_Button;
+    JButton Summit_Button;	
 	
 // alarm disable buttons 	
 	JButton STG1_Alrm_Button;
@@ -60,6 +65,13 @@ public class ComFrame extends JFrame implements ActionListener {
 	JLabel TI100;
 	JLabel PI500;
 	JLabel PI2500;
+// actuators and Loading paramaters  
+	JLabel PV500;
+	JLabel PV2500;
+	JLabel PV100;
+	JLabel STARTUPTIMER;
+	JLabel autload;
+	
 	
 	JLabel VAL100;
 	JLabel VAH100;
@@ -95,181 +107,216 @@ public class ComFrame extends JFrame implements ActionListener {
 	JLabel PAH2500;
 	JLabel PALL2500;
 	JLabel PAHH2500;
-	
+    JTextField HS500LDSP;	
 	
 	ComFrame(){
             
 		panel= new ComPanel ();
 		
 		
-		 Reset_Button= new JButton("RESET COMMAND");	
-		 Reset_Button.setBounds(50,650,180,15);
+		 Reset_Button= new JButton("RESET");	
+		 Reset_Button.setBounds(10,450,120,15);
 		 Reset_Button.setFocusable(false);
 		 Reset_Button.addActionListener(this);
 
-		 Start_Button= new JButton("START COMMAND");	
-		 Start_Button.setBounds(50,670,180,15);
+		 Start_Button= new JButton("START");	
+		 Start_Button.setBounds(10,470,120,15);
 		 Start_Button.setFocusable(false);
 		 Start_Button.addActionListener(this);
 		 
-		 Stop_Button= new JButton("STOP COMMAND");	
-		 Stop_Button.setBounds(50,690,180,15);
+		 Stop_Button= new JButton("STOP");	
+		 Stop_Button.setBounds(10,490,120,15);
 		 Stop_Button.setFocusable(false);
 		 Stop_Button.addActionListener(this);
 		 
+		 // SETPOINTS
+		 HS500LDSP= new JTextField();
+		 HS500LDSP.setBounds(10,510,120,20);
+		 HS500LDSP.setForeground(Color.green);
+		 HS500LDSP.setBackground(Color.black);
+		 HS500LDSP.setCaretColor(Color.white);
+		 HS500LDSP.setText("Loading point");
+		 HS500LDSP.setEditable(true);
+		 
+		 Summit_Button= new JButton("SUMIT");	
+		 Summit_Button.setBounds(10,530,120,15);
+		 Summit_Button.setFocusable(false);
+		 Summit_Button.addActionListener(this);
 		 
 		 
         // Commands  
-		 STG1_Alrm_Button= new JButton("DISABLE STG1 ALARMS");	
-		 STG1_Alrm_Button.setBounds(800,650,180,15);
+		 STG1_Alrm_Button= new JButton("STG1 ALRMS");	
+		 STG1_Alrm_Button.setBounds(800,450,130,15);
 		 STG1_Alrm_Button.setFocusable(false);
 		 STG1_Alrm_Button.addActionListener(this);
 		 
-		 STG2_Alrm_Button= new JButton("DISABLE STG2 ALARMS");	
-		 STG2_Alrm_Button.setBounds(800,670,180,15);
+		 STG2_Alrm_Button= new JButton("STG2 ALRMS");	
+		 STG2_Alrm_Button.setBounds(800,470,130,15);
 		 STG2_Alrm_Button.setFocusable(false);
 		 STG2_Alrm_Button.addActionListener(this);
 		 
-		 STG3_Alrm_Button= new JButton("DISABLE STG3 ALARMS");	
-		 STG3_Alrm_Button.setBounds(800,690,180,15);
+		 STG3_Alrm_Button= new JButton("STG3 ALRMS");	
+		 STG3_Alrm_Button.setBounds(800,490,130,15);
 		 STG3_Alrm_Button.setFocusable(false);
 		 STG3_Alrm_Button.addActionListener(this);
 		 
-		 COOL_Alrm_DISABLE= new JButton("DISABLE COOL ALARMS");	
-		 COOL_Alrm_DISABLE.setBounds(800,710,180,15);
+		 COOL_Alrm_DISABLE= new JButton("COOL ALRMS");	
+		 COOL_Alrm_DISABLE.setBounds(800,510,130,15);
 		 COOL_Alrm_DISABLE.setFocusable(false);
 		 COOL_Alrm_DISABLE.addActionListener(this);
 		 
 
-		 Oil_Alrm_DISABLE= new JButton("DISABLE OIL ALARMS");	
-		 Oil_Alrm_DISABLE.setBounds(800,730,180,15);
+		 Oil_Alrm_DISABLE= new JButton("OIL ALRMS");	
+		 Oil_Alrm_DISABLE.setBounds(800,530,130,15);
 		 Oil_Alrm_DISABLE.setFocusable(false);
 		 Oil_Alrm_DISABLE.addActionListener(this);
 		 
 		
-		 SUCTION_Alrm_DISABLE= new JButton("DISABLE SUCTION ALARMS");	
-		 SUCTION_Alrm_DISABLE.setBounds(800,750,180,15);
+		 SUCTION_Alrm_DISABLE= new JButton("SUCT ALRMS");	
+		 SUCTION_Alrm_DISABLE.setBounds(800,550,130,15);
 		 SUCTION_Alrm_DISABLE.setFocusable(false);
 		 SUCTION_Alrm_DISABLE.addActionListener(this);
 		 
-		 DISCH_Alrm_DISABLE= new JButton("DISABLE DISCHARGE ALARMS");	
-		 DISCH_Alrm_DISABLE.setBounds(800,770,180,15);
+		 DISCH_Alrm_DISABLE= new JButton("DISCH ALRMS");	
+		 DISCH_Alrm_DISABLE.setBounds(800,570,130,15);
 		 DISCH_Alrm_DISABLE.setFocusable(false);
 		 DISCH_Alrm_DISABLE.addActionListener(this);
 		
 		 
 		 // Indicators
 		 VI100= new JLabel();
-		 VI100.setBounds(80,400,200,15);
-		 VI200= new JLabel();
-		 VI200.setBounds(80,420,200,15);
-		 VI300= new JLabel();
-		 VI300.setBounds(80,440,200,15);
-		 PI100= new JLabel();
-		 PI100.setBounds(80,460,200,15);
-		 TI100= new JLabel();
-		 TI100.setBounds(80,480,200,15);
-		 PI500= new JLabel();
-		 PI500.setBounds(80,500,200,15);
-		 PI2500= new JLabel();
-		 PI2500.setBounds(80,520,200,15);
+		 VI100.setBounds(210,134,200,15);
 		 
+		 VI200= new JLabel();
+		 VI200.setBounds(380,134,200,15);
+		 
+		 VI300= new JLabel();
+		 VI300.setBounds(540,134,200,15);
+		 
+		 PI100= new JLabel();
+		 PI100.setBounds(705,134,200,15);
+		 
+		 TI100= new JLabel();
+		 TI100.setBounds(210,480,200,15);
+		 
+		 PI500= new JLabel();
+		 PI500.setBounds(110,323,200,15);
+		 
+		 PI2500= new JLabel();
+		 PI2500.setBounds(617,323,200,15);
+		 
+		 // actuators 
+		 PV500= new JLabel();
+		 PV500.setBounds(20,275,200,15);
+		 
+		 PV2500= new JLabel();
+		 PV2500.setBounds(800,275,130,15);
+
+		 PV100= new JLabel();
+		 PV100.setBounds(440,22,300,15);
+		 
+		 
+		 
+		 // Startup timer
+		 STARTUPTIMER= new JLabel();
+		 STARTUPTIMER.setBounds(10,54,100,15);
+		
+		 //auto-load
+		 autload= new JLabel();
+		 autload.setBounds(10,74,100,15);
 		 // RESET prompt 
 		 RESETREQU= new JLabel();
-		 RESETREQU.setBounds(235,650,180,15);
+		 RESETREQU.setBounds(132,450,180,15);
 		 
 		// START COMMAND UI Indication
 		 HS500= new JLabel();
-		 HS500.setBounds(235,670,180,15);
+		 HS500.setBounds(132,470,140,15);
          
 		 // Stop Indicator
 		 HSTP500= new JLabel();
-		 HSTP500.setBounds(235,690,180,15);
+		 HSTP500.setBounds(132,490,140,15);
 		 // Reset Required
-		 
-		 
-		 
 		 
 		 // Alarm indicators
 		 VAL100= new JLabel();
-		 VAL100.setBounds(550,650,300,15);
+		 VAL100.setBounds(210,114,300,15);
 		 VAH100= new JLabel();
-		 VAH100.setBounds(550,670,300,15);
+		 VAH100.setBounds(210,94,300,15);
 		 
-		
-		
-		 VAL200= new JLabel();
-		 VAL200.setBounds(550,690,300,15);
+		 VAL200= new JLabel(); //210,134
+		 VAL200.setBounds(380,114,300,15);
 		 VAH200= new JLabel();
-		 VAH200.setBounds(550,710,300,15);
+		 VAH200.setBounds(380,94,300,15);
 		 
 		 VAL300= new JLabel();
-		 VAL300.setBounds(550,730,300,15);
+		 VAL300.setBounds(540,114,300,15);
 		 VAH300= new JLabel();
-		 VAH300.setBounds(550,750,300,15);
+		 VAH300.setBounds(540,94,300,15);
 		 
 		 VPH100= new JLabel();
-     	 VPH100.setBounds(300,650,300,15);
+     	 VPH100.setBounds(210,74,300,15);
+     	 
      	 VPH200= new JLabel();
-    	 VPH200.setBounds(300,670,300,15);
+    	 VPH200.setBounds(380,74,300,15);
+    	 
     	 VPH300= new JLabel();
-    	 VPH300.setBounds(300,690,300,15);
+    	 VPH300.setBounds(540,74,300,15);
 		 
 		 VAHH100= new JLabel();
-		 VAHH100.setBounds(300,710,300,15);
-		 VAHH200= new JLabel();
-		 VAHH200.setBounds(300,730,300,15);
-		 VAHH300= new JLabel();
-		 VAHH300.setBounds(300,750,300,15);
-	
+		 VAHH100.setBounds(210,54,300,15);
 		 
+		 VAHH200= new JLabel();
+		 VAHH200.setBounds(380,60,300,15);
+		 
+		 VAHH300= new JLabel();
+		 VAHH300.setBounds(540,54,300,15);
+	
 		 PAL100= new JLabel();
-    	 PAL100.setBounds(780,400,300,15);		 
+    	 PAL100.setBounds(705,114,300,15);		 
     	 PAH100= new JLabel();
-		 PAH100.setBounds(780,420,300,15);
+		 PAH100.setBounds(705,94,300,15);
 		 
 		 PALL100= new JLabel();
-		 PALL100.setBounds(780,440,300,15);
+		 PALL100.setBounds(705,74,300,15);
 		 PAHH100= new JLabel();
-		 PAHH100.setBounds(780,460,300,15);
-		 
+		 PAHH100.setBounds(705,54,300,15);
 		 
 		 TAL100= new JLabel();
-    	 TAL100.setBounds(780,500,300,15);		 
+    	 TAL100.setBounds(210,500,300,15);		 
     	 TAH100= new JLabel();
-		 TAH100.setBounds(780,520,300,15);
+		 TAH100.setBounds(210,520,300,15);
 		 
 		 TALL100= new JLabel();
-		 TALL100.setBounds(780,540,300,15);
+		 TALL100.setBounds(210,540,300,15);
 		 TAHH100= new JLabel();
-		 TAHH100.setBounds(780,560,300,15);
+		 TAHH100.setBounds(210,560,300,15);
 		 
 		 
 		 PAL500= new JLabel();
-    	 PAL500.setBounds(80,80,300,15);		 
+    	 PAL500.setBounds(110,343,300,15);		 
     	 PAH500= new JLabel();
-		 PAH500.setBounds(80,100,300,15);
+		 PAH500.setBounds(110,363,300,15);
 		 
 		 PALL500= new JLabel();
-		 PALL500.setBounds(80,120,300,15);
+		 PALL500.setBounds(110,383,300,15);
 		 PAHH500= new JLabel();
-		 PAHH500.setBounds(80,140,300,15);
+		 PAHH500.setBounds(110,403,300,15);
 		 
 		 
 		 PAL2500= new JLabel();
-    	 PAL2500.setBounds(760,80,300,15);		 
+    	 PAL2500.setBounds(617,343,300,15);		 
     	 PAH2500= new JLabel();
-		 PAH2500.setBounds(760,100,300,15);
+		 PAH2500.setBounds(617,363,300,15);
 		 
 		 PALL2500= new JLabel();
-		 PALL2500.setBounds(760,120,300,15);
+		 PALL2500.setBounds(617,383,300,15);
 		 
 		 PAHH2500= new JLabel();
-		 PAHH2500.setBounds(760,140,300,15);
+		 PAHH2500.setBounds(617,403,300,15);
 		 
 		 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,1000);	
+		this.setSize(1000,908);	
 		this.add(Reset_Button);
 		this.add(Start_Button);
 		this.add(Stop_Button);
@@ -290,7 +337,8 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(TI100);
 		this.add(PI500);
 		this.add(PI2500);
-		
+		this.add(STARTUPTIMER);
+		this.add(autload);
 
 		this.add(VAL100);
 		this.add(VAH100);
@@ -327,10 +375,16 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(PALL2500);
 		this.add(PAHH2500);	
 		
-		
+		this.add(PV500);
+		this.add(PV2500);
+		this.add(PV100);
 		this.add(HS500);
 		this.add(HSTP500);
 		this.add(RESETREQU);
+		
+		this.add(HS500LDSP);
+		this.add(Summit_Button);
+	
 		
 		
 		this.add(panel);
@@ -391,6 +445,12 @@ public class ComFrame extends JFrame implements ActionListener {
     		}
        else if(e.getSource()==DISCH_Alrm_DISABLE) {
     	   DischargeDisableReq =1;
-       }	
+       }
+       else if(e.getSource()==Summit_Button) {
+    	   HSLD=HS500LDSP.getText();
+    	   System.out.println("loading setpoint="+HSLD);
+    	   HSLDSP= Integer.parseInt(HSLD);
+    	   System.out.println("loading setpoint="+HSLDSP);
+       }
    } 	
 }
