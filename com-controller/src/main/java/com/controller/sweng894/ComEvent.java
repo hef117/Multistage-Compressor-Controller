@@ -99,7 +99,7 @@ class ComEvent {
 				// System.out.println("engineering unit:"+ senEngUnit);
 			}
 		}
-		System.out.println("================================");
+		//System.out.println("================================");
 		// call the alarm leaf with parameters associated with low or high alarm
 		// conditions
 
@@ -154,17 +154,17 @@ class ComEvent {
 
 		String transmtag = "initialized";
 		int transmreading = 0; // sensor reading
-		int setpointLo = 0; // Alarm OR Shutdown set-point
-		int setpointHi = 0; // Alarm OR Shutdown set-point
-		int alarmFlagLo = 0; // alarm flag
-		int alarmFlagHi = 0; // alarm flag
-		int transmitter_status = 0; // sensor signal integrity
-		int c_status = 0; // compressor status
-		String alarm_DiscrpLo = "ALARM logic initilized ";
-		String alarm_DiscrpHi = "ALARM logic initilized ";
-		String perm_Discrp = "PERMISSIVE logic initilized ";
-		String transm_eng = "engineering unit";
-		String SD_transm_eng = "";
+//		int setpointLo = 0; // Alarm OR Shutdown set-point
+//		int setpointHi = 0; // Alarm OR Shutdown set-point
+//		int alarmFlagLo = 0; // alarm flag
+//		int alarmFlagHi = 0; // alarm flag
+//		int transmitter_status = 0; // sensor signal integrity
+//		int c_status = 0; // compressor status
+//		String alarm_DiscrpLo = "ALARM logic initilized ";
+//		String alarm_DiscrpHi = "ALARM logic initilized ";
+//		String perm_Discrp = "PERMISSIVE logic initilized ";
+//		String transm_eng = "engineering unit";
+//		String SD_transm_eng = "";
 		Compsite aux = new Compsite();
 
 		Object[] input_L = new Object[] { SenTag, senReading, senAlmHiSP, senShutDwnHiSP, senAlmLoSP, senShutDwnLoSP,

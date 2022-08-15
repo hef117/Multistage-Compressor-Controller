@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComEvent.java</span></div><h1>ComEvent.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+<span class="fc" id="L3">class ComEvent {</span>
+
+///========================================Alarm Module====================================================///
+
+	public static int[] leafevent(String SenTagIn, int senReadingIn, int senAlmHiSPIn, int senShutDwnHiSPIn,
+			int senAlmLoSPIn, int senAlmHiFlgIn, int senShutDwnHiFlgIn, int senAlmLoFlgIn, int senPermissFlgIn,
+			int sensSTATIn, int c_STATIn, String senAlmDiscrpHiIn, String senShutdwnDiscrpHiIn, String senAlmDiscrpLoIn,
+			String senPermissDiscrpIn, String senEngUnitIn) {
+
+		// Stage-1 I/O instruments
+<span class="fc" id="L13">		String SenTag = SenTagIn; // &quot;1ST Stage Vibration Sensor&quot;;</span>
+<span class="fc" id="L14">		int senReading = senReadingIn; // First Stage Vibration sensor reading</span>
+<span class="fc" id="L15">		int senAlmHiSP = senAlmHiSPIn; // First Stage vibration alarm set-point</span>
+<span class="fc" id="L16">		int senShutDwnHiSP = senShutDwnHiSPIn; // Shutdown high set-point</span>
+<span class="fc" id="L17">		int senAlmLoSP = senAlmLoSPIn; //</span>
+		
+<span class="fc" id="L19">		int senAlmHiFlg = senAlmHiFlgIn; // alarm high flag</span>
+<span class="fc" id="L20">		int senShutDwnHiFlg = senShutDwnHiFlgIn;</span>
+<span class="fc" id="L21">		int senAlmLoFlg = senAlmLoFlgIn; // alarm low flag</span>
+	
+<span class="fc" id="L23">		int senPermissFlg = senPermissFlgIn;// 2nd Stage Vibration permissive</span>
+<span class="fc" id="L24">		String senEngUnit = senEngUnitIn;</span>
+<span class="fc" id="L25">		int sensSTAT = sensSTATIn; // Sensor signal integrity</span>
+<span class="fc" id="L26">		int c_STAT = c_STATIn; // Sensor signal integrity</span>
+
+<span class="fc" id="L28">		String senAlmDiscrpHi = senAlmDiscrpHiIn;</span>
+<span class="fc" id="L29">		String senShutdwnDiscrpHi = senShutdwnDiscrpHiIn;</span>
+<span class="fc" id="L30">		String senAlmDiscrpLo = senAlmDiscrpLoIn;</span>
+		// String senShutdwnDiscrpLo= senShutdwnDiscrpLoIn;
+<span class="fc" id="L32">		String senPermissDiscrp = senPermissDiscrpIn;</span>
+		// String CoolingSystem = &quot;Compressor Cooling System&quot;;
+
+<span class="fc" id="L35">		String transmtag = &quot;initialized&quot;;</span>
+<span class="fc" id="L36">		int transmreading = 0; // sensor reading</span>
+<span class="fc" id="L37">		int setpointLo = 0; // Alarm OR Shutdown set-point</span>
+<span class="fc" id="L38">		int setpointHi = 0; // Alarm OR Shutdown set-point</span>
+<span class="fc" id="L39">		int FlagLo = 0; // alarm flag</span>
+<span class="fc" id="L40">		int FlagHi = 0; // alarm flag</span>
+<span class="fc" id="L41">		int transmitter_status = 0; // sensor signal integrity</span>
+<span class="fc" id="L42">		int c_status = 0; // compressor status</span>
+<span class="fc" id="L43">		String alarm_DiscrpLo = &quot;ALARM logic initilized &quot;;</span>
+<span class="fc" id="L44">		String alarm_DiscrpHi = &quot;ALARM logic initilized &quot;;</span>
+<span class="fc" id="L45">		String perm_Discrp = &quot;PERMISSIVE logic initilized &quot;;</span>
+<span class="fc" id="L46">		String transm_eng = &quot;engineering unit&quot;;</span>
+<span class="fc" id="L47">		String SD_transm_eng = &quot;&quot;;</span>
+
+<span class="fc" id="L49">		Object[] input_L = new Object[] { SenTag, senReading, senAlmHiSP, senShutDwnHiSP, senAlmLoSP, senAlmHiFlg,</span>
+<span class="fc" id="L50">				senShutDwnHiFlg, senAlmLoFlg, sensSTAT, c_STAT, senAlmDiscrpHi, senShutdwnDiscrpHi, senAlmDiscrpLo,</span>
+				senPermissDiscrp, senEngUnit };
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		for (int i = 0; i &lt; 15; i++) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if (i == 0) {</span>
+<span class="fc" id="L55">				transmtag = (String) input_L[i];</span>
+				// System.out.println(&quot;Transmitter Discription:&quot; + &quot; &quot; + transmtag);
+			}
+<span class="fc bfc" id="L58" title="All 2 branches covered.">			else if (i == 1) {</span>
+<span class="fc" id="L59">				transmreading = (int) input_L[i];</span>
+				// System.out.println(&quot;Transmitter READING&quot; + &quot; &quot; +transmreading);
+<span class="fc bfc" id="L61" title="All 2 branches covered.">			} else if (i == 2) {</span>
+<span class="fc" id="L62">				senAlmHiSP = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor high alarm set point&quot; + &quot; &quot; +senAlmHiSP);
+<span class="fc bfc" id="L64" title="All 2 branches covered.">			} else if (i == 3) {</span>
+<span class="fc" id="L65">				senShutDwnHiSP = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor high shutdown set point&quot; + &quot; &quot; +senShutDwnHiSP);
+<span class="fc bfc" id="L67" title="All 2 branches covered.">			} else if (i == 4) {</span>
+<span class="fc" id="L68">				senAlmLoSP = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor Low alarm setpoint&quot; + &quot; &quot; +senAlmLoSP);
+<span class="fc bfc" id="L70" title="All 2 branches covered.">			} else if (i == 5) {</span>
+<span class="fc" id="L71">				senAlmHiFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor high alarm flag&quot;+ senAlmHiFlg);
+<span class="fc bfc" id="L73" title="All 2 branches covered.">			} else if (i == 6) {</span>
+<span class="fc" id="L74">				senShutDwnHiFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor high shutdown flag:&quot; +senShutDwnHiFlg);
+<span class="fc bfc" id="L76" title="All 2 branches covered.">			} else if (i == 7) {</span>
+<span class="fc" id="L77">				senAlmLoFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor low alarm flag:&quot;+ senAlmLoFlg);
+<span class="fc bfc" id="L79" title="All 2 branches covered.">			} else if (i == 8) {</span>
+<span class="fc" id="L80">				sensSTAT = (int) input_L[i];</span>
+				// System.out.println(&quot;Sensor status:&quot;+ sensSTAT);
+<span class="fc bfc" id="L82" title="All 2 branches covered.">			} else if (i == 9) {</span>
+<span class="fc" id="L83">				c_STAT = (int) input_L[i];</span>
+				// System.out.println(&quot;Compressor status:&quot;+ c_STAT);
+<span class="fc bfc" id="L85" title="All 2 branches covered.">			} else if (i == 10) {</span>
+<span class="fc" id="L86">				senAlmDiscrpHi = (String) input_L[i];</span>
+				// System.out.println(&quot;Sensor high alarm description:&quot;+senAlmDiscrpHi);
+<span class="fc bfc" id="L88" title="All 2 branches covered.">			} else if (i == 11) {</span>
+<span class="fc" id="L89">				senShutdwnDiscrpHi = (String) input_L[i];</span>
+				// System.out.println(&quot;Sensor high shutdown description:&quot;+ senShutdwnDiscrpHi);
+<span class="fc bfc" id="L91" title="All 2 branches covered.">			} else if (i == 12) {</span>
+<span class="fc" id="L92">				senAlmDiscrpLo = (String) input_L[i];</span>
+				// System.out.println(&quot;Sensor low alarm description:&quot;+ senAlmDiscrpLo);
+<span class="fc bfc" id="L94" title="All 2 branches covered.">			} else if (i == 13) {</span>
+<span class="fc" id="L95">				senPermissDiscrp = (String) input_L[i];</span>
+				// System.out.println(&quot;Sensor Permissive description:&quot; + senPermissDiscrp);
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">			} else if (i == 14) {</span>
+<span class="fc" id="L98">				senEngUnit = (String) input_L[i];</span>
+				// System.out.println(&quot;engineering unit:&quot;+ senEngUnit);
+			}
+		}
+		//System.out.println(&quot;================================&quot;);
+		// call the alarm leaf with parameters associated with low or high alarm
+		// conditions
+
+<span class="fc" id="L106">		ComAuxSys alarmLow = new LowAlarm(transmtag, transmreading, senAlmLoSP, senAlmLoFlg, sensSTAT, alarm_DiscrpLo,</span>
+				senEngUnit);
+
+<span class="fc" id="L109">		ComAuxSys alarmHigh = new HighAlarm(transmtag, transmreading, senAlmHiSP,senAlmHiFlg, sensSTAT, alarm_DiscrpHi,</span>
+				senEngUnit);
+
+<span class="fc" id="L112">		ComAuxSys PermissVib = new AuxVibPermissive(transmtag, sensSTAT, senPermissFlg, c_status, senPermissDiscrp);</span>
+
+<span class="fc" id="L114">		ComAuxSys shutdwnHigh = new Highshutdown(transmtag, transmreading, senShutDwnHiSP,senShutDwnHiFlg, sensSTAT,</span>
+				senShutdwnDiscrpHi, senEngUnit);
+
+<span class="fc" id="L117">		senAlmLoFlg = alarmLow.detectLowAlarm();</span>
+<span class="fc" id="L118">		senAlmHiFlg = alarmHigh.detectHighAlarm();</span>
+<span class="fc" id="L119">		senPermissFlg = PermissVib.detectPermssive();</span>
+<span class="fc" id="L120">		senShutDwnHiFlg = shutdwnHigh.detectHighShutdown();</span>
+<span class="fc" id="L121">		int[] flag = new int[4];</span>
+<span class="fc" id="L122">		flag[0] = senAlmLoFlg;</span>
+<span class="fc" id="L123">		flag[1] = senAlmHiFlg;</span>
+<span class="fc" id="L124">		flag[2] = senPermissFlg;</span>
+<span class="fc" id="L125">		flag[3] = senShutDwnHiFlg;</span>
+
+<span class="fc" id="L127">		return flag;</span>
+
+	}
+
+	public static int[] compsiteEvent(String SenTagIn, int senReadingIn, int senAlmHiSPIn, int senShutDwnHiSPIn,
+			int senAlmLoSPIn, int senShutDwnLoSPIn, int senAlmHiFlgIn, int senShutDwnHiFlgIn, int senAlmLoFlgIn,
+			int senShutDwnLoFlgIn, int sensSTATIn, String senAlmDiscrpHiIn, String senShutdwnDiscrpHiIn,
+			String senAlmDiscrpLoIn, String senShutdwnDiscrpLoIn, String senEngUnitIn, ComAuxSys auxcooling) {
+		// Stage-1 I/O instruments
+<span class="fc" id="L136">		String SenTag = SenTagIn; // &quot;1ST Stage Vibration Sensor&quot;;</span>
+<span class="fc" id="L137">		int senReading = senReadingIn; // First Stage Vibration sensor reading</span>
+<span class="fc" id="L138">		int senAlmHiSP = senAlmHiSPIn; // First Stage vibration alarm set-point</span>
+<span class="fc" id="L139">		int senShutDwnHiSP = senShutDwnHiSPIn; // Shutdown high set-point</span>
+<span class="fc" id="L140">		int senAlmLoSP = senAlmLoSPIn;</span>
+<span class="fc" id="L141">		int senShutDwnLoSP = senShutDwnLoSPIn;</span>
+<span class="fc" id="L142">		int senAlmHiFlg = senAlmHiFlgIn; // alarm high flag</span>
+<span class="fc" id="L143">		int senShutDwnHiFlg = senShutDwnHiFlgIn;</span>
+<span class="fc" id="L144">		int senAlmLoFlg = senAlmLoFlgIn;</span>
+<span class="fc" id="L145">		int senShutDwnLoFlg = senShutDwnLoFlgIn;</span>
+<span class="fc" id="L146">		int sensSTAT = sensSTATIn; // Sensor signal integrity</span>
+<span class="fc" id="L147">		String senAlmDiscrpLo = senAlmDiscrpLoIn;</span>
+<span class="fc" id="L148">		String senAlmDiscrpHi = senAlmDiscrpHiIn;</span>
+<span class="fc" id="L149">		String senShutdwnDiscrpHi = senShutdwnDiscrpHiIn;</span>
+<span class="fc" id="L150">		String senShutdwnDiscrpLo = senShutdwnDiscrpLoIn;</span>
+		// String senPermissDiscrp= &quot;Check for permissive*&quot;;
+		// String CoolingSystem = &quot;Compressor Cooling System&quot;;
+<span class="fc" id="L153">		String senEngUnit = senEngUnitIn;</span>
+
+<span class="fc" id="L155">		String transmtag = &quot;initialized&quot;;</span>
+<span class="fc" id="L156">		int transmreading = 0; // sensor reading</span>
+//		int setpointLo = 0; // Alarm OR Shutdown set-point
+//		int setpointHi = 0; // Alarm OR Shutdown set-point
+//		int alarmFlagLo = 0; // alarm flag
+//		int alarmFlagHi = 0; // alarm flag
+//		int transmitter_status = 0; // sensor signal integrity
+//		int c_status = 0; // compressor status
+//		String alarm_DiscrpLo = &quot;ALARM logic initilized &quot;;
+//		String alarm_DiscrpHi = &quot;ALARM logic initilized &quot;;
+//		String perm_Discrp = &quot;PERMISSIVE logic initilized &quot;;
+//		String transm_eng = &quot;engineering unit&quot;;
+//		String SD_transm_eng = &quot;&quot;;
+<span class="fc" id="L168">		Compsite aux = new Compsite();</span>
+
+<span class="fc" id="L170">		Object[] input_L = new Object[] { SenTag, senReading, senAlmHiSP, senShutDwnHiSP, senAlmLoSP, senShutDwnLoSP,</span>
+<span class="fc" id="L171">				senAlmHiFlg, senShutDwnHiFlg, senAlmLoFlg, senShutDwnLoFlg, sensSTAT, senAlmDiscrpHi,</span>
+				senShutdwnDiscrpHi, senAlmDiscrpLo, senShutdwnDiscrpLo, senEngUnit };
+		// map event input parameters to event leaf
+
+<span class="fc bfc" id="L175" title="All 2 branches covered.">		for (int i = 0; i &lt; 16; i++) {</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">			if (i == 0) {</span>
+<span class="fc" id="L177">				transmtag = (String) input_L[i];</span>
+				// System.out.println(&quot;Transmitter Discription:&quot; + &quot; &quot; + transmtag);
+			}
+<span class="fc bfc" id="L180" title="All 2 branches covered.">			else if (i == 1) {</span>
+<span class="fc" id="L181">				transmreading = (int) input_L[i];</span>
+				// System.out.println(&quot;Transmitter READING&quot; + &quot; &quot; +transmreading);
+			}
+<span class="fc bfc" id="L184" title="All 2 branches covered.">			else if (i == 2) {</span>
+<span class="fc" id="L185">				senAlmHiSP = (int) input_L[i];</span>
+				// System.out.println(&quot;senAlmHiSP&quot; + &quot; &quot; +senAlmHiSP);
+			}
+<span class="fc bfc" id="L188" title="All 2 branches covered.">			else if (i == 3) {</span>
+<span class="fc" id="L189">				senShutDwnHiSP = (int) input_L[i];</span>
+				// System.out.println(&quot;senShutDwnHiSP&quot; + &quot; &quot; +senShutDwnHiSP);
+<span class="fc bfc" id="L191" title="All 2 branches covered.">			} else if (i == 4) {</span>
+<span class="fc" id="L192">				senAlmLoSP = (int) input_L[i];</span>
+				// System.out.println(&quot;senAlmLoSP&quot; + &quot; &quot; +senAlmLoSP);
+			}
+<span class="fc bfc" id="L195" title="All 2 branches covered.">			else if (i == 5) {</span>
+<span class="fc" id="L196">				senShutDwnLoSP = (int) input_L[i];</span>
+				// System.out.println(&quot;senShutDwnLoSP&quot; + &quot; &quot; +senShutDwnLoSP);
+<span class="fc bfc" id="L198" title="All 2 branches covered.">			} else if (i == 6) {</span>
+<span class="fc" id="L199">				senAlmHiFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;senAlmHiFlg&quot; + &quot; &quot; +senAlmHiFlg);
+			}
+<span class="fc bfc" id="L202" title="All 2 branches covered.">			else if (i == 7) {</span>
+<span class="fc" id="L203">				senShutDwnHiFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;senShutDwnHiFlg&quot;+&quot; &quot;+senShutDwnHiFlg);
+<span class="fc bfc" id="L205" title="All 2 branches covered.">			} else if (i == 8) {</span>
+<span class="fc" id="L206">				senAlmLoFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;senAlmLoFlg&quot;+&quot; &quot;+senAlmLoFlg);
+<span class="fc bfc" id="L208" title="All 2 branches covered.">			} else if (i == 9) {</span>
+<span class="fc" id="L209">				senShutDwnLoFlg = (int) input_L[i];</span>
+				// System.out.println(&quot;senShutDwnLoFlg&quot;+&quot; &quot;+senShutDwnLoFlg);
+			}
+<span class="fc bfc" id="L212" title="All 2 branches covered.">			else if (i == 10) {</span>
+<span class="fc" id="L213">				sensSTAT = (int) input_L[i];</span>
+				// System.out.println(&quot;sensSTAT&quot;+&quot;&quot;+sensSTAT);
+<span class="fc bfc" id="L215" title="All 2 branches covered.">			} else if (i == 11) {</span>
+<span class="fc" id="L216">				senAlmDiscrpHi = (String) input_L[i];</span>
+				// System.out.println(&quot;senAlmDiscrpHi&quot;+&quot; &quot;+senAlmDiscrpHi);
+			}
+<span class="fc bfc" id="L219" title="All 2 branches covered.">			else if (i == 12) {</span>
+<span class="fc" id="L220">				senShutdwnDiscrpHi = (String) input_L[i];</span>
+				// System.out.println(&quot;senShutdwnDiscrpHi&quot;+&quot; &quot;+senShutdwnDiscrpHi);
+<span class="fc bfc" id="L222" title="All 2 branches covered.">			} else if (i == 13) {</span>
+<span class="fc" id="L223">				senAlmDiscrpLo = (String) input_L[i];</span>
+				// System.out.println(&quot;senAlmDiscrpLo&quot;+&quot; &quot;+senAlmDiscrpLo);
+<span class="fc bfc" id="L225" title="All 2 branches covered.">			} else if (i == 14) {</span>
+<span class="fc" id="L226">				senShutdwnDiscrpLo = (String) input_L[i];</span>
+				// System.out.println(&quot;senShutdwnDiscrpLo&quot;+&quot; &quot;+senShutdwnDiscrpLo);
+			}
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">			else if (i == 15) {</span>
+<span class="fc" id="L230">				senEngUnit = (String) input_L[i];</span>
+				// System.out.println(&quot;senEngUnit&quot;+&quot; &quot;+senEngUnit);
+			}
+		}
+		// call composite with different alarm or shutdown parameters
+<span class="fc" id="L235">		int[] flagComposite = new int[4];</span>
+		
+<span class="fc" id="L237">		auxcooling = new LowAlarm(transmtag, transmreading, senAlmLoSP, senAlmLoFlg, sensSTAT, senAlmDiscrpLo,senEngUnit);</span>
+<span class="fc" id="L238">		aux.addsys(auxcooling);</span>
+<span class="fc" id="L239">		int Flg = aux.detectLowAlarm();</span>
+<span class="fc" id="L240">		flagComposite[0] = Flg;</span>
+
+<span class="fc" id="L242">		auxcooling = new HighAlarm(transmtag, transmreading, senAlmHiSP, senAlmHiFlg, sensSTAT, senAlmDiscrpHi,senEngUnit);</span>
+<span class="fc" id="L243">		aux.addsys(auxcooling);</span>
+<span class="fc" id="L244">		senAlmHiFlg = aux.detectHighAlarm();</span>
+<span class="fc" id="L245">		flagComposite[1] = senAlmHiFlg;</span>
+
+<span class="fc" id="L247">		auxcooling = new Lowshutdown(transmtag, transmreading, senShutDwnLoSP, senShutDwnLoFlg, sensSTAT,senShutdwnDiscrpLo, senEngUnit);</span>
+<span class="fc" id="L248">		aux.addsys(auxcooling);</span>
+<span class="fc" id="L249">		senShutDwnLoFlg = aux.detectLowShutdown();</span>
+<span class="fc" id="L250">		flagComposite[2] = senShutDwnLoFlg;</span>
+
+<span class="fc" id="L252">		auxcooling = new Highshutdown(transmtag, transmreading, senShutDwnHiSP, senShutDwnHiFlg, sensSTAT,senShutdwnDiscrpHi, senEngUnit);</span>
+<span class="fc" id="L253">		aux.addsys(auxcooling);</span>
+<span class="fc" id="L254">		senShutDwnHiFlg = aux.detectHighShutdown();</span>
+<span class="fc" id="L255">		flagComposite[3] = senShutDwnHiFlg;</span>
+		
+<span class="fc" id="L257">		return flagComposite;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

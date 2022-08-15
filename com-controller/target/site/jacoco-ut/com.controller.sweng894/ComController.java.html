@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComController.java</span></div><h1>ComController.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+import java.awt.Color;
+
+
+<span class="nc" id="L6">public class ComController {</span>
+
+	public static void main(String[] args) throws Exception {
+
+		// alarm disable requests
+<span class="nc" id="L11">		int Stg1VibDisableReq = 0;</span>
+<span class="nc" id="L12">		int Stg2VibDisableReq = 0;</span>
+<span class="nc" id="L13">		int Stg3VibDisableReq = 0;</span>
+<span class="nc" id="L14">		int auxcoolingDisableReq = 0;</span>
+<span class="nc" id="L15">		int auxoilDisableReq = 0;</span>
+<span class="nc" id="L16">		int suctionDisableReq = 0;</span>
+<span class="nc" id="L17">		int dischargeDisableReq = 0;</span>
+
+<span class="nc" id="L19">		int HIS500 = 0; // Compressor start/stop status 0= stopped, 1= ready to start, 2= Running</span>
+		// overall shutdown word
+
+<span class="nc" id="L22">		int HIS500_STR = 0; // Compressor start command</span>
+<span class="nc" id="L23">		int HIS500_STP = 0; // Compressor stop command</span>
+<span class="nc" id="L24">		int HIS500_LD  = 0; // Compressor loading</span>
+<span class="nc" id="L25">		int HIS500_UNLD  = 0; // Compressor unloading</span>
+		//int YSP2500    = ; // Compressor loading set-point in PSIG.
+		
+<span class="nc" id="L28">		int shutdownWord = 0;</span>
+<span class="nc" id="L29">		String comRequest = &quot; &quot;;</span>
+<span class="nc" id="L30">		String driveFeedBack = &quot; &quot;;</span>
+
+		// System.out.println(&quot;command=&quot; + shutdownWord);
+		// ======== User Interface start=====//
+<span class="nc" id="L34">		ComFrame myframe = new ComFrame();</span>
+<span class="nc" id="L35">		Thread.sleep(0000);</span>
+<span class="nc" id="L36">		shutdownWord = myframe.Resetcommand;</span>
+		//System.out.println(&quot;out of loop shutdownWord=&quot; + shutdownWord);
+<span class="nc" id="L38">		Thread.sleep(0000);</span>
+<span class="nc" id="L39">		HIS500_STR = myframe.Startcommand;</span>
+		// System.out.println(&quot;HIS500_STR=&quot; + HIS500_STR);
+
+		
+		// The following 7 variables are for instruments increment readings - for
+		// simulation purposes only reading simulation only
+<span class="nc" id="L45">		int VT100_increment = 0;</span>
+<span class="nc" id="L46">		int VT200_increment = 0;</span>
+<span class="nc" id="L47">		int VT300_increment = 0;</span>
+<span class="nc" id="L48">		int PT100_increment = 0;</span>
+<span class="nc" id="L49">		int TT100_increment = 0;</span>
+<span class="nc" id="L50">		int PT500_increment = 0;</span>
+<span class="nc" id="L51">		int PT2500_increment = 0;</span>
+<span class="nc" id="L52">		int[] TransmitterReading = new int[7];</span>
+<span class="nc" id="L53">		int[] autoLoadPermissives = new int[10];</span>
+<span class="nc" id="L54">		int[] autoUnLoadPermissives = new int[10];</span>
+<span class="nc" id="L55">		int[] valve_Increment = new int[10];</span>
+		
+<span class="nc" id="L57">		Boolean startupPeriodDone=false;</span>
+<span class="nc" id="L58">		Boolean startuptimerdone=false ;</span>
+		
+		
+		do {
+<span class="nc" id="L62">			Thread.sleep(2000);</span>
+<span class="nc" id="L63">			shutdownWord = myframe.Resetcommand;</span>
+			//System.out.println(&quot;Inside loop shutdownWord=&quot; + shutdownWord);
+<span class="nc" id="L65">			HIS500_STR = myframe.Startcommand;</span>
+			//System.out.println(&quot;HIS500_STR=&quot; + myframe.Startcommand);
+<span class="nc" id="L67">			HIS500_STP = myframe.Stopcommand;</span>
+<span class="nc" id="L68">			HIS500_UNLD= myframe.AutoStopcommand;</span>
+			//System.out.println(&quot;HIS500_UNLD=&quot; + HIS500_UNLD);
+			
+<span class="nc" id="L71">			int YSP2500    = myframe.HSLDSP; // Compressor loading set-point in PSIG.</span>
+			// Simulation values.
+<span class="nc" id="L73">			VT100_increment = 1;</span>
+<span class="nc" id="L74">			VT200_increment = 1;</span>
+<span class="nc" id="L75">			VT300_increment = 1;</span>
+<span class="nc" id="L76">			PT100_increment = 1;</span>
+<span class="nc" id="L77">			TT100_increment = 1;</span>
+<span class="nc" id="L78">			PT500_increment = 1;</span>
+<span class="nc" id="L79">			PT2500_increment =3;</span>
+            
+<span class="nc" id="L81">			int permissWord = 0; // overall permissive word</span>
+			// Call the simulation class simulate the compressor variables
+<span class="nc" id="L83">			ComSimulation sim = new ComSimulation();</span>
+
+<span class="nc" id="L85">			String transmtag = &quot;initialized&quot;;</span>
+<span class="nc" id="L86">			int transmreading = 0; // sensor reading</span>
+<span class="nc" id="L87">			int setpoint = 0; // Alarm OR Shutdown set-point</span>
+<span class="nc" id="L88">			int alarmFlag = 0; // alarm flag</span>
+<span class="nc" id="L89">			int transmitter_status = 0; // sensor signal integrity</span>
+<span class="nc" id="L90">			String alarm_Discrp = &quot;ALARM logic initilized &quot;;</span>
+<span class="nc" id="L91">			String transm_eng = &quot;engineering unit&quot;;</span>
+
+<span class="nc" id="L93">			String VT100 = &quot;1ST Stage Vibration Sensor&quot;;</span>
+
+<span class="nc" id="L95">			int VI100 = TransmitterReading[0]; // First Stage Vibration sensor reading</span>
+<span class="nc" id="L96">			int VSH100 = 5; // First Stage vibration alarm set-point</span>
+<span class="nc" id="L97">			int VSL100 = 2; //</span>
+<span class="nc" id="L98">			int VSHH100 = 9; // Shutdown high set-point</span>
+<span class="nc" id="L99">			int VAH100 = 0; // alarm high flag; 0 = cleared, 1 = alarm, 2 =disabled.</span>
+<span class="nc" id="L100">			int VAL100 = 0; // alarm low flag</span>
+<span class="nc" id="L101">			int VAHH100 = 0; // shutdown high flag</span>
+<span class="nc" id="L102">			int VPH100 = 0; // 2nd Stage Vibration permissive</span>
+<span class="nc" id="L103">			int VT100_STAT = 1; // Sensor signal integrity</span>
+<span class="nc" id="L104">			String VAH100_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L105">			String VAL100_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L106">			String VAHH100_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L107">			String VPH100_Discrp = &quot;Check for permissive*&quot;;</span>
+<span class="nc" id="L108">			String VT100_ENG = &quot;mils&quot;;</span>
+<span class="nc" id="L109">			myframe.VI100.setText(&quot;VT100&quot;+&quot;  &quot;+VI100+&quot;   &quot;+VT100_ENG);</span>
+<span class="nc" id="L110">			myframe.VSL100.setText(&quot;VSL100&quot;+&quot;  &quot;+VSL100);</span>
+<span class="nc" id="L111">			myframe.VSH100.setText(&quot;VSH100&quot;+&quot;  &quot;+VSH100);</span>
+<span class="nc" id="L112">			myframe.VSHH100.setText(&quot;VSHH100&quot;+&quot;  &quot;+VSHH100);</span>
+
+			// Stage-2 I/O instruments
+<span class="nc" id="L115">			String VT200 = &quot;2ND Stage Vibration Sensor&quot;;</span>
+<span class="nc" id="L116">			int VI200 = TransmitterReading[1]; // Stage Vibration sensor reading</span>
+<span class="nc" id="L117">			int VSH200 = 15; // vibration high alarm set-point</span>
+<span class="nc" id="L118">			int VSL200 = 2; //</span>
+<span class="nc" id="L119">			int VSHH200 = 2000; // Shutdown high set-point</span>
+<span class="nc" id="L120">			int VAH200 = 0; // alarm high flag</span>
+<span class="nc" id="L121">			int VAL200 = 0; // alarm low flag</span>
+<span class="nc" id="L122">			int VAHH200 = 2000; // shutdown high flag</span>
+<span class="nc" id="L123">			int VPH200 = 0; // 2nd Stage Vibration permissive</span>
+<span class="nc" id="L124">			int VT200_STAT = 1; // Sensor signal integrity</span>
+<span class="nc" id="L125">			String VAH200_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L126">			String VAL200_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L127">			String VAHH200_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L128">			String VPH200_Discrp = &quot;Check for permissive*&quot;;</span>
+<span class="nc" id="L129">			String VT200_ENG = &quot;mils&quot;;</span>
+<span class="nc" id="L130">			myframe.VI200.setText(&quot;VT200&quot; + &quot;   &quot; + VI200 + &quot;   &quot; + VT200_ENG);</span>
+
+			// Stage-3 I/O instruments
+<span class="nc" id="L133">			String VT300 = &quot;3RD Stage Vibration Sensor&quot;;</span>
+<span class="nc" id="L134">			int VI300 = TransmitterReading[2]; // Stage Vibration sensor reading</span>
+<span class="nc" id="L135">			int VSH300 = 15; // vibration high alarm set-point</span>
+<span class="nc" id="L136">			int VSL300 = 2; //</span>
+<span class="nc" id="L137">			int VSHH300 = 2000; // Shutdown high set-point</span>
+<span class="nc" id="L138">			int VAH300 = 0; // alarm high flag</span>
+<span class="nc" id="L139">			int VAL300 = 0; // alarm low flag</span>
+<span class="nc" id="L140">			int VAHH300 = 0; // shutdown high flag</span>
+<span class="nc" id="L141">			int VPH300 = 0; // 2nd Stage Vibration permissive</span>
+<span class="nc" id="L142">			int VT300_STAT = 1; // Sensor signal integrity</span>
+<span class="nc" id="L143">			String VAH300_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L144">			String VAL300_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L145">			String VAHH300_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L146">			String VPH300_Discrp = &quot;Check for permissive*&quot;;</span>
+<span class="nc" id="L147">			String VT300_ENG = &quot;mils&quot;;</span>
+<span class="nc" id="L148">			myframe.VI300.setText(&quot;VT300&quot; + &quot;   &quot; + VI300 + &quot;   &quot; + VT300_ENG);</span>
+
+			// Auxiliary Systems instrumentation tags
+
+<span class="nc" id="L152">			String PT100 = &quot;PT100 Compressor Cooling Pressure&quot;;</span>
+<span class="nc" id="L153">			int PI100 = TransmitterReading[3]; // Sensor Reading</span>
+<span class="nc" id="L154">			int PSH100 = 15; // Alarm High set-point</span>
+<span class="nc" id="L155">			int PSL100 = 2; // Alarm low set point</span>
+<span class="nc" id="L156">			int PSHH100 = 40; // Shutdown high set-point</span>
+<span class="nc" id="L157">			int PSLL100 = -10; // Shutdown set-point</span>
+<span class="nc" id="L158">			int PAH100 = 0; // alarm high flag</span>
+<span class="nc" id="L159">			int PAL100 = 0; // alarm low flag</span>
+<span class="nc" id="L160">			int PAHH100 = 0; // shutdown high flag</span>
+<span class="nc" id="L161">			int PALL100 = 0; // shutdown low flag</span>
+<span class="nc" id="L162">			int PT100_STAT = 1; // Sensor signal integrity</span>
+<span class="nc" id="L163">			String PAH100_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L164">			String PAL100_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L165">			String PAHH100_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L166">			String PALL100_Discrp_SD = &quot;Check for low shutdown&quot;;</span>
+<span class="nc" id="L167">			String PT100_ENG = &quot;PSIG&quot;;</span>
+<span class="nc" id="L168">			myframe.PI100.setText(&quot;PT100&quot; + &quot;   &quot; + PI100 + &quot;   &quot; + PT100_ENG);</span>
+
+<span class="nc" id="L170">			String TT100 = &quot;TT100 Oil System Temperature&quot;;</span>
+<span class="nc" id="L171">			int TI100 = TransmitterReading[4];</span>
+<span class="nc" id="L172">			int TSH100 = 120;</span>
+<span class="nc" id="L173">			int TSL100 = 10;</span>
+<span class="nc" id="L174">			int TSHH100 = 200;</span>
+<span class="nc" id="L175">			int TSLL100 = -10;</span>
+<span class="nc" id="L176">			int TAH100 = 0;</span>
+<span class="nc" id="L177">			int TAL100 = 0;</span>
+<span class="nc" id="L178">			int TAHH100 = 0;</span>
+<span class="nc" id="L179">			int TALL100 = 0;</span>
+<span class="nc" id="L180">			int TT100_STAT = 1;</span>
+<span class="nc" id="L181">			String TAH100_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L182">			String TAL100_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L183">			String TAHH100_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L184">			String TALL100_Discrp_SD = &quot;Check for low shutdown&quot;;</span>
+<span class="nc" id="L185">			String TT100_ENG = &quot;degC&quot;;</span>
+<span class="nc" id="L186">			myframe.TI100.setText(&quot;TT100&quot; + &quot;   &quot; + TI100 + &quot;   &quot; + TT100_ENG);</span>
+<span class="nc" id="L187">			myframe.TSL100.setText(&quot;TSL100&quot; + &quot;   &quot; + TSL100);</span>
+<span class="nc" id="L188">			myframe.TSH100.setText(&quot;TSH100&quot; + &quot;   &quot; + TSH100);</span>
+<span class="nc" id="L189">			myframe.TSLL100.setText(&quot;TSLL100&quot; + &quot;   &quot; + TSLL100);</span>
+<span class="nc" id="L190">			myframe.TSHH100.setText(&quot;TSHH100&quot; + &quot;   &quot; + TSHH100);</span>
+
+<span class="nc" id="L192">			String PT500 = &quot;PT500 Compressor Suction Pressure&quot;;</span>
+<span class="nc" id="L193">			int PI500 = TransmitterReading[5];</span>
+<span class="nc" id="L194">			int PSH500 = 30;</span>
+<span class="nc" id="L195">			int PSL500 = 10;</span>
+<span class="nc" id="L196">			int PSHH500 = 40;</span>
+<span class="nc" id="L197">			int PSLL500 = -20;</span>
+<span class="nc" id="L198">			int PAH500 = 0;</span>
+<span class="nc" id="L199">			int PAL500 = 0;</span>
+<span class="nc" id="L200">			int PAHH500 = 0;</span>
+<span class="nc" id="L201">			int PALL500 = 0;</span>
+<span class="nc" id="L202">			int PT500_STAT = 1;</span>
+<span class="nc" id="L203">			String PAH500_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L204">			String PAL500_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L205">			String PAHH500_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L206">			String PALL500_Discrp_SD = &quot;Check for low shutdown&quot;;</span>
+<span class="nc" id="L207">			String PT500_ENG = &quot;PSIG&quot;;</span>
+<span class="nc" id="L208">			myframe.PI500.setText(&quot;PT500&quot; + &quot;   &quot; + PI500 + &quot;   &quot; + PT500_ENG);</span>
+<span class="nc" id="L209">			myframe.PSL500.setText(&quot;PSL500&quot; + &quot;   &quot; + PSL500);</span>
+<span class="nc" id="L210">			myframe.PSH500.setText(&quot;PSH500&quot; + &quot;   &quot; + PSH500);</span>
+<span class="nc" id="L211">			myframe.PSLL500.setText(&quot;PSLL500&quot; + &quot;   &quot; + PSLL500);</span>
+<span class="nc" id="L212">			myframe.PSHH500.setText(&quot;PSHH500&quot; + &quot;   &quot; + PSHH500);</span>
+			
+
+<span class="nc" id="L215">			String PT2500 = &quot;PT2500 Compressor discharge Pressure&quot;;</span>
+<span class="nc" id="L216">			int PI2500 = TransmitterReading[6];</span>
+<span class="nc" id="L217">			int PSH2500 = 200;</span>
+<span class="nc" id="L218">			int PSL2500 = 10;</span>
+<span class="nc" id="L219">			int PSHH2500 = 220;</span>
+<span class="nc" id="L220">			int PSLL2500 = -20;</span>
+<span class="nc" id="L221">			int PAH2500 = 300;</span>
+<span class="nc" id="L222">			int PAL2500 = 0;</span>
+<span class="nc" id="L223">			int PAHH2500 = 0;</span>
+<span class="nc" id="L224">			int PALL2500 = 0;</span>
+<span class="nc" id="L225">			int PT2500_STAT = 1;</span>
+<span class="nc" id="L226">			String PAH2500_Discrp = &quot;Check for high alarm&quot;;</span>
+<span class="nc" id="L227">			String PAL2500_Discrp_LO = &quot;Check for low alarm&quot;;</span>
+<span class="nc" id="L228">			String PAHH2500_Discrp_SD = &quot;Check for high shutdown&quot;;</span>
+<span class="nc" id="L229">			String PT2500_ENG = &quot;PSIG&quot;;</span>
+<span class="nc" id="L230">			myframe.PI2500.setText(&quot;PT2500&quot; + &quot;   &quot; + PI2500 + &quot;   &quot; + PT2500_ENG);</span>
+<span class="nc" id="L231">			myframe.PSL2500.setText(&quot;PSL2500&quot; + &quot;   &quot; + PSL2500);</span>
+<span class="nc" id="L232">			myframe.PSH2500.setText(&quot;PSH2500&quot; + &quot;   &quot; + PSH2500);</span>
+<span class="nc" id="L233">			myframe.PSLL2500.setText(&quot;PSLL2500&quot; + &quot;   &quot; + PSLL2500);</span>
+<span class="nc" id="L234">			myframe.PSHH2500.setText(&quot;PSHH2500&quot; + &quot;   &quot; + PSHH2500);</span>
+
+//======================================================= Actuators========================//
+			//---- suction valve----------------------------//
+<span class="nc" id="L238">			String PV500 = &quot;PV500&quot;;</span>
+<span class="nc" id="L239">			int PY500 = valve_Increment[0];</span>
+<span class="nc" id="L240">			int PYS500RamUp  = 8;</span>
+<span class="nc" id="L241">			int PYS500RamDwn = 4;</span>
+<span class="nc" id="L242">			String PV500_ENG = &quot;% OPEN&quot;;</span>
+<span class="nc" id="L243">			myframe.PV500.setText(PV500+&quot; &quot;+PY500+&quot; &quot;+PV500_ENG);</span>
+			//---- Recirculation valve------------------------//
+<span class="nc" id="L245">			String PV100 = &quot;PV100&quot;;</span>
+<span class="nc" id="L246">			int PY100 = valve_Increment[1];</span>
+<span class="nc" id="L247">			int PYS100RamUp  = 4;</span>
+<span class="nc" id="L248">			int PYS100RamDwn = 6;</span>
+<span class="nc" id="L249">			String PV100_ENG = &quot;% OPEN&quot;;</span>
+<span class="nc" id="L250">			myframe.PV100.setText(PV100+&quot; &quot;+PY100+&quot; &quot;+PV100_ENG);</span>
+			//---- Discharge valve----------------------------//
+<span class="nc" id="L252">			String PV2500 = &quot;PV2500&quot;;</span>
+<span class="nc" id="L253">			int PY2500 = valve_Increment[2];</span>
+<span class="nc" id="L254">			int PYS2500RamUp  = 4;</span>
+<span class="nc" id="L255">			int PYS2500RamDwn = 4;</span>
+<span class="nc" id="L256">			String PV2500_ENG = &quot;% OPEN&quot;;</span>
+<span class="nc" id="L257">			myframe.PV2500.setText(PV2500+&quot; &quot;+PY2500+&quot; &quot;+PV2500_ENG);</span>
+	           
+//----call simulation controller---- important this logic should be disabled for actual deployment----//
+<span class="nc" id="L260">				TransmitterReading = sim.comTransmitterSim(HIS500, shutdownWord, HIS500_STR, VI100, VT100_increment, VI200,</span>
+						VT200_increment, VI300, VT300_increment, PI100, PT100_increment, TI100, TT100_increment, PI500,
+						PT500_increment, PI2500, PT2500_increment,PY500,PY100,PY2500,YSP2500,PSH2500);
+			
+//=====================Drive=====================================================================//
+
+//========leaf Events ( alarms, Permissive, and Shutdown)========================================//
+<span class="nc" id="L267">			boolean[] alarmVisablity = new boolean[30];// Over all user interface alarm visibility link.</span>
+
+<span class="nc" id="L269">			int[] AlmStatusFlags = new int[2];</span>
+
+<span class="nc" id="L271">			Stg1VibDisableReq = myframe.Stg1VibDisableReq;</span>
+
+<span class="nc" id="L273">			ComAlmStatusVIB alarmStatusVIB = new ComAlmStatusVIB();</span>
+
+			// ================stage-1=============== determine the alarm value
+<span class="nc" id="L276">			ComLeafEvent Vibs = new ComLeafEvent();</span>
+<span class="nc" id="L277">			int[] flag = new int[4];</span>
+<span class="nc" id="L278">			flag = Vibs.leafevent(VT100, VI100, VSH100, VSHH100, VSL100, VAH100, VAHH100, VAL100, VPH100, VT100_STAT,</span>
+					HIS500, VAH100_Discrp, VAHH100_Discrp_SD, VAL100_Discrp_LO, VPH100_Discrp, VT100_ENG);
+
+<span class="nc bnc" id="L281" title="All 2 branches missed.">			if (Stg1VibDisableReq != 1) {</span>
+<span class="nc" id="L282">				VAL100 = flag[0];</span>
+<span class="nc" id="L283">				VAH100 = flag[1];</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">			} else if (Stg1VibDisableReq == 1) {</span>
+<span class="nc" id="L285">				int Stg1VibEnableReq = 0;</span>
+<span class="nc" id="L286">				AlmStatusFlags = alarmStatusVIB.alarmStatus(Stg1VibDisableReq, Stg1VibEnableReq, VAL100, VAH100);</span>
+<span class="nc" id="L287">				VAL100 = AlmStatusFlags[0];</span>
+<span class="nc" id="L288">				VAH100 = AlmStatusFlags[1];</span>
+			}
+<span class="nc bnc" id="L290" title="All 2 branches missed.">			if (VAL100 == 1) {</span>
+<span class="nc" id="L291">				alarmVisablity[0] = true;</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">			} else if (VAL100 == 0) {</span>
+<span class="nc" id="L293">				alarmVisablity[0] = false;</span>
+			}
+
+<span class="nc bnc" id="L296" title="All 2 branches missed.">			if (VAH100 == 1) {</span>
+<span class="nc" id="L297">				alarmVisablity[1] = true;</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">			} else if (VAH100 == 0) {</span>
+<span class="nc" id="L299">				alarmVisablity[1] = false;</span>
+			}
+
+<span class="nc" id="L302">			VPH100 = flag[2];</span>
+<span class="nc" id="L303">			VAHH100 = flag[3];</span>
+
+<span class="nc bnc" id="L305" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L306">				alarmVisablity[14] = true;</span>
+<span class="nc bnc" id="L307" title="All 4 branches missed.">				if (VAHH100 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L308">					myframe.VAHH100.setForeground(Color.red);</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L310">					myframe.VAHH100.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L312" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; VAHH100 == 0) {</span>
+<span class="nc" id="L313">				alarmVisablity[14] = false;</span>
+			}
+
+<span class="nc bnc" id="L316" title="All 4 branches missed.">			if (VPH100 == 0 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L317">				alarmVisablity[15] = true;</span>
+<span class="nc" id="L318">				myframe.VPH100.setForeground(Color.red);</span>
+<span class="nc bnc" id="L319" title="All 4 branches missed.">			} else if (VPH100 == 1 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L320">				alarmVisablity[15] = true;</span>
+<span class="nc" id="L321">				myframe.VPH100.setForeground(Color.green);</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">			} else if (HIS500 == 1) {</span>
+<span class="nc" id="L323">				alarmVisablity[15] = false;</span>
+
+			}
+
+			// USER Interface Tags
+<span class="nc" id="L328">			myframe.VAL100.setText(&quot;VAL100:&quot; + VAL100);</span>
+<span class="nc" id="L329">			myframe.VAL100.setVisible(alarmVisablity[0]);</span>
+<span class="nc" id="L330">			myframe.VAL100.setForeground(Color.red);</span>
+
+<span class="nc" id="L332">			myframe.VAH100.setText(&quot;VAH100:&quot; + VAH100);</span>
+<span class="nc" id="L333">			myframe.VAH100.setVisible(alarmVisablity[1]);</span>
+<span class="nc" id="L334">			myframe.VAH100.setForeground(Color.red);</span>
+
+<span class="nc" id="L336">			myframe.VAHH100.setText(&quot;VAHH100:&quot; + VAHH100);</span>
+<span class="nc" id="L337">			myframe.VAHH100.setVisible(alarmVisablity[14]);</span>
+
+<span class="nc" id="L339">			myframe.VPH100.setText(&quot;VPH100:&quot; + VPH100);</span>
+<span class="nc" id="L340">			myframe.VPH100.setVisible(alarmVisablity[15]);</span>
+
+			// ===========================STAGE-2======================================================================//
+
+<span class="nc" id="L344">			Stg2VibDisableReq = myframe.Stg2VibDisableReq;</span>
+<span class="nc" id="L345">			flag = Vibs.leafevent(VT200, VI200, VSH200, VSHH200, VSL200, VAH200, VAHH200, VAL200, VPH200, VT200_STAT,</span>
+					HIS500, VAH200_Discrp, VAHH200_Discrp_SD, VAL200_Discrp_LO, VPH200_Discrp, VT200_ENG);
+<span class="nc bnc" id="L347" title="All 2 branches missed.">			if (Stg2VibDisableReq != 1) {</span>
+<span class="nc" id="L348">				VAL200 = flag[0];</span>
+<span class="nc" id="L349">				VAH200 = flag[1];</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">			} else if (Stg2VibDisableReq == 1) {</span>
+<span class="nc" id="L351">				int Stg2VibEnableReq = 0;</span>
+<span class="nc" id="L352">				AlmStatusFlags = alarmStatusVIB.alarmStatus(Stg2VibDisableReq, Stg2VibEnableReq, VAL200, VAH200);</span>
+<span class="nc" id="L353">				VAL200 = AlmStatusFlags[0];</span>
+<span class="nc" id="L354">				VAH200 = AlmStatusFlags[1];</span>
+			}
+<span class="nc bnc" id="L356" title="All 2 branches missed.">			if (VAL200 == 1) {</span>
+<span class="nc" id="L357">				alarmVisablity[2] = true;</span>
+			} else {
+<span class="nc" id="L359">				alarmVisablity[2] = false;</span>
+
+			}
+<span class="nc bnc" id="L362" title="All 2 branches missed.">			if (VAH200 == 1) {</span>
+<span class="nc" id="L363">				alarmVisablity[3] = true;</span>
+
+			} else {
+<span class="nc" id="L366">				alarmVisablity[3] = false;</span>
+
+			}
+
+<span class="nc" id="L370">			VPH200 = flag[2];</span>
+<span class="nc" id="L371">			VAHH200 = flag[3];</span>
+
+<span class="nc" id="L373">			myframe.VAL200.setText(&quot;VAL200:&quot; + VAL200);</span>
+<span class="nc" id="L374">			myframe.VAL200.setVisible(alarmVisablity[2]);</span>
+<span class="nc" id="L375">			myframe.VAL200.setForeground(Color.red);</span>
+
+<span class="nc" id="L377">			myframe.VAH200.setText(&quot;VAH200:&quot; + VAH200);</span>
+<span class="nc" id="L378">			myframe.VAH200.setVisible(alarmVisablity[3]);</span>
+<span class="nc" id="L379">			myframe.VAH200.setForeground(Color.red);</span>
+
+<span class="nc bnc" id="L381" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L382">				alarmVisablity[16] = true;</span>
+<span class="nc bnc" id="L383" title="All 4 branches missed.">				if (VAHH200 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L384">					myframe.VAHH200.setForeground(Color.red);</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L386">					myframe.VAHH200.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L388" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; VAHH200 == 0) {</span>
+<span class="nc" id="L389">				alarmVisablity[16] = false;</span>
+			}
+			// ===================================//
+<span class="nc bnc" id="L392" title="All 4 branches missed.">			if (VPH200 == 0 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L393">				alarmVisablity[17] = true;</span>
+<span class="nc" id="L394">				myframe.VPH200.setForeground(Color.red);</span>
+<span class="nc bnc" id="L395" title="All 4 branches missed.">			} else if (VPH200 == 1 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L396">				alarmVisablity[17] = true;</span>
+<span class="nc" id="L397">				myframe.VPH200.setForeground(Color.green);</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">			} else if (HIS500 == 1) {</span>
+<span class="nc" id="L399">				alarmVisablity[17] = false;</span>
+			}
+
+<span class="nc" id="L402">			myframe.VAHH200.setText(&quot;VAHH200:&quot; + VAHH200);</span>
+<span class="nc" id="L403">			myframe.VAHH200.setVisible(alarmVisablity[16]);</span>
+<span class="nc" id="L404">			myframe.VPH200.setText(&quot;VPH200:&quot; + VPH200);</span>
+<span class="nc" id="L405">			myframe.VPH200.setVisible(alarmVisablity[17]);</span>
+
+			// =================================STAGE-3========================================================//
+			// Input 1 to disable stage-3 vibration alarms/ Input 0 to Enable Them.
+<span class="nc" id="L409">			Stg3VibDisableReq = myframe.Stg3VibDisableReq;</span>
+<span class="nc" id="L410">			flag = Vibs.leafevent(VT300, VI300, VSH300, VSHH300, VSL300, VAH300, VAHH300, VAL300, VPH300, VT300_STAT,</span>
+					HIS500, VAH300_Discrp, VAHH300_Discrp_SD, VAL300_Discrp_LO, VPH300_Discrp, VT300_ENG);
+<span class="nc bnc" id="L412" title="All 2 branches missed.">			if (Stg3VibDisableReq != 1) {</span>
+<span class="nc" id="L413">				VAL300 = flag[0];</span>
+<span class="nc" id="L414">				VAH300 = flag[1];</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">			} else if (Stg3VibDisableReq == 1) {</span>
+<span class="nc" id="L416">				int Stg3VibEnableReq = 0;</span>
+<span class="nc" id="L417">				AlmStatusFlags = alarmStatusVIB.alarmStatus(Stg3VibDisableReq, Stg3VibEnableReq, VAL300, VAH300);</span>
+<span class="nc" id="L418">				VAL300 = AlmStatusFlags[0];</span>
+<span class="nc" id="L419">				VAH300 = AlmStatusFlags[1];</span>
+			}
+
+<span class="nc bnc" id="L422" title="All 2 branches missed.">			if (VAL300 == 1) {</span>
+<span class="nc" id="L423">				alarmVisablity[4] = true;</span>
+			} else {
+<span class="nc" id="L425">				alarmVisablity[4] = false;</span>
+
+			}
+<span class="nc bnc" id="L428" title="All 2 branches missed.">			if (VAH300 == 1) {</span>
+<span class="nc" id="L429">				alarmVisablity[5] = true;</span>
+
+			} else {
+<span class="nc" id="L432">				alarmVisablity[5] = false;</span>
+			}
+
+<span class="nc" id="L435">			myframe.VAL300.setText(&quot;VAL300:&quot; + VAL300);</span>
+<span class="nc" id="L436">			myframe.VAL300.setVisible(alarmVisablity[4]);</span>
+<span class="nc" id="L437">			myframe.VAL300.setForeground(Color.red);</span>
+
+<span class="nc" id="L439">			myframe.VAH300.setText(&quot;VAH300:&quot; + VAH300);</span>
+<span class="nc" id="L440">			myframe.VAH300.setVisible(alarmVisablity[5]);</span>
+<span class="nc" id="L441">			myframe.VAH300.setForeground(Color.red);</span>
+
+<span class="nc" id="L443">			VPH300 = flag[2];</span>
+<span class="nc" id="L444">			VAHH300 = flag[3];</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L446">				alarmVisablity[18] = true;</span>
+<span class="nc bnc" id="L447" title="All 4 branches missed.">				if (VAHH300 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L448">					myframe.VAHH300.setForeground(Color.red);</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L450">					myframe.VAHH300.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L452" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; VAHH300 == 0) {</span>
+<span class="nc" id="L453">				alarmVisablity[18] = false;</span>
+			}
+			// ===================================//
+<span class="nc bnc" id="L456" title="All 4 branches missed.">			if (VPH300 == 0 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L457">				alarmVisablity[19] = true;</span>
+<span class="nc" id="L458">				myframe.VPH300.setForeground(Color.red);</span>
+<span class="nc bnc" id="L459" title="All 4 branches missed.">			} else if (VPH300 == 1 &amp;&amp; HIS500 == 0) {</span>
+<span class="nc" id="L460">				alarmVisablity[19] = true;</span>
+<span class="nc" id="L461">				myframe.VPH300.setForeground(Color.green);</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">			} else if (HIS500 == 1) {</span>
+<span class="nc" id="L463">				alarmVisablity[19] = false;</span>
+			}
+<span class="nc" id="L465">			myframe.VAHH300.setText(&quot;VAHH300:&quot; + VAHH300);</span>
+<span class="nc" id="L466">			myframe.VAHH300.setVisible(alarmVisablity[18]);</span>
+<span class="nc" id="L467">			myframe.VPH300.setText(&quot;VPH300:&quot; + VPH300);</span>
+<span class="nc" id="L468">			myframe.VPH300.setVisible(alarmVisablity[19]);</span>
+
+//=========== auxcooling events=============================================//
+
+<span class="nc" id="L472">			auxcoolingDisableReq = myframe.AuxcoolingDisableReq;</span>
+<span class="nc" id="L473">			ComAlmStatusAuxCooling auxcoolingalarmstatus = new ComAlmStatusAuxCooling();</span>
+
+<span class="nc" id="L475">			int[] flagCompsite = new int[4];</span>
+<span class="nc" id="L476">			ComCompositeEvent AuxsysEvnt = new ComCompositeEvent();</span>
+
+<span class="nc" id="L478">			ComAuxSys auxcooling = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,</span>
+					alarm_Discrp, transm_eng);
+<span class="nc" id="L480">			flagCompsite = AuxsysEvnt.compsiteEvent(PT100, PI100, PSH100, PSHH100, PSL100, PSLL100, PAH100, PAHH100,</span>
+					PAL100, PALL100, PT100_STAT, PAH100_Discrp, PAHH100_Discrp_SD, PAL100_Discrp_LO, PALL100_Discrp_SD,
+					PT100_ENG, auxcooling);
+<span class="nc bnc" id="L483" title="All 2 branches missed.">			if (auxcoolingDisableReq != 1) {</span>
+<span class="nc" id="L484">				PAL100 = flagCompsite[0];</span>
+<span class="nc" id="L485">				PAH100 = flagCompsite[1];</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">			} else if (auxcoolingDisableReq == 1) {</span>
+<span class="nc" id="L487">				int auxcoolingEnableReq = 0;</span>
+<span class="nc" id="L488">				AlmStatusFlags = auxcoolingalarmstatus.alarmStatus(auxcoolingDisableReq, auxcoolingEnableReq, PAL100,</span>
+						PAH100);
+<span class="nc" id="L490">				PAL100 = AlmStatusFlags[0];</span>
+<span class="nc" id="L491">				PAH100 = AlmStatusFlags[1];</span>
+			}
+
+<span class="nc bnc" id="L494" title="All 2 branches missed.">			if (PAL100 == 1) {</span>
+<span class="nc" id="L495">				alarmVisablity[6] = true;</span>
+			} else {
+<span class="nc" id="L497">				alarmVisablity[6] = false;</span>
+			}
+<span class="nc bnc" id="L499" title="All 2 branches missed.">			if (PAH100 == 1) {</span>
+<span class="nc" id="L500">				alarmVisablity[7] = true;</span>
+			} else {
+<span class="nc" id="L502">				alarmVisablity[7] = false;</span>
+			}
+<span class="nc" id="L504">			PALL100 = flagCompsite[2];</span>
+<span class="nc" id="L505">			PAHH100 = flagCompsite[3];</span>
+
+<span class="nc" id="L507">			myframe.PAL100.setText(&quot;PAL100:&quot; + PAL100);</span>
+<span class="nc" id="L508">			myframe.PAL100.setVisible(alarmVisablity[6]);</span>
+<span class="nc" id="L509">			myframe.PAL100.setForeground(Color.red);</span>
+
+<span class="nc" id="L511">			myframe.PAH100.setText(&quot;PAH100:&quot; + PAH100);</span>
+<span class="nc" id="L512">			myframe.PAH100.setVisible(alarmVisablity[7]);</span>
+<span class="nc" id="L513">			myframe.PAH100.setForeground(Color.red);</span>
+			// ----- shutdown visibility---------//
+<span class="nc bnc" id="L515" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L516">				alarmVisablity[20] = true;</span>
+<span class="nc bnc" id="L517" title="All 4 branches missed.">				if (PALL100 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L518">					myframe.PALL100.setForeground(Color.red);</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L520">					myframe.PALL100.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L522" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; PALL100 == 0) {</span>
+<span class="nc" id="L523">				alarmVisablity[20] = false;</span>
+			}
+<span class="nc bnc" id="L525" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L526">				alarmVisablity[21] = true;</span>
+<span class="nc bnc" id="L527" title="All 4 branches missed.">				if (PAHH100 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L528">					myframe.PAHH100.setForeground(Color.red);</span>
+<span class="nc" id="L529">					myframe.PAHH100.setBackground(Color.black);</span>
+					
+<span class="nc bnc" id="L531" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L532">					myframe.PAHH100.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L534" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; PALL100 == 0) {</span>
+<span class="nc" id="L535">				alarmVisablity[21] = false;</span>
+			}
+
+<span class="nc" id="L538">			myframe.PALL100.setText(&quot;PALL100:&quot; + PALL100);</span>
+<span class="nc" id="L539">			myframe.PALL100.setVisible(alarmVisablity[20]);</span>
+<span class="nc" id="L540">			myframe.PAHH100.setText(&quot;PAHH100:&quot; + PAHH100);</span>
+<span class="nc" id="L541">			myframe.PAHH100.setVisible(alarmVisablity[21]);</span>
+//=========== auxiliary oil system events===========================================================//
+
+<span class="nc" id="L544">			auxoilDisableReq = myframe.AuxoilDisableReq;</span>
+<span class="nc" id="L545">			ComAlmStatusAuxOil auxoilalarmstatus = new ComAlmStatusAuxOil();</span>
+
+<span class="nc" id="L547">			ComAuxSys auxoil = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,</span>
+					alarm_Discrp, transm_eng);
+<span class="nc" id="L549">			flagCompsite = AuxsysEvnt.compsiteEvent(TT100, TI100, TSH100, TSHH100, TSL100, TSLL100, TAH100, TAHH100,</span>
+					TAL100, TALL100, TT100_STAT, TAH100_Discrp, TAHH100_Discrp_SD, TAL100_Discrp_LO, TALL100_Discrp_SD,
+					TT100_ENG, auxoil);
+			// Determine status if no disable is request is set send the alarm status to HMI
+			// else sent 2 for disabled alarms.
+<span class="nc bnc" id="L554" title="All 2 branches missed.">			if (auxoilDisableReq != 1) {</span>
+<span class="nc" id="L555">				TAL100 = flagCompsite[0];</span>
+<span class="nc" id="L556">				TAH100 = flagCompsite[1];</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">			} else if (auxoilDisableReq == 1) {</span>
+<span class="nc" id="L558">				int auxoilEnableReq = 0;</span>
+<span class="nc" id="L559">				AlmStatusFlags = auxoilalarmstatus.alarmStatus(auxoilDisableReq, auxoilEnableReq, TAL100, TAH100);</span>
+<span class="nc" id="L560">				TAL100 = AlmStatusFlags[0];</span>
+<span class="nc" id="L561">				TAH100 = AlmStatusFlags[1];</span>
+			}
+
+<span class="nc bnc" id="L564" title="All 2 branches missed.">			if (TAL100 == 1) {</span>
+<span class="nc" id="L565">				alarmVisablity[8] = true;</span>
+			} else {
+<span class="nc" id="L567">				alarmVisablity[8] = false;</span>
+			}
+<span class="nc bnc" id="L569" title="All 2 branches missed.">			if (TAH100 == 1) {</span>
+<span class="nc" id="L570">				alarmVisablity[9] = true;</span>
+			} else {
+<span class="nc" id="L572">				alarmVisablity[9] = false;</span>
+			}
+
+<span class="nc" id="L575">			TALL100 = flagCompsite[2];</span>
+<span class="nc" id="L576">			TAHH100 = flagCompsite[3];</span>
+
+<span class="nc" id="L578">			myframe.TAL100.setText(&quot;TAL100:&quot; + TAL100);</span>
+<span class="nc" id="L579">			myframe.TAL100.setVisible(alarmVisablity[8]);</span>
+<span class="nc" id="L580">			myframe.TAL100.setForeground(Color.red);</span>
+
+<span class="nc" id="L582">			myframe.TAH100.setText(&quot;TAH100:&quot; + TAH100);</span>
+<span class="nc" id="L583">			myframe.TAH100.setVisible(alarmVisablity[9]);</span>
+<span class="nc" id="L584">			myframe.TAH100.setForeground(Color.red);</span>
+
+			// ----- shutdown visibility---------//
+<span class="nc bnc" id="L587" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L588">				alarmVisablity[22] = true;</span>
+<span class="nc bnc" id="L589" title="All 4 branches missed.">				if (TALL100 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L590">					myframe.TALL100.setForeground(Color.red);</span>
+<span class="nc bnc" id="L591" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L592">					myframe.TALL100.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L594" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; TALL100 == 0) {</span>
+<span class="nc" id="L595">				alarmVisablity[22] = false;</span>
+			}
+<span class="nc bnc" id="L597" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L598">				alarmVisablity[23] = true;</span>
+<span class="nc bnc" id="L599" title="All 4 branches missed.">				if (TAHH100 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L600">					myframe.TAHH100.setForeground(Color.red);</span>
+<span class="nc bnc" id="L601" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L602">					myframe.TAHH100.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L604" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; TAHH100 == 0) {</span>
+<span class="nc" id="L605">				alarmVisablity[23] = false;</span>
+			}
+
+<span class="nc" id="L608">			myframe.TALL100.setText(&quot;TALL100:&quot; + TALL100);</span>
+<span class="nc" id="L609">			myframe.TALL100.setVisible(alarmVisablity[22]);</span>
+<span class="nc" id="L610">			myframe.TAHH100.setText(&quot;TAHH100:&quot; + TAHH100);</span>
+<span class="nc" id="L611">			myframe.TAHH100.setVisible(alarmVisablity[23]);</span>
+
+//=========== Suction pressure events=============================================//
+
+<span class="nc" id="L615">			suctionDisableReq = myframe.SuctionDisableReq;</span>
+<span class="nc" id="L616">			ComAlmStatusSuction suctionalarmstatus = new ComAlmStatusSuction();</span>
+
+<span class="nc" id="L618">			ComAuxSys comSuction = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,</span>
+					alarm_Discrp, transm_eng);
+<span class="nc" id="L620">			flagCompsite = AuxsysEvnt.compsiteEvent(PT500, PI500, PSH500, PSHH500, PSL500, PSLL500, PAH500, PAHH500,</span>
+					PAL500, PALL500, PT500_STAT, PAH500_Discrp, PAHH500_Discrp_SD, PAL500_Discrp_LO, PALL500_Discrp_SD,
+					PT500_ENG, comSuction);
+
+//========================alarm disable function evaluation=======//			
+<span class="nc bnc" id="L625" title="All 2 branches missed.">			if (suctionDisableReq != 1) {</span>
+<span class="nc" id="L626">				PAL500 = flagCompsite[0];</span>
+<span class="nc" id="L627">				PAH500 = flagCompsite[1];</span>
+<span class="nc bnc" id="L628" title="All 2 branches missed.">			} else if (suctionDisableReq == 1) {</span>
+<span class="nc" id="L629">				int suctionEnableReq = 0;</span>
+<span class="nc" id="L630">				AlmStatusFlags = suctionalarmstatus.alarmStatus(suctionDisableReq, suctionEnableReq, PAL500, PAH500);</span>
+<span class="nc" id="L631">				PAL500 = AlmStatusFlags[0];</span>
+<span class="nc" id="L632">				PAH500 = AlmStatusFlags[1];</span>
+			}
+
+<span class="nc bnc" id="L635" title="All 2 branches missed.">			if (PAL500 == 1) {</span>
+<span class="nc" id="L636">				alarmVisablity[10] = true;</span>
+			} else {
+<span class="nc" id="L638">				alarmVisablity[10] = false;</span>
+			}
+<span class="nc bnc" id="L640" title="All 2 branches missed.">			if (PAH500 == 1) {</span>
+<span class="nc" id="L641">				alarmVisablity[11] = true;</span>
+			} else {
+<span class="nc" id="L643">				alarmVisablity[11] = false;</span>
+			}
+
+<span class="nc" id="L646">			PALL500 = flagCompsite[2];</span>
+<span class="nc" id="L647">			PAHH500 = flagCompsite[3];</span>
+<span class="nc" id="L648">			PALL500 = flagCompsite[2];</span>
+<span class="nc" id="L649">			PAHH500 = flagCompsite[3];</span>
+
+<span class="nc" id="L651">			myframe.PAL500.setText(&quot;PAL500:&quot; + PAL500);</span>
+<span class="nc" id="L652">			myframe.PAL500.setVisible(alarmVisablity[10]);</span>
+<span class="nc" id="L653">			myframe.PAL500.setForeground(Color.red);</span>
+
+<span class="nc" id="L655">			myframe.PAH500.setText(&quot;PAH500:&quot; + PAH500);</span>
+<span class="nc" id="L656">			myframe.PAH500.setVisible(alarmVisablity[11]);</span>
+<span class="nc" id="L657">			myframe.PAH500.setForeground(Color.red);</span>
+			
+			// ----- shutdown visibility---------//
+<span class="nc bnc" id="L660" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L661">				alarmVisablity[24] = true;</span>
+<span class="nc bnc" id="L662" title="All 4 branches missed.">				if (PALL500 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L663">					myframe.PALL500.setForeground(Color.red);</span>
+<span class="nc" id="L664">					myframe.PALL500.setBackground(Color.black);</span>
+<span class="nc bnc" id="L665" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L666">					myframe.PALL500.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L668" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; PALL500 == 0) {</span>
+<span class="nc" id="L669">				alarmVisablity[24] = false;</span>
+			}
+			
+<span class="nc bnc" id="L672" title="All 2 branches missed.">			if (HIS500 == 0) {</span>
+<span class="nc" id="L673">				alarmVisablity[25] = true;</span>
+<span class="nc bnc" id="L674" title="All 4 branches missed.">				if (PAHH500 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L675">					myframe.PAHH500.setForeground(Color.red);</span>
+<span class="nc" id="L676">					myframe.PAHH500.setBackground(Color.red);</span>
+					
+<span class="nc bnc" id="L678" title="All 2 branches missed.">				} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L679">					myframe.PAHH500.setForeground(Color.green);</span>
+				}
+<span class="nc bnc" id="L681" title="All 4 branches missed.">			} else if (HIS500 == 1 &amp;&amp; PAHH500 == 0) {</span>
+<span class="nc" id="L682">				alarmVisablity[25] = false;</span>
+			}
+			
+<span class="nc" id="L685">			myframe.PALL500.setText(&quot;PALL500:&quot; + PALL500);</span>
+<span class="nc" id="L686">			myframe.PALL500.setVisible(alarmVisablity[24]);</span>
+<span class="nc" id="L687">			myframe.PAHH500.setText(&quot;PAHH500:&quot; + PAHH500);</span>
+<span class="nc" id="L688">			myframe.PAHH500.setVisible(alarmVisablity[25]);</span>
+//================== Compressor discharge events=============================================//
+
+<span class="nc" id="L691">			dischargeDisableReq = myframe.DischargeDisableReq;</span>
+<span class="nc" id="L692">			ComAlmStatusDischarge dischargealarmstatus = new ComAlmStatusDischarge();</span>
+
+<span class="nc" id="L694">			ComAuxSys comDischarge = new HighAlarm(transmtag, transmreading, setpoint, alarmFlag, transmitter_status,</span>
+					alarm_Discrp, transm_eng);
+<span class="nc" id="L696">			flagCompsite = AuxsysEvnt.compsiteEvent(PT2500, PI2500, PSH2500, PSHH2500, PSL2500, PSLL2500, PAH2500,</span>
+					PAHH2500, PAL2500, PALL2500, PT2500_STAT, PAH2500_Discrp, PAHH2500_Discrp_SD, PAL2500_Discrp_LO,
+					PALL500_Discrp_SD, PT500_ENG, comDischarge);
+//========================alarm disable function evaluation=======//
+
+<span class="nc bnc" id="L701" title="All 2 branches missed.">			if (dischargeDisableReq != 1) {</span>
+<span class="nc" id="L702">				PAL2500 = flagCompsite[0];</span>
+<span class="nc" id="L703">				PAH2500 = flagCompsite[1];</span>
+<span class="nc bnc" id="L704" title="All 2 branches missed.">			} else if (dischargeDisableReq == 1) {</span>
+<span class="nc" id="L705">				int dischargeEnableReq = 0;</span>
+<span class="nc" id="L706">				AlmStatusFlags = dischargealarmstatus.alarmStatus(dischargeDisableReq, dischargeEnableReq, PAL2500,</span>
+						PAH2500);
+<span class="nc" id="L708">				PAL2500 = AlmStatusFlags[0];</span>
+<span class="nc" id="L709">				PAH2500 = AlmStatusFlags[1];</span>
+			}
+		
+<span class="nc bnc" id="L712" title="All 2 branches missed.">			if (PAL2500 == 1) {</span>
+<span class="nc" id="L713">				alarmVisablity[12] = true;</span>
+			} else {
+<span class="nc" id="L715">				alarmVisablity[12] = false;</span>
+			}
+<span class="nc bnc" id="L717" title="All 2 branches missed.">			if (PAH2500 == 1) {</span>
+<span class="nc" id="L718">				alarmVisablity[13] = true;</span>
+			} else {
+<span class="nc" id="L720">				alarmVisablity[13] = false;</span>
+			}
+
+<span class="nc" id="L723">			PALL2500 = flagCompsite[2];</span>
+<span class="nc" id="L724">			PAHH2500 = flagCompsite[3];</span>
+
+<span class="nc" id="L726">			myframe.PAL2500.setText(&quot;PAL2500:&quot; + PAL2500);</span>
+<span class="nc" id="L727">			myframe.PAL2500.setVisible(alarmVisablity[12]);</span>
+<span class="nc" id="L728">			myframe.PAL2500.setForeground(Color.red);</span>
+
+<span class="nc" id="L730">			myframe.PAH2500.setText(&quot;PAH2500:&quot; + PAH2500);</span>
+<span class="nc" id="L731">			myframe.PAH2500.setVisible(alarmVisablity[13]);</span>
+<span class="nc" id="L732">			myframe.PAH2500.setForeground(Color.red);</span>
+
+			// ----- shutdown visibility---------//
+<span class="nc bnc" id="L735" title="All 2 branches missed.">						if (HIS500 == 0) {</span>
+<span class="nc" id="L736">							alarmVisablity[26] = true;</span>
+<span class="nc bnc" id="L737" title="All 4 branches missed.">							if (PALL2500 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L738">								myframe.PALL2500.setForeground(Color.red);</span>
+<span class="nc bnc" id="L739" title="All 2 branches missed.">							} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L740">								myframe.PALL2500.setForeground(Color.green);</span>
+							}
+<span class="nc bnc" id="L742" title="All 4 branches missed.">						} else if (HIS500 == 1 &amp;&amp; PALL2500 == 0) {</span>
+<span class="nc" id="L743">							alarmVisablity[26] = false;</span>
+						}
+						
+<span class="nc bnc" id="L746" title="All 2 branches missed.">						if (HIS500 == 0) {</span>
+<span class="nc" id="L747">							alarmVisablity[27] = true;</span>
+<span class="nc bnc" id="L748" title="All 4 branches missed.">							if (PAHH2500 == 1 &amp;&amp; myframe.Resetcommand == 1) {</span>
+<span class="nc" id="L749">								myframe.PAHH2500.setForeground(Color.red);</span>
+<span class="nc bnc" id="L750" title="All 2 branches missed.">							} else if (myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L751">								myframe.PAHH2500.setForeground(Color.green);</span>
+							}
+<span class="nc bnc" id="L753" title="All 4 branches missed.">						} else if (HIS500 == 1 &amp;&amp; PAHH2500 == 0) {</span>
+<span class="nc" id="L754">							alarmVisablity[27] = false;</span>
+						}
+			
+<span class="nc" id="L757">			myframe.PALL2500.setText(&quot;PALL2500:&quot; + PALL2500);</span>
+<span class="nc" id="L758">			myframe.PALL2500.setVisible(alarmVisablity[26]);</span>
+<span class="nc" id="L759">			myframe.PAHH2500.setText(&quot;PAHH2500:&quot; + PAHH2500);</span>
+<span class="nc" id="L760">			myframe.PAHH2500.setVisible(alarmVisablity[27]);</span>
+
+//====================Aux System Status======================================================================//
+			// send all trip flags comauxstatus class, the class determines if all trips are
+			// cleared/ if not the overall trip word is set
+
+<span class="nc" id="L766">			ComAuxStatus auxStatus = new ComAuxStatus();</span>
+
+<span class="nc" id="L768">			shutdownWord = auxStatus.AuxSysTrip(VAHH100, VAHH200, VAHH300, PALL100, PAHH100, TALL100, TAHH100, PALL500,</span>
+					PAHH500, PALL2500, PAHH2500);
+
+<span class="nc" id="L771">			String shutdownWord_STATUS = &quot;TRIP&quot;;</span>
+<span class="nc bnc" id="L772" title="All 4 branches missed.">			if (shutdownWord == 1||myframe.Stopcommand==1) {</span>
+<span class="nc" id="L773">				shutdownWord_STATUS = &quot;TRIP&quot;;</span>
+<span class="nc" id="L774">				myframe.Startcommand = 0;</span>
+<span class="nc" id="L775">				myframe.Resetcommand = 1;</span>
+
+<span class="nc bnc" id="L777" title="All 4 branches missed.">			} else if (shutdownWord == 0 &amp;&amp; myframe.Resetcommand == 0) {</span>
+<span class="nc" id="L778">				shutdownWord_STATUS = &quot;RESET&quot;;</span>
+			}
+
+<span class="nc" id="L781">			myframe.RESETREQU.setText(shutdownWord_STATUS);</span>
+			//System.out.println(&quot;Compressor auxiliary system overall shutdown=&quot; + &quot; &quot; + shutdownWord);
+			//System.out.println(&quot;================================&quot;);
+
+			// send all permissives flags to comauxstatus class, the class determines if all
+			// permissives are cleared/ if not the overall permissive word is set
+<span class="nc" id="L787">			permissWord = auxStatus.AuxSysPermiss(VPH100, VPH200, VPH300);</span>
+			//System.out.println(&quot;Compressor auxiliary system overall permissive=&quot; + &quot; &quot; + permissWord);
+			//System.out.println(&quot;================================&quot;);
+
+			// ======== Call compressor leaf drive start/stop===========================//
+		
+<span class="nc" id="L793">			ComAuxSys drive = new ComDrive(comRequest, HIS500_STR, HIS500_STP, permissWord, shutdownWord, HIS500,</span>
+					driveFeedBack);
+<span class="nc" id="L795">			HIS500 = drive.comDriveStartStop();</span>
+			// Compressor USER INTERFACE STATUS RUN STATUS
+<span class="nc" id="L797">			String hON_500 = &quot;OFF&quot;;</span>
+<span class="nc" id="L798">			String hOFF_500 = &quot;OFF&quot;;</span>
+<span class="nc bnc" id="L799" title="All 2 branches missed.">			if (HIS500 == 1) {</span>
+<span class="nc" id="L800">				hON_500 = &quot;RUN&quot;;</span>
+<span class="nc" id="L801">				hOFF_500 = &quot;OFF&quot;;</span>
+<span class="nc bnc" id="L802" title="All 2 branches missed.">			} else if ((HIS500 == 0)) {</span>
+<span class="nc" id="L803">				hON_500 = &quot;OFF&quot;;</span>
+<span class="nc" id="L804">				hOFF_500 = &quot;ON&quot;;</span>
+<span class="nc" id="L805">				startupPeriodDone=false;</span>
+<span class="nc" id="L806">				startuptimerdone=false;</span>
+			}
+<span class="nc" id="L808">			myframe.HS500.setText(hON_500);</span>
+<span class="nc" id="L809">			myframe.HSTP500.setText(hOFF_500);</span>
+			// ================================AutoLoading==============================//
+			// auto-loading preconditions- startup timer must be done  
+<span class="nc" id="L812">			String HS_LD = &quot;unloaded&quot;;//loading user interface indicator</span>
+<span class="nc" id="L813">			int i=0; //startup timer seconds counts//</span>
+			
+<span class="nc bnc" id="L815" title="All 4 branches missed.">			while  (HIS500==1&amp;&amp; startuptimerdone==false) {</span>
+<span class="nc" id="L816">				Thread.sleep(1000);</span>
+<span class="nc" id="L817">				i++;</span>
+<span class="nc" id="L818">				myframe.STARTUPTIMER.setText(&quot;LD_TMR&quot; + &quot;   &quot; + i + &quot;SEC&quot;);	</span>
+<span class="nc bnc" id="L819" title="All 2 branches missed.">				if(i==15) {</span>
+<span class="nc" id="L820">					startupPeriodDone=true;</span>
+<span class="nc" id="L821">					startuptimerdone=true;</span>
+				 }
+			 }	
+			 //=========call auto loading class with loading parameters==================// 
+<span class="nc" id="L825">			ComAutoLoad autoload = new ComAutoLoad();//int comStatus, boolean startupPeriodDone, int shutdownWord</span>
+<span class="nc" id="L826">			autoLoadPermissives= autoload.comAutoLoadPermissives(HIS500,startupPeriodDone,shutdownWord);</span>
+			
+			//System.out.println(&quot;AutoLoading initiated*******&amp;&amp;&amp;&amp;&amp;=&quot; + &quot; &quot; +autoLoadPermissives[9]);
+			
+<span class="nc" id="L830">			HIS500_LD=autoLoadPermissives[9];</span>
+			
+<span class="nc bnc" id="L832" title="All 6 branches missed.">			if (HIS500_LD == 1 &amp;&amp; autoUnLoadPermissives[9]==0&amp;&amp;valve_Increment[5]==0) {</span>
+<span class="nc" id="L833">				alarmVisablity[28] = true;</span>
+<span class="nc" id="L834">				HS_LD=&quot;LOADING&quot;;</span>
+<span class="nc bnc" id="L835" title="All 2 branches missed.">			}else if(valve_Increment[5]==1)  {</span>
+<span class="nc" id="L836">				alarmVisablity[28] = true;</span>
+<span class="nc" id="L837">				HS_LD=&quot;LOADED&quot;;</span>
+<span class="nc bnc" id="L838" title="All 2 branches missed.">			} else if(autoUnLoadPermissives[9]==1) {</span>
+<span class="nc" id="L839">				alarmVisablity[28] = true;</span>
+<span class="nc" id="L840">				HS_LD=&quot;UNLOADING&quot;;</span>
+			}else {
+<span class="nc" id="L842">				alarmVisablity[28] = false;</span>
+			}
+<span class="nc" id="L844">			myframe.autload.setText(&quot;MACH&quot;+&quot; &quot;+HS_LD);</span>
+<span class="nc" id="L845">			myframe.autload.setVisible(alarmVisablity[28]);		</span>
+			
+<span class="nc" id="L847">			valve_Increment= autoload.comAutoLoadingRamp(HIS500,HIS500_LD,PI500,PSL500,PI2500,PSH2500,PY500, PYS500RamUp,PY2500, PYS2500RamUp,PY100,PYS100RamUp,YSP2500);</span>
+			
+			////=========call auto unloading class with loading parameters==================//
+<span class="nc" id="L850">			autoUnLoadPermissives= autoload.comAutoUnLoadPermissives(HIS500_UNLD,HIS500,startupPeriodDone,shutdownWord,HIS500_LD);</span>
+<span class="nc bnc" id="L851" title="All 2 branches missed.">			if(autoUnLoadPermissives[9]==1) {</span>
+<span class="nc" id="L852">				 valve_Increment= autoload.comAutoUnLoadingRamp(HIS500, autoUnLoadPermissives[9],PI500, PI2500,  PY500,</span>
+					PYS500RamDwn, PY2500,PYS2500RamDwn, PY100, PYS100RamDwn);
+<span class="nc bnc" id="L854" title="All 2 branches missed.">			   }if(valve_Increment[7]==1) {</span>
+<span class="nc" id="L855">					HIS500_STP=1;</span>
+<span class="nc" id="L856">					myframe.Stopcommand=1;</span>
+			  }
+			   
+			
+<span class="nc" id="L860">		} while (true);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

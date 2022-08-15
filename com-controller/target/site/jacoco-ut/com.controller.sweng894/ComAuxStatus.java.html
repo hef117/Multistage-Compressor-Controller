@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComAuxStatus.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComAuxStatus.java</span></div><h1>ComAuxStatus.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+<span class="fc" id="L3">public class ComAuxStatus {</span>
+// Check if all shutdown-triggers are cleared if so reset the overall shutdown trip word else set the overall word
+	public static int AuxSysTrip(int auxtrp01In, int auxtrp02In, int auxtrp03In, int auxtrp11In, int auxtrp12In,
+			int auxtrp21In, int auxtrp22In, int auxtrp31In, int auxtrp32In, int auxtrp41In, int auxtrp42In) {
+
+<span class="fc" id="L8">		int auxtrp01 = auxtrp01In;</span>
+<span class="fc" id="L9">		int auxtrp02 = auxtrp02In;</span>
+<span class="fc" id="L10">		int auxtrp03 = auxtrp03In;</span>
+<span class="fc" id="L11">		int auxtrp11 = auxtrp11In;</span>
+<span class="fc" id="L12">		int auxtrp12 = auxtrp12In;</span>
+<span class="fc" id="L13">		int auxtrp21 = auxtrp21In;</span>
+<span class="fc" id="L14">		int auxtrp22 = auxtrp22In;</span>
+<span class="fc" id="L15">		int auxtrp31 = auxtrp31In;</span>
+<span class="fc" id="L16">		int auxtrp32 = auxtrp32In;</span>
+<span class="fc" id="L17">		int auxtrp41 = auxtrp41In;</span>
+<span class="fc" id="L18">		int auxtrp42 = auxtrp42In;</span>
+
+<span class="fc" id="L20">		int auxShutdwnoverall = 0;</span>
+
+// Iterate each input supplied by the compressor controller to determine if a trip is present 1= trip, 0= clear 
+<span class="fc" id="L23">		int[] input_trip = new int[] { auxtrp01, auxtrp02, auxtrp03, auxtrp11, auxtrp12, auxtrp21, auxtrp22, auxtrp31,</span>
+				auxtrp32, auxtrp41, auxtrp42 };
+
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		for (int i = 0; i &lt;= input_trip.length; i++) {</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			if (i &lt;= 10) {</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">				if (input_trip[i] == 1) {</span>
+<span class="fc" id="L29">					auxShutdwnoverall = 1;</span>
+					//System.out.println(&quot;system trip found&quot; + &quot;&quot; + i + &quot;&quot; + input_trip[i]);
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">					if (auxShutdwnoverall != 0) {</span>
+<span class="fc" id="L32">						return auxShutdwnoverall;</span>
+					}
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">				} else if (input_trip[i] == 0) {</span>
+<span class="fc" id="L35">					auxShutdwnoverall = input_trip[i];</span>
+					//System.out.println(&quot;system trip found&quot; + &quot;&quot; + i + &quot;&quot; + input_trip[i]);
+				}	
+			}
+		}
+		
+<span class="fc" id="L41">		return auxShutdwnoverall;</span>
+	}
+// Check if every  permissive-trigger are cleared if so set the overall permissive word else reset the overall word
+	public static int AuxSysPermiss(int auxperm01In, int auxperm02In, int auxperm03In) {
+<span class="fc" id="L45">		int auxperm01 = auxperm01In;</span>
+<span class="fc" id="L46">		int auxperm02 = auxperm02In;</span>
+<span class="fc" id="L47">		int auxperm03 = auxperm03In;</span>
+<span class="fc" id="L48">		int auxpermoverall = 0;</span>
+
+// Iterate each input supplied by the compressor controller to determine if a trip is present 1= trip, 0= clear 
+<span class="fc" id="L51">		int[] input_perm = new int[] { auxperm01, auxperm02, auxperm03 };</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		for (int i = 0; i &lt;= input_perm.length; i++) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if (i &lt;= 2) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">				if (input_perm[i] == 1) {</span>
+<span class="fc" id="L56">					auxpermoverall = input_perm[i];</span>
+					//System.out.println(&quot;system permissive granted&quot; + &quot; &quot; + i + &quot; &quot; + input_perm[i]);
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">				} else if (input_perm[i] != 1) {</span>
+
+<span class="fc" id="L60">					auxpermoverall = input_perm[i];</span>
+					//System.out.println(&quot;system permissive not granted&quot; + &quot; &quot; + i + &quot; &quot; + input_perm[i]);
+				}
+			}
+<span class="fc bfc" id="L64" title="All 2 branches covered.">			if (auxpermoverall != 1) {</span>
+<span class="fc" id="L65">				return auxpermoverall;</span>
+			}
+		}
+<span class="fc" id="L68">		return auxpermoverall;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

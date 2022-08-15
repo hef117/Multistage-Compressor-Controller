@@ -1,97 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="22" passed="22" failed="0" skipped="0">
+<testng-results ignored="0" total="34" passed="34" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2022-07-17T14:26:55 CDT" name="Surefire suite" finished-at="2022-07-17T14:26:55 CDT" duration-ms="85">
+  <suite started-at="2022-08-14T17:59:50 CDT" name="Surefire suite" finished-at="2022-08-14T17:59:50 CDT" duration-ms="181">
     <groups>
     </groups>
-    <test started-at="2022-07-17T14:26:55 CDT" name="Surefire test" finished-at="2022-07-17T14:26:55 CDT" duration-ms="85">
+    <test started-at="2022-08-14T17:59:50 CDT" name="Surefire test" finished-at="2022-08-14T17:59:50 CDT" duration-ms="181">
       <class name="com.controller.sweng894.ComControllerTest">
-        <test-method signature="ComAuxOverallPermissiveAssertion()" started-at="2022-07-17T14:26:55 CDT" name="ComAuxOverallPermissiveAssertion" finished-at="2022-07-17T14:26:55 CDT" duration-ms="11" status="PASS">
+        <test-method signature="AutoLoadingPermissivesTest()" started-at="2022-08-14T17:59:50 CDT" name="AutoLoadingPermissivesTest" finished-at="2022-08-14T17:59:50 CDT" duration-ms="55" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ComAuxOverallPermissiveAssertion -->
-        <test-method signature="AuxOilsystemHighalarms1()" started-at="2022-07-17T14:26:55 CDT" name="AuxOilsystemHighalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="21" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- AuxOilsystemHighalarms1 -->
-        <test-method signature="ComDriveStartIngeration()" started-at="2022-07-17T14:26:55 CDT" name="ComDriveStartIngeration" finished-at="2022-07-17T14:26:55 CDT" duration-ms="12" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- ComDriveStartIngeration -->
-        <test-method signature="ComDriveStop()" started-at="2022-07-17T14:26:55 CDT" name="ComDriveStop" finished-at="2022-07-17T14:26:55 CDT" duration-ms="21" status="PASS">
+        </test-method> <!-- AutoLoadingPermissivesTest -->
+        <test-method signature="ComDriveStop()" started-at="2022-08-14T17:59:50 CDT" name="ComDriveStop" finished-at="2022-08-14T17:59:50 CDT" duration-ms="60" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- ComDriveStop -->
-        <test-method signature="ComDriveStart()" started-at="2022-07-17T14:26:55 CDT" name="ComDriveStart" finished-at="2022-07-17T14:26:55 CDT" duration-ms="22" status="PASS">
+        <test-method signature="ComEventCompositAssertion()" started-at="2022-08-14T17:59:50 CDT" name="ComEventCompositAssertion" finished-at="2022-08-14T17:59:50 CDT" duration-ms="68" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ComDriveStart -->
-        <test-method signature="comSuctionLowalarms1()" started-at="2022-07-17T14:26:55 CDT" name="comSuctionLowalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="25" status="PASS">
+        </test-method> <!-- ComEventCompositAssertion -->
+        <test-method signature="ComAuxOverallPermissiveAssertion()" started-at="2022-08-14T17:59:50 CDT" name="ComAuxOverallPermissiveAssertion" finished-at="2022-08-14T17:59:50 CDT" duration-ms="56" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- comSuctionLowalarms1 -->
-        <test-method signature="comDischargeLowalarms1()" started-at="2022-07-17T14:26:55 CDT" name="comDischargeLowalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="26" status="PASS">
+        </test-method> <!-- ComAuxOverallPermissiveAssertion -->
+        <test-method signature="AutoUnLoadingRampCompressorRunningPermissiveNotOkay() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingRampCompressorRunningPermissiveNotOkay" finished-at="2022-08-14T17:59:50 CDT" duration-ms="57" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- comDischargeLowalarms1 -->
-        <test-method signature="comDischargeHighalarms1()" started-at="2022-07-17T14:26:55 CDT" name="comDischargeHighalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="22" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- comDischargeHighalarms1 -->
-        <test-method signature="comCoolingPressLowshutdown()" started-at="2022-07-17T14:26:55 CDT" name="comCoolingPressLowshutdown" finished-at="2022-07-17T14:26:55 CDT" duration-ms="24" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- comCoolingPressLowshutdown -->
-        <test-method signature="ComAuxOverallShutdownWordAssertion()" started-at="2022-07-17T14:26:55 CDT" name="ComAuxOverallShutdownWordAssertion" finished-at="2022-07-17T14:26:55 CDT" duration-ms="20" status="PASS">
+        </test-method> <!-- AutoUnLoadingRampCompressorRunningPermissiveNotOkay -->
+        <test-method signature="ComAuxOverallShutdownWordAssertion()" started-at="2022-08-14T17:59:50 CDT" name="ComAuxOverallShutdownWordAssertion" finished-at="2022-08-14T17:59:50 CDT" duration-ms="60" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- ComAuxOverallShutdownWordAssertion -->
-        <test-method signature="ComDriveShutdown()" started-at="2022-07-17T14:26:55 CDT" name="ComDriveShutdown" finished-at="2022-07-17T14:26:55 CDT" duration-ms="32" status="PASS">
+        <test-method signature="AuxOilsystemHighalarms1()" started-at="2022-08-14T17:59:50 CDT" name="AuxOilsystemHighalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="60" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ComDriveShutdown -->
-        <test-method signature="AuxcoolingHighalarms1()" started-at="2022-07-17T14:26:55 CDT" name="AuxcoolingHighalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="33" status="PASS">
+        </test-method> <!-- AuxOilsystemHighalarms1 -->
+        <test-method signature="ComDriveStart()" started-at="2022-08-14T17:59:50 CDT" name="ComDriveStart" finished-at="2022-08-14T17:59:50 CDT" duration-ms="69" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- AuxcoolingHighalarms1 -->
-        <test-method signature="comCoolingPressHighshutdown()" started-at="2022-07-17T14:26:55 CDT" name="comCoolingPressHighshutdown" finished-at="2022-07-17T14:26:55 CDT" duration-ms="27" status="PASS">
+        </test-method> <!-- ComDriveStart -->
+        <test-method signature="ComDriveStartIngeration()" started-at="2022-08-14T17:59:50 CDT" name="ComDriveStartIngeration" finished-at="2022-08-14T17:59:50 CDT" duration-ms="58" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- comCoolingPressHighshutdown -->
-        <test-method signature="vibpermissive()" started-at="2022-07-17T14:26:55 CDT" name="vibpermissive" finished-at="2022-07-17T14:26:55 CDT" duration-ms="31" status="PASS">
+        </test-method> <!-- ComDriveStartIngeration -->
+        <test-method signature="comDischargeHighalarms1()" started-at="2022-08-14T17:59:50 CDT" name="comDischargeHighalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="61" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- vibpermissive -->
-        <test-method signature="LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator()" started-at="2022-07-17T14:26:55 CDT" name="LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator" finished-at="2022-07-17T14:26:55 CDT" duration-ms="26" status="PASS">
+        </test-method> <!-- comDischargeHighalarms1 -->
+        <test-method signature="comCoolingPressLowshutdown()" started-at="2022-08-14T17:59:50 CDT" name="comCoolingPressLowshutdown" finished-at="2022-08-14T17:59:50 CDT" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- comCoolingPressLowshutdown -->
+        <test-method signature="AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtFinalPosition() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtFinalPosition" finished-at="2022-08-14T17:59:50 CDT" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtFinalPosition -->
+        <test-method signature="AutoUnLoadingRampActivePermissiveOkayCompressorRunning() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingRampActivePermissiveOkayCompressorRunning" finished-at="2022-08-14T17:59:50 CDT" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoUnLoadingRampActivePermissiveOkayCompressorRunning -->
+        <test-method signature="LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator()" started-at="2022-08-14T17:59:50 CDT" name="LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator" finished-at="2022-08-14T17:59:50 CDT" duration-ms="71" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- LowAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator -->
-        <test-method signature="highalarmleaf()" started-at="2022-07-17T14:26:55 CDT" name="highalarmleaf" finished-at="2022-07-17T14:26:55 CDT" duration-ms="32" status="PASS">
+        <test-method signature="AutoLoadingRamp() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoLoadingRamp" finished-at="2022-08-14T17:59:50 CDT" duration-ms="68" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- highalarmleaf -->
-        <test-method signature="ALarmDisabledReEnabled()" started-at="2022-07-17T14:26:55 CDT" name="ALarmDisabledReEnabled" finished-at="2022-07-17T14:26:55 CDT" duration-ms="32" status="PASS">
+        </test-method> <!-- AutoLoadingRamp -->
+        <test-method signature="comCoolingPressHighshutdown()" started-at="2022-08-14T17:59:50 CDT" name="comCoolingPressHighshutdown" finished-at="2022-08-14T17:59:50 CDT" duration-ms="71" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- ALarmDisabledReEnabled -->
-        <test-method signature="ComDrivePermssive()" started-at="2022-07-17T14:26:55 CDT" name="ComDrivePermssive" finished-at="2022-07-17T14:26:55 CDT" duration-ms="33" status="PASS">
+        </test-method> <!-- comCoolingPressHighshutdown -->
+        <test-method signature="AutoLoadingPermissives() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoLoadingPermissives" finished-at="2022-08-14T17:59:50 CDT" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoLoadingPermissives -->
+        <test-method signature="AutoUnLoadingRampCompressorTripped() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingRampCompressorTripped" finished-at="2022-08-14T17:59:50 CDT" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoUnLoadingRampCompressorTripped -->
+        <test-method signature="comDischargeLowalarms1()" started-at="2022-08-14T17:59:50 CDT" name="comDischargeLowalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="70" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- comDischargeLowalarms1 -->
+        <test-method signature="comSuctionLowalarms1()" started-at="2022-08-14T17:59:50 CDT" name="comSuctionLowalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- comSuctionLowalarms1 -->
+        <test-method signature="AutoLoadingAssertComSim() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoLoadingAssertComSim" finished-at="2022-08-14T17:59:50 CDT" duration-ms="74" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoLoadingAssertComSim -->
+        <test-method signature="AuxcoolingHighalarms1()" started-at="2022-08-14T17:59:50 CDT" name="AuxcoolingHighalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AuxcoolingHighalarms1 -->
+        <test-method signature="ComDrivePermssive()" started-at="2022-08-14T17:59:50 CDT" name="ComDrivePermssive" finished-at="2022-08-14T17:59:50 CDT" duration-ms="76" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- ComDrivePermssive -->
-        <test-method signature="lowalarmleaf()" started-at="2022-07-17T14:26:55 CDT" name="lowalarmleaf" finished-at="2022-07-17T14:26:55 CDT" duration-ms="33" status="PASS">
+        <test-method signature="ComDriveShutdown()" started-at="2022-08-14T17:59:50 CDT" name="ComDriveShutdown" finished-at="2022-08-14T17:59:50 CDT" duration-ms="74" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- lowalarmleaf -->
-        <test-method signature="ComDriveStartIngerationTripAndPermissiveDetection()" started-at="2022-07-17T14:26:55 CDT" name="ComDriveStartIngerationTripAndPermissiveDetection" finished-at="2022-07-17T14:26:55 CDT" duration-ms="33" status="PASS">
+        </test-method> <!-- ComDriveShutdown -->
+        <test-method signature="highalarmleaf()" started-at="2022-08-14T17:59:50 CDT" name="highalarmleaf" finished-at="2022-08-14T17:59:50 CDT" duration-ms="72" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- highalarmleaf -->
+        <test-method signature="ALarmDisabledReEnabled()" started-at="2022-08-14T17:59:50 CDT" name="ALarmDisabledReEnabled" finished-at="2022-08-14T17:59:50 CDT" duration-ms="72" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ALarmDisabledReEnabled -->
+        <test-method signature="vibpermissive()" started-at="2022-08-14T17:59:50 CDT" name="vibpermissive" finished-at="2022-08-14T17:59:50 CDT" duration-ms="71" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- vibpermissive -->
+        <test-method signature="ComDriveStartIngerationTripAndPermissiveDetection()" started-at="2022-08-14T17:59:50 CDT" name="ComDriveStartIngerationTripAndPermissiveDetection" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- ComDriveStartIngerationTripAndPermissiveDetection -->
-        <test-method signature="HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator()" started-at="2022-07-17T14:26:55 CDT" name="HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator" finished-at="2022-07-17T14:26:55 CDT" duration-ms="33" status="PASS">
+        <test-method signature="ComEventAssertion()" started-at="2022-08-14T17:59:50 CDT" name="ComEventAssertion" finished-at="2022-08-14T17:59:50 CDT" duration-ms="76" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ComEventAssertion -->
+        <test-method signature="AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtOutOfBoundaryPosition() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtOutOfBoundaryPosition" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoUnLoadingRampCompressorRunningPermissiveOkayVlaveAtOutOfBoundaryPosition -->
+        <test-method signature="HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator()" started-at="2022-08-14T17:59:50 CDT" name="HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- HighAlarmTriggered_ByComController_ThenDisableCommandIssued_ByOperator -->
-        <test-method signature="comSuctionHighalarms1()" started-at="2022-07-17T14:26:55 CDT" name="comSuctionHighalarms1" finished-at="2022-07-17T14:26:55 CDT" duration-ms="34" status="PASS">
+        <test-method signature="AutoUnLoadingPermissives() throws java.lang.Exception" started-at="2022-08-14T17:59:50 CDT" name="AutoUnLoadingPermissives" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AutoUnLoadingPermissives -->
+        <test-method signature="lowalarmleaf()" started-at="2022-08-14T17:59:50 CDT" name="lowalarmleaf" finished-at="2022-08-14T17:59:50 CDT" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- lowalarmleaf -->
+        <test-method signature="comSuctionHighalarms1()" started-at="2022-08-14T17:59:50 CDT" name="comSuctionHighalarms1" finished-at="2022-08-14T17:59:50 CDT" duration-ms="76" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- comSuctionHighalarms1 -->

@@ -1,11 +1,7 @@
 package com.controller.sweng894;
 
 import java.awt.Color;
-import java.util.Scanner;
 
-import javax.swing.JFrame;
-
-import com.google.common.primitives.Booleans;
 
 public class ComController {
 
@@ -25,7 +21,8 @@ public class ComController {
 
 		int HIS500_STR = 0; // Compressor start command
 		int HIS500_STP = 0; // Compressor stop command
-		int HIS500_LD  = 0; // Compressor loading status 0= unloaded, 1 = loading, 2 = loaded, 3 unloading,
+		int HIS500_LD  = 0; // Compressor loading
+		int HIS500_UNLD  = 0; // Compressor unloading
 		//int YSP2500    = ; // Compressor loading set-point in PSIG.
 		
 		int shutdownWord = 0;
@@ -37,12 +34,12 @@ public class ComController {
 		ComFrame myframe = new ComFrame();
 		Thread.sleep(0000);
 		shutdownWord = myframe.Resetcommand;
-		System.out.println("out of loop shutdownWord=" + shutdownWord);
+		//System.out.println("out of loop shutdownWord=" + shutdownWord);
 		Thread.sleep(0000);
 		HIS500_STR = myframe.Startcommand;
 		// System.out.println("HIS500_STR=" + HIS500_STR);
 
-		int YSP2500    = myframe.HSLDSP; // Compressor loading set-point in PSIG.
+		
 		// The following 7 variables are for instruments increment readings - for
 		// simulation purposes only reading simulation only
 		int VT100_increment = 0;
@@ -54,6 +51,7 @@ public class ComController {
 		int PT2500_increment = 0;
 		int[] TransmitterReading = new int[7];
 		int[] autoLoadPermissives = new int[10];
+		int[] autoUnLoadPermissives = new int[10];
 		int[] valve_Increment = new int[10];
 		
 		Boolean startupPeriodDone=false;
@@ -63,12 +61,14 @@ public class ComController {
 		do {
 			Thread.sleep(2000);
 			shutdownWord = myframe.Resetcommand;
-			System.out.println("Inside loop shutdownWord=" + shutdownWord);
+			//System.out.println("Inside loop shutdownWord=" + shutdownWord);
 			HIS500_STR = myframe.Startcommand;
-			System.out.println("HIS500_STR=" + myframe.Startcommand);
+			//System.out.println("HIS500_STR=" + myframe.Startcommand);
 			HIS500_STP = myframe.Stopcommand;
-			// System.out.println("HIS500_STP=" + myframe.Stopcommand);
-
+			HIS500_UNLD= myframe.AutoStopcommand;
+			//System.out.println("HIS500_UNLD=" + HIS500_UNLD);
+			
+			int YSP2500    = myframe.HSLDSP; // Compressor loading set-point in PSIG.
 			// Simulation values.
 			VT100_increment = 1;
 			VT200_increment = 1;
@@ -76,7 +76,7 @@ public class ComController {
 			PT100_increment = 1;
 			TT100_increment = 1;
 			PT500_increment = 1;
-			PT2500_increment =20;
+			PT2500_increment =3;
             
 			int permissWord = 0; // overall permissive word
 			// Call the simulation class simulate the compressor variables
@@ -87,18 +87,15 @@ public class ComController {
 			int setpoint = 0; // Alarm OR Shutdown set-point
 			int alarmFlag = 0; // alarm flag
 			int transmitter_status = 0; // sensor signal integrity
-			int c_status = 0; // compressor status
 			String alarm_Discrp = "ALARM logic initilized ";
-			String perm_Discrp = "PERMISSIVE logic initilized ";
 			String transm_eng = "engineering unit";
-			String SD_transm_eng = "";
 
 			String VT100 = "1ST Stage Vibration Sensor";
 
 			int VI100 = TransmitterReading[0]; // First Stage Vibration sensor reading
-			int VSH100 = 15; // First Stage vibration alarm set-point
+			int VSH100 = 5; // First Stage vibration alarm set-point
 			int VSL100 = 2; //
-			int VSHH100 = 2000; // Shutdown high set-point
+			int VSHH100 = 9; // Shutdown high set-point
 			int VAH100 = 0; // alarm high flag; 0 = cleared, 1 = alarm, 2 =disabled.
 			int VAL100 = 0; // alarm low flag
 			int VAHH100 = 0; // shutdown high flag
@@ -109,7 +106,10 @@ public class ComController {
 			String VAHH100_Discrp_SD = "Check for high shutdown";
 			String VPH100_Discrp = "Check for permissive*";
 			String VT100_ENG = "mils";
-			myframe.VI100.setText("VT100" + "   " + VI100 + "   " + VT100_ENG);
+			myframe.VI100.setText("VT100"+"  "+VI100+"   "+VT100_ENG);
+			myframe.VSL100.setText("VSL100"+"  "+VSL100);
+			myframe.VSH100.setText("VSH100"+"  "+VSH100);
+			myframe.VSHH100.setText("VSHH100"+"  "+VSHH100);
 
 			// Stage-2 I/O instruments
 			String VT200 = "2ND Stage Vibration Sensor";
@@ -153,8 +153,8 @@ public class ComController {
 			int PI100 = TransmitterReading[3]; // Sensor Reading
 			int PSH100 = 15; // Alarm High set-point
 			int PSL100 = 2; // Alarm low set point
-			int PSHH100 = 4000; // Shutdown high set-point
-			int PSLL100 = -100; // Shutdown set-point
+			int PSHH100 = 40; // Shutdown high set-point
+			int PSLL100 = -10; // Shutdown set-point
 			int PAH100 = 0; // alarm high flag
 			int PAL100 = 0; // alarm low flag
 			int PAHH100 = 0; // shutdown high flag
@@ -164,16 +164,15 @@ public class ComController {
 			String PAL100_Discrp_LO = "Check for low alarm";
 			String PAHH100_Discrp_SD = "Check for high shutdown";
 			String PALL100_Discrp_SD = "Check for low shutdown";
-			String CoolingSystem = "Compressor Cooling System";
 			String PT100_ENG = "PSIG";
 			myframe.PI100.setText("PT100" + "   " + PI100 + "   " + PT100_ENG);
 
 			String TT100 = "TT100 Oil System Temperature";
 			int TI100 = TransmitterReading[4];
-			int TSH100 = 20;
+			int TSH100 = 120;
 			int TSL100 = 10;
-			int TSHH100 = 3000;
-			int TSLL100 = -1000;
+			int TSHH100 = 200;
+			int TSLL100 = -10;
 			int TAH100 = 0;
 			int TAL100 = 0;
 			int TAHH100 = 0;
@@ -184,15 +183,18 @@ public class ComController {
 			String TAHH100_Discrp_SD = "Check for high shutdown";
 			String TALL100_Discrp_SD = "Check for low shutdown";
 			String TT100_ENG = "degC";
-			String OilSystem = "Compressor Oil System";
 			myframe.TI100.setText("TT100" + "   " + TI100 + "   " + TT100_ENG);
+			myframe.TSL100.setText("TSL100" + "   " + TSL100);
+			myframe.TSH100.setText("TSH100" + "   " + TSH100);
+			myframe.TSLL100.setText("TSLL100" + "   " + TSLL100);
+			myframe.TSHH100.setText("TSHH100" + "   " + TSHH100);
 
 			String PT500 = "PT500 Compressor Suction Pressure";
 			int PI500 = TransmitterReading[5];
 			int PSH500 = 30;
 			int PSL500 = 10;
-			int PSHH500 = 4000;
-			int PSLL500 = -300;
+			int PSHH500 = 40;
+			int PSLL500 = -20;
 			int PAH500 = 0;
 			int PAL500 = 0;
 			int PAHH500 = 0;
@@ -204,13 +206,18 @@ public class ComController {
 			String PALL500_Discrp_SD = "Check for low shutdown";
 			String PT500_ENG = "PSIG";
 			myframe.PI500.setText("PT500" + "   " + PI500 + "   " + PT500_ENG);
+			myframe.PSL500.setText("PSL500" + "   " + PSL500);
+			myframe.PSH500.setText("PSH500" + "   " + PSH500);
+			myframe.PSLL500.setText("PSLL500" + "   " + PSLL500);
+			myframe.PSHH500.setText("PSHH500" + "   " + PSHH500);
+			
 
 			String PT2500 = "PT2500 Compressor discharge Pressure";
 			int PI2500 = TransmitterReading[6];
 			int PSH2500 = 200;
 			int PSL2500 = 10;
-			int PSHH2500 = 5000;
-			int PSLL2500 = -2000;
+			int PSHH2500 = 220;
+			int PSLL2500 = -20;
 			int PAH2500 = 300;
 			int PAL2500 = 0;
 			int PAHH2500 = 0;
@@ -221,34 +228,38 @@ public class ComController {
 			String PAHH2500_Discrp_SD = "Check for high shutdown";
 			String PT2500_ENG = "PSIG";
 			myframe.PI2500.setText("PT2500" + "   " + PI2500 + "   " + PT2500_ENG);
+			myframe.PSL2500.setText("PSL2500" + "   " + PSL2500);
+			myframe.PSH2500.setText("PSH2500" + "   " + PSH2500);
+			myframe.PSLL2500.setText("PSLL2500" + "   " + PSLL2500);
+			myframe.PSHH2500.setText("PSHH2500" + "   " + PSHH2500);
 
 //======================================================= Actuators========================//
 			//---- suction valve----------------------------//
 			String PV500 = "PV500";
 			int PY500 = valve_Increment[0];
 			int PYS500RamUp  = 8;
-			int PYS500RamDwn = 1;
+			int PYS500RamDwn = 4;
 			String PV500_ENG = "% OPEN";
 			myframe.PV500.setText(PV500+" "+PY500+" "+PV500_ENG);
 			//---- Recirculation valve------------------------//
 			String PV100 = "PV100";
 			int PY100 = valve_Increment[1];
 			int PYS100RamUp  = 4;
-			int PYS100RamDwn = 4;
+			int PYS100RamDwn = 6;
 			String PV100_ENG = "% OPEN";
 			myframe.PV100.setText(PV100+" "+PY100+" "+PV100_ENG);
 			//---- Discharge valve----------------------------//
 			String PV2500 = "PV2500";
 			int PY2500 = valve_Increment[2];
 			int PYS2500RamUp  = 4;
-			int PYS2500RamDwn = 1;
+			int PYS2500RamDwn = 4;
 			String PV2500_ENG = "% OPEN";
 			myframe.PV2500.setText(PV2500+" "+PY2500+" "+PV2500_ENG);
 	           
 //----call simulation controller---- important this logic should be disabled for actual deployment----//
 				TransmitterReading = sim.comTransmitterSim(HIS500, shutdownWord, HIS500_STR, VI100, VT100_increment, VI200,
 						VT200_increment, VI300, VT300_increment, PI100, PT100_increment, TI100, TT100_increment, PI500,
-						PT500_increment, PI2500, PT2500_increment,PY500,PY100,PY2500);
+						PT500_increment, PI2500, PT2500_increment,PY500,PY100,PY2500,YSP2500,PSH2500);
 			
 //=====================Drive=====================================================================//
 
@@ -515,6 +526,8 @@ public class ComController {
 				alarmVisablity[21] = true;
 				if (PAHH100 == 1 && myframe.Resetcommand == 1) {
 					myframe.PAHH100.setForeground(Color.red);
+					myframe.PAHH100.setBackground(Color.black);
+					
 				} else if (myframe.Resetcommand == 0) {
 					myframe.PAHH100.setForeground(Color.green);
 				}
@@ -648,6 +661,7 @@ public class ComController {
 				alarmVisablity[24] = true;
 				if (PALL500 == 1 && myframe.Resetcommand == 1) {
 					myframe.PALL500.setForeground(Color.red);
+					myframe.PALL500.setBackground(Color.black);
 				} else if (myframe.Resetcommand == 0) {
 					myframe.PALL500.setForeground(Color.green);
 				}
@@ -659,6 +673,8 @@ public class ComController {
 				alarmVisablity[25] = true;
 				if (PAHH500 == 1 && myframe.Resetcommand == 1) {
 					myframe.PAHH500.setForeground(Color.red);
+					myframe.PAHH500.setBackground(Color.red);
+					
 				} else if (myframe.Resetcommand == 0) {
 					myframe.PAHH500.setForeground(Color.green);
 				}
@@ -692,8 +708,7 @@ public class ComController {
 				PAL2500 = AlmStatusFlags[0];
 				PAH2500 = AlmStatusFlags[1];
 			}
-			PAL2500 = flagCompsite[2];
-			PAH2500 = flagCompsite[3];
+		
 			if (PAL2500 == 1) {
 				alarmVisablity[12] = true;
 			} else {
@@ -754,7 +769,7 @@ public class ComController {
 					PAHH500, PALL2500, PAHH2500);
 
 			String shutdownWord_STATUS = "TRIP";
-			if (shutdownWord == 1) {
+			if (shutdownWord == 1||myframe.Stopcommand==1) {
 				shutdownWord_STATUS = "TRIP";
 				myframe.Startcommand = 0;
 				myframe.Resetcommand = 1;
@@ -764,14 +779,14 @@ public class ComController {
 			}
 
 			myframe.RESETREQU.setText(shutdownWord_STATUS);
-			System.out.println("Compressor auxiliary system overall shutdown=" + " " + shutdownWord);
-			System.out.println("================================");
+			//System.out.println("Compressor auxiliary system overall shutdown=" + " " + shutdownWord);
+			//System.out.println("================================");
 
 			// send all permissives flags to comauxstatus class, the class determines if all
 			// permissives are cleared/ if not the overall permissive word is set
 			permissWord = auxStatus.AuxSysPermiss(VPH100, VPH200, VPH300);
-			System.out.println("Compressor auxiliary system overall permissive=" + " " + permissWord);
-			System.out.println("================================");
+			//System.out.println("Compressor auxiliary system overall permissive=" + " " + permissWord);
+			//System.out.println("================================");
 
 			// ======== Call compressor leaf drive start/stop===========================//
 		
@@ -810,24 +825,37 @@ public class ComController {
 			ComAutoLoad autoload = new ComAutoLoad();//int comStatus, boolean startupPeriodDone, int shutdownWord
 			autoLoadPermissives= autoload.comAutoLoadPermissives(HIS500,startupPeriodDone,shutdownWord);
 			
-			System.out.println("AutoLoading initiated*******&&&&&=" + " " +autoLoadPermissives[9]);
+			//System.out.println("AutoLoading initiated*******&&&&&=" + " " +autoLoadPermissives[9]);
 			
 			HIS500_LD=autoLoadPermissives[9];
 			
-			if (HIS500_LD == 1) {
+			if (HIS500_LD == 1 && autoUnLoadPermissives[9]==0&&valve_Increment[5]==0) {
 				alarmVisablity[28] = true;
-				HS_LD="LOAD";
-			} else {
+				HS_LD="LOADING";
+			}else if(valve_Increment[5]==1)  {
+				alarmVisablity[28] = true;
+				HS_LD="LOADED";
+			} else if(autoUnLoadPermissives[9]==1) {
+				alarmVisablity[28] = true;
+				HS_LD="UNLOADING";
+			}else {
 				alarmVisablity[28] = false;
 			}
-			myframe.autload.setText("IND"+" "+HS_LD);
+			myframe.autload.setText("MACH"+" "+HS_LD);
 			myframe.autload.setVisible(alarmVisablity[28]);		
 			
 			valve_Increment= autoload.comAutoLoadingRamp(HIS500,HIS500_LD,PI500,PSL500,PI2500,PSH2500,PY500, PYS500RamUp,PY2500, PYS2500RamUp,PY100,PYS100RamUp,YSP2500);
-			System.out.println("autoload Permissives=" + " " +valve_Increment[9]);
-			System.out.println("SuctionRamp=" + " " +valve_Increment[0]);
-			System.out.println("RecirctRamp=" + " " +valve_Increment[1]);
-			System.out.println("dischargeRamp=" + " " +valve_Increment[2]);
+			
+			////=========call auto unloading class with loading parameters==================//
+			autoUnLoadPermissives= autoload.comAutoUnLoadPermissives(HIS500_UNLD,HIS500,startupPeriodDone,shutdownWord,HIS500_LD);
+			if(autoUnLoadPermissives[9]==1) {
+				 valve_Increment= autoload.comAutoUnLoadingRamp(HIS500, autoUnLoadPermissives[9],PI500, PI2500,  PY500,
+					PYS500RamDwn, PY2500,PYS2500RamDwn, PY100, PYS100RamDwn);
+			   }if(valve_Increment[7]==1) {
+					HIS500_STP=1;
+					myframe.Stopcommand=1;
+			  }
+			   
 			
 		} while (true);
 	}

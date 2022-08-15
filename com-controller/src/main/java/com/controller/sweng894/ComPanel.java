@@ -14,6 +14,8 @@ public class ComPanel extends JPanel {
 Image image;
 
 	ComPanel(){
+		//image = new ImageIcon("C:/Users/hef11/Desktop/test1.png").getImage();
+		
 		image = new ImageIcon("test1.png").getImage();
 		
 		this.setPreferredSize(new Dimension (940,595));

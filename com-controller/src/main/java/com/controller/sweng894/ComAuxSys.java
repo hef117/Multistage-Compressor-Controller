@@ -2,7 +2,7 @@ package com.controller.sweng894;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 public interface ComAuxSys {
 	// Interface to the Compressor controller -- is the client should pass sensor
@@ -119,8 +119,8 @@ class HighAlarm implements ComAuxSys {
 
 	@Override
 	public int detectHighAlarm() {
-		System.out.println("Input data to high alarm:" + SensorTag + "  " + Sensor + " " + Sensor_eng + "  Setpoint: "
-				+ Sensor_SP + " " + Sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + ALM_DSCRIP);
+		//System.out.println("Input data to high alarm:" + SensorTag + "  " + Sensor + " " + Sensor_eng + "  Setpoint: "
+			//	+ Sensor_SP + " " + Sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + ALM_DSCRIP);
 
 		if (sensor_STAT == 1 && Sensor >= Sensor_SP) {
 			ALM_DSCRIP = "High alarm detected";
@@ -132,10 +132,10 @@ class HighAlarm implements ComAuxSys {
 			sensor_alarm_flag = 0;
 		}
 
-		System.out.println(SensorTag + " " + Sensor + " " + Sensor_eng);
-		System.out.println(SensorTag + " " + ALM_DSCRIP);
-		System.out.println("Alarm Flag:" + " " + sensor_alarm_flag);
-		System.out.println("================================");
+		//System.out.println(SensorTag + " " + Sensor + " " + Sensor_eng);
+		//System.out.println(SensorTag + " " + ALM_DSCRIP);
+		//System.out.println("Alarm Flag:" + " " + sensor_alarm_flag);
+		//System.out.println("================================");
 		return sensor_alarm_flag;
 	}
 
@@ -196,8 +196,8 @@ class LowAlarm implements ComAuxSys {
 	@Override
 	public int detectLowAlarm() {
 
-		System.out.println("Input data to low alarm:" + SensorTag + "  " + Sensor + " " + Sensor_eng + "  Setpoint: "
-				+ Sensor_SP + " " + Sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + ALM_DSCRIP);
+		//System.out.println("Input data to low alarm:" + SensorTag + "  " + Sensor + " " + Sensor_eng + "  Setpoint: "
+				//+ Sensor_SP + " " + Sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + ALM_DSCRIP);
 
 		if (sensor_STAT == 1 && Sensor < Sensor_SP) {
 			ALM_DSCRIP = "Low alarm detected";
@@ -208,10 +208,10 @@ class LowAlarm implements ComAuxSys {
 			ALM_DSCRIP = "Alarm cleared";
 			sensor_alarm_flag = 0;
 		}
-		System.out.println(SensorTag + " " + Sensor + " " + Sensor_eng);
-		System.out.println(SensorTag + " " + ALM_DSCRIP);
-		System.out.println("Alarm Flag:" + " " + sensor_alarm_flag);
-		System.out.println("================================");
+		//System.out.println(SensorTag + " " + Sensor + " " + Sensor_eng);
+		//System.out.println(SensorTag + " " + ALM_DSCRIP);
+		//System.out.println("Alarm Flag:" + " " + sensor_alarm_flag);
+		//System.out.println("================================");
 		return sensor_alarm_flag;
 	}
 
@@ -273,8 +273,8 @@ class AuxVibPermissive implements ComAuxSys {
 		// fixed.
 		// Do not trip the machine if the machine is running and the sensor goes bad.
 		// The alarm logic will notify the operator by setting the sensor alarm flag.
-		System.out.println("Input data permissive leaf:" + sensorTag + "Sensor integrity:" + " " + sensor_STAT + " "
-				+ "Compressor Status:" + " " + C_STAT + " " + PERM_DSCRIP);
+		//System.out.println("Input data permissive leaf:" + sensorTag + "Sensor integrity:" + " " + sensor_STAT + " "
+				//+ "Compressor Status:" + " " + C_STAT + " " + PERM_DSCRIP);
 		{
 			if (C_STAT == 0 && sensor_STAT != 1) {
 				PERM_DSCRIP = "Permissive not granted check sensor ";
@@ -285,9 +285,9 @@ class AuxVibPermissive implements ComAuxSys {
 				PERM_DSCRIP = "Permissive granted";
 				sensor_permis_flag = 1;
 			}
-			System.out.println(sensorTag + " " + PERM_DSCRIP);
-			System.out.println(sensorTag + " " + "PERMISSIVE  STATUS =" + sensor_permis_flag);
-			System.out.println("================================");
+			//System.out.println(sensorTag + " " + PERM_DSCRIP);
+			//System.out.println(sensorTag + " " + "PERMISSIVE  STATUS =" + sensor_permis_flag);
+			//System.out.println("================================");
 			return sensor_permis_flag;
 		}
 	}
@@ -353,9 +353,9 @@ class Highshutdown implements ComAuxSys {
 
 	@Override
 	public int detectHighShutdown() {
-		System.out.println("Input data to high shutdown:" + sensorTag + "  " + sensor + " " + sensor_eng
-				+ "  Setpoint: " + sensor_SP + " " + sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " "
-				+ SD_DSCRIP);
+		//System.out.println("Input data to high shutdown:" + sensorTag + "  " + sensor + " " + sensor_eng
+				//+ "  Setpoint: " + sensor_SP + " " + sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " "
+				//+ SD_DSCRIP);
 
 		// if the sensor reading is valid if the alarm exceeds the set point and set the
 		// alarm flag,
@@ -368,10 +368,10 @@ class Highshutdown implements ComAuxSys {
 			SD_DSCRIP = "High Shutdown Reset";
 			sensor_shutdown_flag = 0;
 		}
-		System.out.println(sensorTag + " " + sensor + " " + sensor_eng);
-		System.out.println(sensorTag + " " + SD_DSCRIP);
-		System.out.println("Shutdown Flag:" + " " + sensor_shutdown_flag);
-		System.out.println("================================");
+		//System.out.println(sensorTag + " " + sensor + " " + sensor_eng);
+		//System.out.println(sensorTag + " " + SD_DSCRIP);
+		//System.out.println("Shutdown Flag:" + " " + sensor_shutdown_flag);
+		//System.out.println("================================");
 		return sensor_shutdown_flag;
 	}
 
@@ -432,8 +432,8 @@ class Lowshutdown implements ComAuxSys {
 
 	@Override
 	public int detectLowShutdown() {
-		System.out.println("Input data to lOW shutdown:" + sensorTag + "  " + sensor + " " + sensor_eng + "  Setpoint: "
-				+ sensor_SP + " " + sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + SD_DSCRIP);
+		//System.out.println("Input data to lOW shutdown:" + sensorTag + "  " + sensor + " " + sensor_eng + "  Setpoint: "
+				//+ sensor_SP + " " + sensor_eng + "  " + "Sensor integrity:" + " " + sensor_STAT + " " + SD_DSCRIP);
 
 		if (sensor_STAT == 1 && sensor <= sensor_SP) {
 			SD_DSCRIP = "Low Shutdown Tripped";
@@ -444,10 +444,10 @@ class Lowshutdown implements ComAuxSys {
 			SD_DSCRIP = "Low Shutdown RESET";
 			sensor_shutdown_flag = 0;
 		}
-		System.out.println(sensorTag + " " + sensor + " " + sensor_eng);
-		System.out.println(sensorTag + " " + SD_DSCRIP);
-		System.out.println("Shutdown Flag:" + " " + sensor_shutdown_flag);
-		System.out.println("================================");
+		//System.out.println(sensorTag + " " + sensor + " " + sensor_eng);
+		//System.out.println(sensorTag + " " + SD_DSCRIP);
+		//System.out.println("Shutdown Flag:" + " " + sensor_shutdown_flag);
+		//System.out.println("================================");
 		return sensor_shutdown_flag;
 	}
 
@@ -539,9 +539,9 @@ class ComDrive implements ComAuxSys {
 			
 		}
 		DriverFeedBack=cmdMessage;
-		System.out.println("Opertor Command Drive:" + " " + comRequest);
-		System.out.println("Compressor Driver Status:" + cmdMessage);
-		System.out.println("================================");
+		//System.out.println("Opertor Command Drive:" + " " + comRequest);
+		//System.out.println("Compressor Driver Status:" + cmdMessage);
+		//System.out.println("================================");
 				
 
 		return C_Status;

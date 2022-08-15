@@ -1,30 +1,30 @@
 package com.controller.sweng894;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Action;
-import javax.swing.ImageIcon;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
 public class ComFrame extends JFrame implements ActionListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	ComPanel panel;
 	
     int Resetcommand=1;
     int Startcommand=1;
     int Stopcommand =1;
+    int AutoStopcommand;
     
     int Stg1VibDisableReq =0;
     int Stg2VibDisableReq =0;
@@ -43,9 +43,10 @@ public class ComFrame extends JFrame implements ActionListener {
 	JButton Start_Button;
 	JButton Stop_Button;
     JButton Summit_Button;	
-	
+	JButton Auto_Stop_Button;
 // alarm disable buttons 	
 	JButton STG1_Alrm_Button;
+	JButton alrm_REST;
 	JButton STG2_Alrm_Button;
 	JButton STG3_Alrm_Button;
 	
@@ -65,7 +66,7 @@ public class ComFrame extends JFrame implements ActionListener {
 	JLabel TI100;
 	JLabel PI500;
 	JLabel PI2500;
-// actuators and Loading paramaters  
+// actuators and Loading parameters  
 	JLabel PV500;
 	JLabel PV2500;
 	JLabel PV100;
@@ -79,6 +80,10 @@ public class ComFrame extends JFrame implements ActionListener {
 	JLabel VAH200;
 	JLabel VAL300;
 	JLabel VAH300;
+	
+	JLabel VSL100;
+	JLabel VSH100;
+	JLabel VSHH100;
 
 	JLabel VPH100;
 	JLabel VPH200;
@@ -97,17 +102,32 @@ public class ComFrame extends JFrame implements ActionListener {
 	JLabel TAH100;
 	JLabel TALL100;
 	JLabel TAHH100;
+	
+	JLabel TSL100;
+	JLabel TSH100;
+	JLabel TSLL100;
+	JLabel TSHH100;
 
 	JLabel PAL500;
 	JLabel PAH500;
 	JLabel PALL500;
 	JLabel PAHH500;
 	
+	JLabel PSL500;
+	JLabel PSH500;
+	JLabel PSLL500;
+	JLabel PSHH500;
+	
 	JLabel PAL2500;
 	JLabel PAH2500;
 	JLabel PALL2500;
 	JLabel PAHH2500;
     JTextField HS500LDSP;	
+	
+	JLabel PSL2500;
+	JLabel PSH2500;
+	JLabel PSLL2500;
+	JLabel PSHH2500;
 	
 	ComFrame(){
             
@@ -129,6 +149,11 @@ public class ComFrame extends JFrame implements ActionListener {
 		 Stop_Button.setFocusable(false);
 		 Stop_Button.addActionListener(this);
 		 
+		 Auto_Stop_Button= new JButton("AutoSTOP");
+		 Auto_Stop_Button.setBounds(10,570,120,15);
+		 Auto_Stop_Button.setFocusable(false);
+		 Auto_Stop_Button.addActionListener(this);
+		 
 		 // SETPOINTS
 		 HS500LDSP= new JTextField();
 		 HS500LDSP.setBounds(10,510,120,20);
@@ -138,17 +163,24 @@ public class ComFrame extends JFrame implements ActionListener {
 		 HS500LDSP.setText("Loading point");
 		 HS500LDSP.setEditable(true);
 		 
-		 Summit_Button= new JButton("SUMIT");	
+		 Summit_Button= new JButton("Enter");	
 		 Summit_Button.setBounds(10,530,120,15);
 		 Summit_Button.setFocusable(false);
 		 Summit_Button.addActionListener(this);
 		 
 		 
-        // Commands  
+        // Commands alrm_REST  
 		 STG1_Alrm_Button= new JButton("STG1 ALRMS");	
 		 STG1_Alrm_Button.setBounds(800,450,130,15);
 		 STG1_Alrm_Button.setFocusable(false);
 		 STG1_Alrm_Button.addActionListener(this);
+		 
+		 alrm_REST= new JButton("ALRM RST");	
+		 alrm_REST.setBounds(700,450,100,15);
+		 alrm_REST.setFocusable(false);
+		 alrm_REST.addActionListener(this);
+		 
+		 
 		 
 		 STG2_Alrm_Button= new JButton("STG2 ALRMS");	
 		 STG2_Alrm_Button.setBounds(800,470,130,15);
@@ -223,7 +255,7 @@ public class ComFrame extends JFrame implements ActionListener {
 		
 		 //auto-load
 		 autload= new JLabel();
-		 autload.setBounds(10,74,100,15);
+		 autload.setBounds(10,74,120,15);
 		 // RESET prompt 
 		 RESETREQU= new JLabel();
 		 RESETREQU.setBounds(132,450,180,15);
@@ -239,10 +271,16 @@ public class ComFrame extends JFrame implements ActionListener {
 		 
 		 // Alarm indicators
 		 VAL100= new JLabel();
-		 VAL100.setBounds(210,114,300,15);
+		 VAL100.setBounds(210,114,300,15);		 
 		 VAH100= new JLabel();
 		 VAH100.setBounds(210,94,300,15);
 		 
+		// SET POINTS
+		 VSL100= new JLabel();
+		 VSL100.setBounds(142,114,300,18);
+	     VSH100= new JLabel();
+		 VSH100.setBounds(142,94,300,18);	 
+						 
 		 VAL200= new JLabel(); //210,134
 		 VAL200.setBounds(380,114,300,15);
 		 VAH200= new JLabel();
@@ -264,6 +302,10 @@ public class ComFrame extends JFrame implements ActionListener {
 		 
 		 VAHH100= new JLabel();
 		 VAHH100.setBounds(210,54,300,15);
+		 VSHH100= new JLabel();
+		 VSHH100.setBounds(142,54,300,15);
+
+		 
 		 
 		 VAHH200= new JLabel();
 		 VAHH200.setBounds(380,60,300,15);
@@ -286,10 +328,20 @@ public class ComFrame extends JFrame implements ActionListener {
     	 TAH100= new JLabel();
 		 TAH100.setBounds(210,520,300,15);
 		 
+		 TSL100= new JLabel();
+		 TSL100.setBounds(340,500,300,15);
+	     TSH100= new JLabel();
+		 TSH100.setBounds(340,520,300,15);
+		 
 		 TALL100= new JLabel();
 		 TALL100.setBounds(210,540,300,15);
 		 TAHH100= new JLabel();
 		 TAHH100.setBounds(210,560,300,15);
+		 
+		 TSLL100= new JLabel();
+		 TSLL100.setBounds(340,540,300,15);
+	     TSHH100= new JLabel();
+		 TSHH100.setBounds(340,560,300,15);
 		 
 		 
 		 PAL500= new JLabel();
@@ -297,10 +349,22 @@ public class ComFrame extends JFrame implements ActionListener {
     	 PAH500= new JLabel();
 		 PAH500.setBounds(110,363,300,15);
 		 
+		 PSL500= new JLabel();
+		 PSL500.setBounds(18,343,300,15);
+		 PSH500= new JLabel();
+		 PSH500.setBounds(18,363,300,15);
+		 
 		 PALL500= new JLabel();
 		 PALL500.setBounds(110,383,300,15);
 		 PAHH500= new JLabel();
 		 PAHH500.setBounds(110,403,300,15);
+		 	 
+		 PSLL500= new JLabel();
+		 PSLL500.setBounds(18,383,300,15);
+		 PSHH500= new JLabel();
+		 PSHH500.setBounds(18,403,300,15);
+		 
+		 
 		 
 		 
 		 PAL2500= new JLabel();
@@ -308,20 +372,30 @@ public class ComFrame extends JFrame implements ActionListener {
     	 PAH2500= new JLabel();
 		 PAH2500.setBounds(617,363,300,15);
 		 
+		 PSL2500= new JLabel();
+		 PSL2500.setBounds(700,343,300,15);
+		 PSH2500= new JLabel();
+		 PSH2500.setBounds(700,363,300,15);
+		 
 		 PALL2500= new JLabel();
 		 PALL2500.setBounds(617,383,300,15);
-		 
 		 PAHH2500= new JLabel();
 		 PAHH2500.setBounds(617,403,300,15);
-		 
-		 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,908);	
+         
+		 PSLL2500= new JLabel();
+		 PSLL2500.setBounds(700,383,300,15);
+		 PSHH2500= new JLabel();
+		 PSHH2500.setBounds(700,403,300,15);
+		
+
+		        
 		this.add(Reset_Button);
 		this.add(Start_Button);
 		this.add(Stop_Button);
+		this.add(Auto_Stop_Button);
 		
 		this.add(STG1_Alrm_Button);
+		this.add(alrm_REST);
 		this.add(STG2_Alrm_Button);
 		this.add(STG3_Alrm_Button);
 		
@@ -347,6 +421,16 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(VAL300);
 		this.add(VAH300);
 		
+		this.add(VSL100);
+		this.add(VSH100);
+		this.add(VSHH100);
+		
+		
+		this.add(PSL500);
+		this.add(PSH500);
+		this.add(PSLL500);
+		this.add(PSHH500);
+		
 		this.add(VPH100);
 		this.add(VPH200);
 		this.add(VPH300);
@@ -364,6 +448,11 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(TALL100);
 		this.add(TAHH100);
 		
+		this.add(TSL100);
+		this.add(TSH100);
+		this.add(TSLL100);
+		this.add(TSHH100);
+		
 		
 		this.add(PAL500);
 		this.add(PAH500);
@@ -375,6 +464,11 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(PALL2500);
 		this.add(PAHH2500);	
 		
+		this.add(PSL2500);
+		this.add(PSH2500);
+		this.add(PSLL2500);
+		this.add(PSHH2500);	
+		
 		this.add(PV500);
 		this.add(PV2500);
 		this.add(PV100);
@@ -382,17 +476,20 @@ public class ComFrame extends JFrame implements ActionListener {
 		this.add(HSTP500);
 		this.add(RESETREQU);
 		
+		
 		this.add(HS500LDSP);
-		this.add(Summit_Button);
-	
-		
-		
+		this.add(Summit_Button);	
 		this.add(panel);
-		
 		this.pack();
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("Compressor Main Page");
+		//this.setSize(1000,908);	
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.setLayout(null);
+        //this.setLayout(null);
+	
 	}
 	 	@Override
 	public void actionPerformed(ActionEvent e) {	
@@ -400,26 +497,26 @@ public class ComFrame extends JFrame implements ActionListener {
 			Resetcommand=0;
 			Startcommand=0;
 			Stopcommand=0;
-			Stg1VibDisableReq=0;
-			Stg2VibDisableReq=0;
-			Stg3VibDisableReq=0;
-		    AuxcoolingDisableReq =0;
-		    AuxoilDisableReq =0;
-		    SuctionDisableReq =0;
-		    DischargeDisableReq =0;
+			AutoStopcommand=0;
+			
+			
 			
 			// System.out.println("Resetcommand="+Resetcommand);	
 	}
 		else if(e.getSource()==Stop_Button) {
 			Stopcommand=1;
 			Startcommand=0;
-			System.out.println("Stopcommand="+Stopcommand);	
+			//System.out.println("Stopcommand="+Stopcommand);	
 			
 	}
 		else if(e.getSource()==Start_Button) {
 			Startcommand=1;
-			 System.out.println("Startcommand="+Startcommand);	
-	}
+			//System.out.println("Startcommand="+Startcommand);	
+	}else if(e.getSource()==Auto_Stop_Button) {
+		AutoStopcommand=1;
+		//System.out.println("AutoStopcommand="+Stopcommand);	
+		
+      }
 		
 		else if(e.getSource()==STG1_Alrm_Button) {
 			Stg1VibDisableReq=1;
@@ -448,9 +545,18 @@ public class ComFrame extends JFrame implements ActionListener {
        }
        else if(e.getSource()==Summit_Button) {
     	   HSLD=HS500LDSP.getText();
-    	   System.out.println("loading setpoint="+HSLD);
+    	   //System.out.println("loading setpoint="+HSLD);
     	   HSLDSP= Integer.parseInt(HSLD);
-    	   System.out.println("loading setpoint="+HSLDSP);
+    	   //System.out.println("loading setpoint="+HSLDSP);
+       }
+       else if(e.getSource()==alrm_REST) {
+    	    Stg1VibDisableReq=0;
+			Stg2VibDisableReq=0;
+			Stg3VibDisableReq=0;
+		    AuxcoolingDisableReq =0;
+		    AuxoilDisableReq =0;
+		    SuctionDisableReq =0;
+		    DischargeDisableReq =0;  
        }
    } 	
 }

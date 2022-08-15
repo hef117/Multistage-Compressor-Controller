@@ -27,13 +27,13 @@ public class ComAuxStatus {
 			if (i <= 10) {
 				if (input_trip[i] == 1) {
 					auxShutdwnoverall = 1;
-					System.out.println("system trip found" + "" + i + "" + input_trip[i]);
+					//System.out.println("system trip found" + "" + i + "" + input_trip[i]);
 					if (auxShutdwnoverall != 0) {
 						return auxShutdwnoverall;
 					}
 				} else if (input_trip[i] == 0) {
 					auxShutdwnoverall = input_trip[i];
-					System.out.println("system trip found" + "" + i + "" + input_trip[i]);
+					//System.out.println("system trip found" + "" + i + "" + input_trip[i]);
 				}	
 			}
 		}
@@ -54,11 +54,11 @@ public class ComAuxStatus {
 			if (i <= 2) {
 				if (input_perm[i] == 1) {
 					auxpermoverall = input_perm[i];
-					System.out.println("system permissive granted" + " " + i + " " + input_perm[i]);
+					//System.out.println("system permissive granted" + " " + i + " " + input_perm[i]);
 				} else if (input_perm[i] != 1) {
 
 					auxpermoverall = input_perm[i];
-					System.out.println("system permissive not granted" + " " + i + " " + input_perm[i]);
+					//System.out.println("system permissive not granted" + " " + i + " " + input_perm[i]);
 				}
 			}
 			if (auxpermoverall != 1) {
