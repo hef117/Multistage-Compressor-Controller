@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComPanel.java</span></div><h1>ComPanel.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+
+public class ComPanel extends JPanel {
+	
+Image image;
+
+<span class="nc" id="L16">	ComPanel(){</span>
+		//image = new ImageIcon(&quot;C:/Users/hef11/Desktop/test1.png&quot;).getImage();
+		
+<span class="nc" id="L19">		image = new ImageIcon(&quot;test1.png&quot;).getImage();</span>
+		
+<span class="nc" id="L21">		this.setPreferredSize(new Dimension (940,595));</span>
+<span class="nc" id="L22">		this.setForeground(Color.blue);</span>
+<span class="nc" id="L23">	}</span>
+	
+	public void paint(Graphics g) {
+<span class="nc" id="L26">		 Graphics2D  g2D = (Graphics2D)g;	;</span>
+<span class="nc" id="L27">		 g2D.setBackground(Color.blue);</span>
+<span class="nc" id="L28">	     g2D.drawImage(image,-60,-240, null);</span>
+	   
+		//g2D.drawLine(0,0,500,500);
+	
+<span class="nc" id="L32">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

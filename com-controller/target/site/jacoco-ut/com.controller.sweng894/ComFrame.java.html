@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComFrame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComFrame.java</span></div><h1>ComFrame.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+import java.awt.Color;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+
+public class ComFrame extends JFrame implements ActionListener {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	ComPanel panel;
+	
+<span class="nc" id="L24">    int Resetcommand=1;</span>
+<span class="nc" id="L25">    int Startcommand=1;</span>
+<span class="nc" id="L26">    int Stopcommand =1;</span>
+    int AutoStopcommand;
+    
+<span class="nc" id="L29">    int Stg1VibDisableReq =0;</span>
+<span class="nc" id="L30">    int Stg2VibDisableReq =0;</span>
+<span class="nc" id="L31">    int Stg3VibDisableReq =0;</span>
+    
+<span class="nc" id="L33">    int AuxcoolingDisableReq =0;</span>
+<span class="nc" id="L34">    int AuxoilDisableReq =0;</span>
+<span class="nc" id="L35">    int SuctionDisableReq =0;</span>
+<span class="nc" id="L36">    int DischargeDisableReq =0;</span>
+<span class="nc" id="L37">    String HSLD=&quot;100&quot;;</span>
+<span class="nc" id="L38">    int HSLDSP=100;</span>
+    
+    
+//	Compressor command buttons
+	JButton Reset_Button;
+	JButton Start_Button;
+	JButton Stop_Button;
+    JButton Summit_Button;	
+	JButton Auto_Stop_Button;
+// alarm disable buttons 	
+	JButton STG1_Alrm_Button;
+	JButton alrm_REST;
+	JButton STG2_Alrm_Button;
+	JButton STG3_Alrm_Button;
+	
+	JButton COOL_Alrm_DISABLE;
+	JButton Oil_Alrm_DISABLE;
+	JButton SUCTION_Alrm_DISABLE;
+	JButton DISCH_Alrm_DISABLE;
+	
+	JLabel HS500;
+	JLabel HSTP500;
+	JLabel RESETREQU;
+// Analog Readings	
+	JLabel VI100;	
+	JLabel VI200;
+    JLabel VI300;
+	JLabel PI100;
+	JLabel TI100;
+	JLabel PI500;
+	JLabel PI2500;
+// actuators and Loading parameters  
+	JLabel PV500;
+	JLabel PV2500;
+	JLabel PV100;
+	JLabel STARTUPTIMER;
+	JLabel autload;
+	
+	
+	JLabel VAL100;
+	JLabel VAH100;
+	JLabel VAL200;
+	JLabel VAH200;
+	JLabel VAL300;
+	JLabel VAH300;
+	
+	JLabel VSL100;
+	JLabel VSH100;
+	JLabel VSHH100;
+
+	JLabel VPH100;
+	JLabel VPH200;
+	JLabel VPH300;
+	
+	JLabel VAHH100;
+	JLabel VAHH200;
+	JLabel VAHH300;
+	
+	JLabel PAL100;
+	JLabel PAH100;
+	JLabel PALL100;
+	JLabel PAHH100;
+
+	JLabel TAL100;
+	JLabel TAH100;
+	JLabel TALL100;
+	JLabel TAHH100;
+	
+	JLabel TSL100;
+	JLabel TSH100;
+	JLabel TSLL100;
+	JLabel TSHH100;
+
+	JLabel PAL500;
+	JLabel PAH500;
+	JLabel PALL500;
+	JLabel PAHH500;
+	
+	JLabel PSL500;
+	JLabel PSH500;
+	JLabel PSLL500;
+	JLabel PSHH500;
+	
+	JLabel PAL2500;
+	JLabel PAH2500;
+	JLabel PALL2500;
+	JLabel PAHH2500;
+    JTextField HS500LDSP;	
+	
+	JLabel PSL2500;
+	JLabel PSH2500;
+	JLabel PSLL2500;
+	JLabel PSHH2500;
+	
+<span class="nc" id="L132">	ComFrame(){</span>
+            
+<span class="nc" id="L134">		panel= new ComPanel ();</span>
+		
+		
+<span class="nc" id="L137">		 Reset_Button= new JButton(&quot;RESET&quot;);	</span>
+<span class="nc" id="L138">		 Reset_Button.setBounds(10,450,120,15);</span>
+<span class="nc" id="L139">		 Reset_Button.setFocusable(false);</span>
+<span class="nc" id="L140">		 Reset_Button.addActionListener(this);</span>
+
+<span class="nc" id="L142">		 Start_Button= new JButton(&quot;START&quot;);	</span>
+<span class="nc" id="L143">		 Start_Button.setBounds(10,470,120,15);</span>
+<span class="nc" id="L144">		 Start_Button.setFocusable(false);</span>
+<span class="nc" id="L145">		 Start_Button.addActionListener(this);</span>
+		 
+<span class="nc" id="L147">		 Stop_Button= new JButton(&quot;STOP&quot;);	</span>
+<span class="nc" id="L148">		 Stop_Button.setBounds(10,490,120,15);</span>
+<span class="nc" id="L149">		 Stop_Button.setFocusable(false);</span>
+<span class="nc" id="L150">		 Stop_Button.addActionListener(this);</span>
+		 
+<span class="nc" id="L152">		 Auto_Stop_Button= new JButton(&quot;AutoSTOP&quot;);</span>
+<span class="nc" id="L153">		 Auto_Stop_Button.setBounds(10,570,120,15);</span>
+<span class="nc" id="L154">		 Auto_Stop_Button.setFocusable(false);</span>
+<span class="nc" id="L155">		 Auto_Stop_Button.addActionListener(this);</span>
+		 
+		 // SETPOINTS
+<span class="nc" id="L158">		 HS500LDSP= new JTextField();</span>
+<span class="nc" id="L159">		 HS500LDSP.setBounds(10,510,120,20);</span>
+<span class="nc" id="L160">		 HS500LDSP.setForeground(Color.green);</span>
+<span class="nc" id="L161">		 HS500LDSP.setBackground(Color.black);</span>
+<span class="nc" id="L162">		 HS500LDSP.setCaretColor(Color.white);</span>
+<span class="nc" id="L163">		 HS500LDSP.setText(&quot;Loading point&quot;);</span>
+<span class="nc" id="L164">		 HS500LDSP.setEditable(true);</span>
+		 
+<span class="nc" id="L166">		 Summit_Button= new JButton(&quot;Enter&quot;);	</span>
+<span class="nc" id="L167">		 Summit_Button.setBounds(10,530,120,15);</span>
+<span class="nc" id="L168">		 Summit_Button.setFocusable(false);</span>
+<span class="nc" id="L169">		 Summit_Button.addActionListener(this);</span>
+		 
+		 
+        // Commands alrm_REST  
+<span class="nc" id="L173">		 STG1_Alrm_Button= new JButton(&quot;STG1 ALRMS&quot;);	</span>
+<span class="nc" id="L174">		 STG1_Alrm_Button.setBounds(800,450,130,15);</span>
+<span class="nc" id="L175">		 STG1_Alrm_Button.setFocusable(false);</span>
+<span class="nc" id="L176">		 STG1_Alrm_Button.addActionListener(this);</span>
+		 
+<span class="nc" id="L178">		 alrm_REST= new JButton(&quot;ALRM RST&quot;);	</span>
+<span class="nc" id="L179">		 alrm_REST.setBounds(700,450,100,15);</span>
+<span class="nc" id="L180">		 alrm_REST.setFocusable(false);</span>
+<span class="nc" id="L181">		 alrm_REST.addActionListener(this);</span>
+		 
+		 
+		 
+<span class="nc" id="L185">		 STG2_Alrm_Button= new JButton(&quot;STG2 ALRMS&quot;);	</span>
+<span class="nc" id="L186">		 STG2_Alrm_Button.setBounds(800,470,130,15);</span>
+<span class="nc" id="L187">		 STG2_Alrm_Button.setFocusable(false);</span>
+<span class="nc" id="L188">		 STG2_Alrm_Button.addActionListener(this);</span>
+		 
+<span class="nc" id="L190">		 STG3_Alrm_Button= new JButton(&quot;STG3 ALRMS&quot;);	</span>
+<span class="nc" id="L191">		 STG3_Alrm_Button.setBounds(800,490,130,15);</span>
+<span class="nc" id="L192">		 STG3_Alrm_Button.setFocusable(false);</span>
+<span class="nc" id="L193">		 STG3_Alrm_Button.addActionListener(this);</span>
+		 
+<span class="nc" id="L195">		 COOL_Alrm_DISABLE= new JButton(&quot;COOL ALRMS&quot;);	</span>
+<span class="nc" id="L196">		 COOL_Alrm_DISABLE.setBounds(800,510,130,15);</span>
+<span class="nc" id="L197">		 COOL_Alrm_DISABLE.setFocusable(false);</span>
+<span class="nc" id="L198">		 COOL_Alrm_DISABLE.addActionListener(this);</span>
+		 
+
+<span class="nc" id="L201">		 Oil_Alrm_DISABLE= new JButton(&quot;OIL ALRMS&quot;);	</span>
+<span class="nc" id="L202">		 Oil_Alrm_DISABLE.setBounds(800,530,130,15);</span>
+<span class="nc" id="L203">		 Oil_Alrm_DISABLE.setFocusable(false);</span>
+<span class="nc" id="L204">		 Oil_Alrm_DISABLE.addActionListener(this);</span>
+		 
+		
+<span class="nc" id="L207">		 SUCTION_Alrm_DISABLE= new JButton(&quot;SUCT ALRMS&quot;);	</span>
+<span class="nc" id="L208">		 SUCTION_Alrm_DISABLE.setBounds(800,550,130,15);</span>
+<span class="nc" id="L209">		 SUCTION_Alrm_DISABLE.setFocusable(false);</span>
+<span class="nc" id="L210">		 SUCTION_Alrm_DISABLE.addActionListener(this);</span>
+		 
+<span class="nc" id="L212">		 DISCH_Alrm_DISABLE= new JButton(&quot;DISCH ALRMS&quot;);	</span>
+<span class="nc" id="L213">		 DISCH_Alrm_DISABLE.setBounds(800,570,130,15);</span>
+<span class="nc" id="L214">		 DISCH_Alrm_DISABLE.setFocusable(false);</span>
+<span class="nc" id="L215">		 DISCH_Alrm_DISABLE.addActionListener(this);</span>
+		
+		 
+		 // Indicators
+<span class="nc" id="L219">		 VI100= new JLabel();</span>
+<span class="nc" id="L220">		 VI100.setBounds(210,134,200,15);</span>
+		 
+<span class="nc" id="L222">		 VI200= new JLabel();</span>
+<span class="nc" id="L223">		 VI200.setBounds(380,134,200,15);</span>
+		 
+<span class="nc" id="L225">		 VI300= new JLabel();</span>
+<span class="nc" id="L226">		 VI300.setBounds(540,134,200,15);</span>
+		 
+<span class="nc" id="L228">		 PI100= new JLabel();</span>
+<span class="nc" id="L229">		 PI100.setBounds(705,134,200,15);</span>
+		 
+<span class="nc" id="L231">		 TI100= new JLabel();</span>
+<span class="nc" id="L232">		 TI100.setBounds(210,480,200,15);</span>
+		 
+<span class="nc" id="L234">		 PI500= new JLabel();</span>
+<span class="nc" id="L235">		 PI500.setBounds(110,323,200,15);</span>
+		 
+<span class="nc" id="L237">		 PI2500= new JLabel();</span>
+<span class="nc" id="L238">		 PI2500.setBounds(617,323,200,15);</span>
+		 
+		 // actuators 
+<span class="nc" id="L241">		 PV500= new JLabel();</span>
+<span class="nc" id="L242">		 PV500.setBounds(20,275,200,15);</span>
+		 
+<span class="nc" id="L244">		 PV2500= new JLabel();</span>
+<span class="nc" id="L245">		 PV2500.setBounds(800,275,130,15);</span>
+
+<span class="nc" id="L247">		 PV100= new JLabel();</span>
+<span class="nc" id="L248">		 PV100.setBounds(440,22,300,15);</span>
+		 
+		 
+		 
+		 // Startup timer
+<span class="nc" id="L253">		 STARTUPTIMER= new JLabel();</span>
+<span class="nc" id="L254">		 STARTUPTIMER.setBounds(10,54,100,15);</span>
+		
+		 //auto-load
+<span class="nc" id="L257">		 autload= new JLabel();</span>
+<span class="nc" id="L258">		 autload.setBounds(10,74,120,15);</span>
+		 // RESET prompt 
+<span class="nc" id="L260">		 RESETREQU= new JLabel();</span>
+<span class="nc" id="L261">		 RESETREQU.setBounds(132,450,180,15);</span>
+		 
+		// START COMMAND UI Indication
+<span class="nc" id="L264">		 HS500= new JLabel();</span>
+<span class="nc" id="L265">		 HS500.setBounds(132,470,140,15);</span>
+         
+		 // Stop Indicator
+<span class="nc" id="L268">		 HSTP500= new JLabel();</span>
+<span class="nc" id="L269">		 HSTP500.setBounds(132,490,140,15);</span>
+		 // Reset Required
+		 
+		 // Alarm indicators
+<span class="nc" id="L273">		 VAL100= new JLabel();</span>
+<span class="nc" id="L274">		 VAL100.setBounds(210,114,300,15);		 </span>
+<span class="nc" id="L275">		 VAH100= new JLabel();</span>
+<span class="nc" id="L276">		 VAH100.setBounds(210,94,300,15);</span>
+		 
+		// SET POINTS
+<span class="nc" id="L279">		 VSL100= new JLabel();</span>
+<span class="nc" id="L280">		 VSL100.setBounds(142,114,300,18);</span>
+<span class="nc" id="L281">	     VSH100= new JLabel();</span>
+<span class="nc" id="L282">		 VSH100.setBounds(142,94,300,18);	 </span>
+						 
+<span class="nc" id="L284">		 VAL200= new JLabel(); //210,134</span>
+<span class="nc" id="L285">		 VAL200.setBounds(380,114,300,15);</span>
+<span class="nc" id="L286">		 VAH200= new JLabel();</span>
+<span class="nc" id="L287">		 VAH200.setBounds(380,94,300,15);</span>
+		 
+<span class="nc" id="L289">		 VAL300= new JLabel();</span>
+<span class="nc" id="L290">		 VAL300.setBounds(540,114,300,15);</span>
+<span class="nc" id="L291">		 VAH300= new JLabel();</span>
+<span class="nc" id="L292">		 VAH300.setBounds(540,94,300,15);</span>
+		 
+<span class="nc" id="L294">		 VPH100= new JLabel();</span>
+<span class="nc" id="L295">     	 VPH100.setBounds(210,74,300,15);</span>
+     	 
+<span class="nc" id="L297">     	 VPH200= new JLabel();</span>
+<span class="nc" id="L298">    	 VPH200.setBounds(380,74,300,15);</span>
+    	 
+<span class="nc" id="L300">    	 VPH300= new JLabel();</span>
+<span class="nc" id="L301">    	 VPH300.setBounds(540,74,300,15);</span>
+		 
+<span class="nc" id="L303">		 VAHH100= new JLabel();</span>
+<span class="nc" id="L304">		 VAHH100.setBounds(210,54,300,15);</span>
+<span class="nc" id="L305">		 VSHH100= new JLabel();</span>
+<span class="nc" id="L306">		 VSHH100.setBounds(142,54,300,15);</span>
+
+		 
+		 
+<span class="nc" id="L310">		 VAHH200= new JLabel();</span>
+<span class="nc" id="L311">		 VAHH200.setBounds(380,60,300,15);</span>
+		 
+<span class="nc" id="L313">		 VAHH300= new JLabel();</span>
+<span class="nc" id="L314">		 VAHH300.setBounds(540,54,300,15);</span>
+	
+<span class="nc" id="L316">		 PAL100= new JLabel();</span>
+<span class="nc" id="L317">    	 PAL100.setBounds(705,114,300,15);		 </span>
+<span class="nc" id="L318">    	 PAH100= new JLabel();</span>
+<span class="nc" id="L319">		 PAH100.setBounds(705,94,300,15);</span>
+		 
+<span class="nc" id="L321">		 PALL100= new JLabel();</span>
+<span class="nc" id="L322">		 PALL100.setBounds(705,74,300,15);</span>
+<span class="nc" id="L323">		 PAHH100= new JLabel();</span>
+<span class="nc" id="L324">		 PAHH100.setBounds(705,54,300,15);</span>
+		 
+<span class="nc" id="L326">		 TAL100= new JLabel();</span>
+<span class="nc" id="L327">    	 TAL100.setBounds(210,500,300,15);		 </span>
+<span class="nc" id="L328">    	 TAH100= new JLabel();</span>
+<span class="nc" id="L329">		 TAH100.setBounds(210,520,300,15);</span>
+		 
+<span class="nc" id="L331">		 TSL100= new JLabel();</span>
+<span class="nc" id="L332">		 TSL100.setBounds(340,500,300,15);</span>
+<span class="nc" id="L333">	     TSH100= new JLabel();</span>
+<span class="nc" id="L334">		 TSH100.setBounds(340,520,300,15);</span>
+		 
+<span class="nc" id="L336">		 TALL100= new JLabel();</span>
+<span class="nc" id="L337">		 TALL100.setBounds(210,540,300,15);</span>
+<span class="nc" id="L338">		 TAHH100= new JLabel();</span>
+<span class="nc" id="L339">		 TAHH100.setBounds(210,560,300,15);</span>
+		 
+<span class="nc" id="L341">		 TSLL100= new JLabel();</span>
+<span class="nc" id="L342">		 TSLL100.setBounds(340,540,300,15);</span>
+<span class="nc" id="L343">	     TSHH100= new JLabel();</span>
+<span class="nc" id="L344">		 TSHH100.setBounds(340,560,300,15);</span>
+		 
+		 
+<span class="nc" id="L347">		 PAL500= new JLabel();</span>
+<span class="nc" id="L348">    	 PAL500.setBounds(110,343,300,15);		 </span>
+<span class="nc" id="L349">    	 PAH500= new JLabel();</span>
+<span class="nc" id="L350">		 PAH500.setBounds(110,363,300,15);</span>
+		 
+<span class="nc" id="L352">		 PSL500= new JLabel();</span>
+<span class="nc" id="L353">		 PSL500.setBounds(18,343,300,15);</span>
+<span class="nc" id="L354">		 PSH500= new JLabel();</span>
+<span class="nc" id="L355">		 PSH500.setBounds(18,363,300,15);</span>
+		 
+<span class="nc" id="L357">		 PALL500= new JLabel();</span>
+<span class="nc" id="L358">		 PALL500.setBounds(110,383,300,15);</span>
+<span class="nc" id="L359">		 PAHH500= new JLabel();</span>
+<span class="nc" id="L360">		 PAHH500.setBounds(110,403,300,15);</span>
+		 	 
+<span class="nc" id="L362">		 PSLL500= new JLabel();</span>
+<span class="nc" id="L363">		 PSLL500.setBounds(18,383,300,15);</span>
+<span class="nc" id="L364">		 PSHH500= new JLabel();</span>
+<span class="nc" id="L365">		 PSHH500.setBounds(18,403,300,15);</span>
+		 
+		 
+		 
+		 
+<span class="nc" id="L370">		 PAL2500= new JLabel();</span>
+<span class="nc" id="L371">    	 PAL2500.setBounds(617,343,300,15);		 </span>
+<span class="nc" id="L372">    	 PAH2500= new JLabel();</span>
+<span class="nc" id="L373">		 PAH2500.setBounds(617,363,300,15);</span>
+		 
+<span class="nc" id="L375">		 PSL2500= new JLabel();</span>
+<span class="nc" id="L376">		 PSL2500.setBounds(700,343,300,15);</span>
+<span class="nc" id="L377">		 PSH2500= new JLabel();</span>
+<span class="nc" id="L378">		 PSH2500.setBounds(700,363,300,15);</span>
+		 
+<span class="nc" id="L380">		 PALL2500= new JLabel();</span>
+<span class="nc" id="L381">		 PALL2500.setBounds(617,383,300,15);</span>
+<span class="nc" id="L382">		 PAHH2500= new JLabel();</span>
+<span class="nc" id="L383">		 PAHH2500.setBounds(617,403,300,15);</span>
+         
+<span class="nc" id="L385">		 PSLL2500= new JLabel();</span>
+<span class="nc" id="L386">		 PSLL2500.setBounds(700,383,300,15);</span>
+<span class="nc" id="L387">		 PSHH2500= new JLabel();</span>
+<span class="nc" id="L388">		 PSHH2500.setBounds(700,403,300,15);</span>
+		
+
+		        
+<span class="nc" id="L392">		this.add(Reset_Button);</span>
+<span class="nc" id="L393">		this.add(Start_Button);</span>
+<span class="nc" id="L394">		this.add(Stop_Button);</span>
+<span class="nc" id="L395">		this.add(Auto_Stop_Button);</span>
+		
+<span class="nc" id="L397">		this.add(STG1_Alrm_Button);</span>
+<span class="nc" id="L398">		this.add(alrm_REST);</span>
+<span class="nc" id="L399">		this.add(STG2_Alrm_Button);</span>
+<span class="nc" id="L400">		this.add(STG3_Alrm_Button);</span>
+		
+<span class="nc" id="L402">		this.add(COOL_Alrm_DISABLE);</span>
+<span class="nc" id="L403">		this.add(Oil_Alrm_DISABLE);</span>
+<span class="nc" id="L404">		this.add(SUCTION_Alrm_DISABLE);</span>
+<span class="nc" id="L405">		this.add(DISCH_Alrm_DISABLE);</span>
+		
+<span class="nc" id="L407">		this.add(VI100);</span>
+<span class="nc" id="L408">		this.add(VI200);</span>
+<span class="nc" id="L409">		this.add(VI300);</span>
+<span class="nc" id="L410">		this.add(PI100);</span>
+<span class="nc" id="L411">		this.add(TI100);</span>
+<span class="nc" id="L412">		this.add(PI500);</span>
+<span class="nc" id="L413">		this.add(PI2500);</span>
+<span class="nc" id="L414">		this.add(STARTUPTIMER);</span>
+<span class="nc" id="L415">		this.add(autload);</span>
+
+<span class="nc" id="L417">		this.add(VAL100);</span>
+<span class="nc" id="L418">		this.add(VAH100);</span>
+<span class="nc" id="L419">		this.add(VAL200);</span>
+<span class="nc" id="L420">		this.add(VAH200);</span>
+<span class="nc" id="L421">		this.add(VAL300);</span>
+<span class="nc" id="L422">		this.add(VAH300);</span>
+		
+<span class="nc" id="L424">		this.add(VSL100);</span>
+<span class="nc" id="L425">		this.add(VSH100);</span>
+<span class="nc" id="L426">		this.add(VSHH100);</span>
+		
+		
+<span class="nc" id="L429">		this.add(PSL500);</span>
+<span class="nc" id="L430">		this.add(PSH500);</span>
+<span class="nc" id="L431">		this.add(PSLL500);</span>
+<span class="nc" id="L432">		this.add(PSHH500);</span>
+		
+<span class="nc" id="L434">		this.add(VPH100);</span>
+<span class="nc" id="L435">		this.add(VPH200);</span>
+<span class="nc" id="L436">		this.add(VPH300);</span>
+<span class="nc" id="L437">		this.add(VAHH100);</span>
+<span class="nc" id="L438">		this.add(VAHH200);</span>
+<span class="nc" id="L439">		this.add(VAHH300);</span>
+		
+<span class="nc" id="L441">		this.add(PAL100);</span>
+<span class="nc" id="L442">		this.add(PAH100);</span>
+<span class="nc" id="L443">		this.add(PALL100);</span>
+<span class="nc" id="L444">		this.add(PAHH100);</span>
+		
+<span class="nc" id="L446">		this.add(TAL100);</span>
+<span class="nc" id="L447">		this.add(TAH100);</span>
+<span class="nc" id="L448">		this.add(TALL100);</span>
+<span class="nc" id="L449">		this.add(TAHH100);</span>
+		
+<span class="nc" id="L451">		this.add(TSL100);</span>
+<span class="nc" id="L452">		this.add(TSH100);</span>
+<span class="nc" id="L453">		this.add(TSLL100);</span>
+<span class="nc" id="L454">		this.add(TSHH100);</span>
+		
+		
+<span class="nc" id="L457">		this.add(PAL500);</span>
+<span class="nc" id="L458">		this.add(PAH500);</span>
+<span class="nc" id="L459">		this.add(PALL500);</span>
+<span class="nc" id="L460">		this.add(PAHH500);</span>
+		
+<span class="nc" id="L462">		this.add(PAL2500);</span>
+<span class="nc" id="L463">		this.add(PAH2500);</span>
+<span class="nc" id="L464">		this.add(PALL2500);</span>
+<span class="nc" id="L465">		this.add(PAHH2500);	</span>
+		
+<span class="nc" id="L467">		this.add(PSL2500);</span>
+<span class="nc" id="L468">		this.add(PSH2500);</span>
+<span class="nc" id="L469">		this.add(PSLL2500);</span>
+<span class="nc" id="L470">		this.add(PSHH2500);	</span>
+		
+<span class="nc" id="L472">		this.add(PV500);</span>
+<span class="nc" id="L473">		this.add(PV2500);</span>
+<span class="nc" id="L474">		this.add(PV100);</span>
+<span class="nc" id="L475">		this.add(HS500);</span>
+<span class="nc" id="L476">		this.add(HSTP500);</span>
+<span class="nc" id="L477">		this.add(RESETREQU);</span>
+		
+		
+<span class="nc" id="L480">		this.add(HS500LDSP);</span>
+<span class="nc" id="L481">		this.add(Summit_Button);	</span>
+<span class="nc" id="L482">		this.add(panel);</span>
+<span class="nc" id="L483">		this.pack();</span>
+		
+<span class="nc" id="L485">		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L486">		this.setTitle(&quot;Compressor Main Page&quot;);</span>
+		//this.setSize(1000,908);	
+<span class="nc" id="L488">		this.setResizable(false);</span>
+<span class="nc" id="L489">		this.setLocationRelativeTo(null);</span>
+<span class="nc" id="L490">        this.setVisible(true);</span>
+        //this.setLayout(null);
+	
+<span class="nc" id="L493">	}</span>
+	 	@Override
+	public void actionPerformed(ActionEvent e) {	
+<span class="nc bnc" id="L496" title="All 2 branches missed.">		if(e.getSource()==Reset_Button) {</span>
+<span class="nc" id="L497">			Resetcommand=0;</span>
+<span class="nc" id="L498">			Startcommand=0;</span>
+<span class="nc" id="L499">			Stopcommand=0;</span>
+<span class="nc" id="L500">			AutoStopcommand=0;</span>
+			
+			
+			
+			// System.out.println(&quot;Resetcommand=&quot;+Resetcommand);	
+	}
+<span class="nc bnc" id="L506" title="All 2 branches missed.">		else if(e.getSource()==Stop_Button) {</span>
+<span class="nc" id="L507">			Stopcommand=1;</span>
+<span class="nc" id="L508">			Startcommand=0;</span>
+			//System.out.println(&quot;Stopcommand=&quot;+Stopcommand);	
+			
+	}
+<span class="nc bnc" id="L512" title="All 2 branches missed.">		else if(e.getSource()==Start_Button) {</span>
+<span class="nc" id="L513">			Startcommand=1;</span>
+			//System.out.println(&quot;Startcommand=&quot;+Startcommand);	
+<span class="nc bnc" id="L515" title="All 2 branches missed.">	}else if(e.getSource()==Auto_Stop_Button) {</span>
+<span class="nc" id="L516">		AutoStopcommand=1;</span>
+		//System.out.println(&quot;AutoStopcommand=&quot;+Stopcommand);	
+		
+      }
+		
+<span class="nc bnc" id="L521" title="All 2 branches missed.">		else if(e.getSource()==STG1_Alrm_Button) {</span>
+<span class="nc" id="L522">			Stg1VibDisableReq=1;</span>
+	}
+<span class="nc bnc" id="L524" title="All 2 branches missed.">		else if(e.getSource()==STG2_Alrm_Button) {</span>
+<span class="nc" id="L525">			Stg2VibDisableReq=1;</span>
+	}
+<span class="nc bnc" id="L527" title="All 2 branches missed.">		else if(e.getSource()==STG3_Alrm_Button) {</span>
+<span class="nc" id="L528">			Stg3VibDisableReq=1;	</span>
+	 }
+<span class="nc bnc" id="L530" title="All 2 branches missed.">		else if(e.getSource()==COOL_Alrm_DISABLE) {</span>
+			
+<span class="nc" id="L532">			AuxcoolingDisableReq =1;</span>
+		}
+<span class="nc bnc" id="L534" title="All 2 branches missed.">        else if(e.getSource()==Oil_Alrm_DISABLE) {</span>
+			
+<span class="nc" id="L536">	    AuxoilDisableReq =1;</span>
+			
+		}
+<span class="nc bnc" id="L539" title="All 2 branches missed.">        else if(e.getSource()==SUCTION_Alrm_DISABLE) {</span>
+			
+<span class="nc" id="L541">        	SuctionDisableReq =1;		</span>
+    		}
+<span class="nc bnc" id="L543" title="All 2 branches missed.">       else if(e.getSource()==DISCH_Alrm_DISABLE) {</span>
+<span class="nc" id="L544">    	   DischargeDisableReq =1;</span>
+       }
+<span class="nc bnc" id="L546" title="All 2 branches missed.">       else if(e.getSource()==Summit_Button) {</span>
+<span class="nc" id="L547">    	   HSLD=HS500LDSP.getText();</span>
+    	   //System.out.println(&quot;loading setpoint=&quot;+HSLD);
+<span class="nc" id="L549">    	   HSLDSP= Integer.parseInt(HSLD);</span>
+    	   //System.out.println(&quot;loading setpoint=&quot;+HSLDSP);
+       }
+<span class="nc bnc" id="L552" title="All 2 branches missed.">       else if(e.getSource()==alrm_REST) {</span>
+<span class="nc" id="L553">    	    Stg1VibDisableReq=0;</span>
+<span class="nc" id="L554">			Stg2VibDisableReq=0;</span>
+<span class="nc" id="L555">			Stg3VibDisableReq=0;</span>
+<span class="nc" id="L556">		    AuxcoolingDisableReq =0;</span>
+<span class="nc" id="L557">		    AuxoilDisableReq =0;</span>
+<span class="nc" id="L558">		    SuctionDisableReq =0;</span>
+<span class="nc" id="L559">		    DischargeDisableReq =0;  </span>
+       }
+<span class="nc" id="L561">   } 	</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

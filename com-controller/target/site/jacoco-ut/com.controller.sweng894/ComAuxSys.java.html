@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComAuxSys.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComAuxSys.java</span></div><h1>ComAuxSys.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public interface ComAuxSys {
+	// Interface to the Compressor controller -- is the client should pass sensor
+	// parameters to detects alarms .
+
+	int detectHighAlarm();
+
+	int comDriveStartStop();
+
+	int detectLowAlarm();
+
+	int detectPermssive();
+
+	int detectHighShutdown();
+
+	int detectLowShutdown();
+}
+
+//==========compressor composite systems===============================================================//
+<span class="fc" id="L25">class Compsite implements ComAuxSys {</span>
+
+<span class="fc" id="L27">	private List&lt;ComAuxSys&gt; auxsystems = new ArrayList&lt;ComAuxSys&gt;();</span>
+
+<span class="fc" id="L29">	int event_flag = 0;</span>
+
+	@Override
+	public int detectHighAlarm() {
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		for (ComAuxSys c : auxsystems) {</span>
+			// System.out.println(c);
+<span class="fc" id="L36">			event_flag = c.detectHighAlarm();</span>
+
+<span class="fc" id="L38">		}</span>
+
+<span class="fc" id="L40">		return event_flag;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		//
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		for (ComAuxSys c : auxsystems) {</span>
+			// System.out.println(c);
+<span class="fc" id="L48">			event_flag = c.detectLowAlarm();</span>
+
+<span class="fc" id="L50">		}</span>
+<span class="fc" id="L51">		return event_flag;</span>
+	}
+
+	@Override
+	public int detectHighShutdown() {
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		for (ComAuxSys c : auxsystems) {</span>
+			// System.out.println(c);
+<span class="fc" id="L59">			event_flag = c.detectHighShutdown();</span>
+
+<span class="fc" id="L61">		}</span>
+<span class="fc" id="L62">		return event_flag;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		for (ComAuxSys c : auxsystems) {</span>
+			// System.out.println(c);
+<span class="fc" id="L70">			event_flag = c.detectLowShutdown();</span>
+
+<span class="fc" id="L72">		}</span>
+<span class="fc" id="L73">		return event_flag;</span>
+	}
+
+	// add the the aux system
+	public void addsys(ComAuxSys c) {
+
+<span class="fc" id="L79">		auxsystems.add(c);</span>
+<span class="fc" id="L80">	}</span>
+
+	@Override
+	public int detectPermssive() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L85">		return 0;</span>
+	}
+
+//	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L91">	return 0;</span>
+	}
+
+}
+
+//======================================Compressor High alarm leaf=======================================//
+// The compressor Vibration Alarms module is considered a leaf object since it
+// has no final elements
+class HighAlarm implements ComAuxSys {
+
+	private String SensorTag; // vibration sensor tag number/compressor stage
+	private int Sensor; // Vibration Sensor reading
+	private int Sensor_SP; // Operator alarm Set point
+	private int sensor_alarm_flag; // Annunciator Alarm flag
+	private int sensor_STAT; // sensor integrity status;
+	private String ALM_DSCRIP; // Annunciator alarm description
+	private String Sensor_eng; // Annunciator alarm description
+
+	public HighAlarm(String SensorTag, int Sensor, int Sensor_SP, int sensor_alarm_flag, int sensor_STAT,
+<span class="fc" id="L110">			String ALM_DSCRIP, String Sensor_eng) {</span>
+<span class="fc" id="L111">		this.SensorTag = SensorTag;</span>
+<span class="fc" id="L112">		this.Sensor = Sensor;</span>
+<span class="fc" id="L113">		this.Sensor_SP = Sensor_SP;</span>
+<span class="fc" id="L114">		this.sensor_alarm_flag = sensor_alarm_flag;</span>
+<span class="fc" id="L115">		this.sensor_STAT = sensor_STAT;</span>
+<span class="fc" id="L116">		this.ALM_DSCRIP = ALM_DSCRIP;</span>
+<span class="fc" id="L117">		this.Sensor_eng = Sensor_eng;</span>
+<span class="fc" id="L118">	}</span>
+
+	@Override
+	public int detectHighAlarm() {
+		//System.out.println(&quot;Input data to high alarm:&quot; + SensorTag + &quot;  &quot; + Sensor + &quot; &quot; + Sensor_eng + &quot;  Setpoint: &quot;
+			//	+ Sensor_SP + &quot; &quot; + Sensor_eng + &quot;  &quot; + &quot;Sensor integrity:&quot; + &quot; &quot; + sensor_STAT + &quot; &quot; + ALM_DSCRIP);
+
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">		if (sensor_STAT == 1 &amp;&amp; Sensor &gt;= Sensor_SP) {</span>
+<span class="fc" id="L126">			ALM_DSCRIP = &quot;High alarm detected&quot;;</span>
+<span class="fc" id="L127">			sensor_alarm_flag = 1;</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">		} else if (sensor_STAT != 1) {</span>
+<span class="nc" id="L129">			ALM_DSCRIP = &quot;Sensor problem call Tech &quot;;</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">		} else if (Sensor &lt; Sensor_SP) {</span>
+<span class="fc" id="L131">			ALM_DSCRIP = &quot;Alarm cleared&quot;;</span>
+<span class="fc" id="L132">			sensor_alarm_flag = 0;</span>
+		}
+
+		//System.out.println(SensorTag + &quot; &quot; + Sensor + &quot; &quot; + Sensor_eng);
+		//System.out.println(SensorTag + &quot; &quot; + ALM_DSCRIP);
+		//System.out.println(&quot;Alarm Flag:&quot; + &quot; &quot; + sensor_alarm_flag);
+		//System.out.println(&quot;================================&quot;);
+<span class="fc" id="L139">		return sensor_alarm_flag;</span>
+	}
+
+	@Override
+	public int detectPermssive() {
+<span class="nc" id="L144">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L150">		return 0;</span>
+	}
+
+	@Override
+	public int detectHighShutdown() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L156">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L162">		return 0;</span>
+	}
+
+	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L168">		return 0;</span>
+	}
+}
+//================================= The Compressor low alarm leaf=======================================//
+
+//The compressor  Alarms module is considered a leaf object since it has no other task to perform expect solve the alarm logic
+
+class LowAlarm implements ComAuxSys {
+
+	private String SensorTag; // sensor tag number/compressor stage
+	private int Sensor; // Sensor reading
+	private int Sensor_SP; // Operator alarm Set point
+	private int sensor_alarm_flag; // Annunciator Alarm flag
+	private int sensor_STAT; // sensor integrity status;
+	private String ALM_DSCRIP; // Annunciator alarm description
+	private String Sensor_eng; // Annunciator alarm description
+
+	public LowAlarm(String SensorTag, int Sensor, int Sensor_SP, int sensor_alarm_flag, int sensor_STAT,
+<span class="fc" id="L186">			String ALM_DSCRIP, String Sensor_eng) {</span>
+<span class="fc" id="L187">		this.SensorTag = SensorTag;</span>
+<span class="fc" id="L188">		this.Sensor = Sensor;</span>
+<span class="fc" id="L189">		this.Sensor_SP = Sensor_SP;</span>
+<span class="fc" id="L190">		this.sensor_alarm_flag = sensor_alarm_flag;</span>
+<span class="fc" id="L191">		this.sensor_STAT = sensor_STAT;</span>
+<span class="fc" id="L192">		this.ALM_DSCRIP = ALM_DSCRIP;</span>
+<span class="fc" id="L193">		this.Sensor_eng = Sensor_eng;</span>
+<span class="fc" id="L194">	}</span>
+
+	@Override
+	public int detectLowAlarm() {
+
+		//System.out.println(&quot;Input data to low alarm:&quot; + SensorTag + &quot;  &quot; + Sensor + &quot; &quot; + Sensor_eng + &quot;  Setpoint: &quot;
+				//+ Sensor_SP + &quot; &quot; + Sensor_eng + &quot;  &quot; + &quot;Sensor integrity:&quot; + &quot; &quot; + sensor_STAT + &quot; &quot; + ALM_DSCRIP);
+
+<span class="pc bpc" id="L202" title="1 of 4 branches missed.">		if (sensor_STAT == 1 &amp;&amp; Sensor &lt; Sensor_SP) {</span>
+<span class="fc" id="L203">			ALM_DSCRIP = &quot;Low alarm detected&quot;;</span>
+<span class="fc" id="L204">			sensor_alarm_flag = 1;</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">		} else if (sensor_STAT != 1) {</span>
+<span class="nc" id="L206">			ALM_DSCRIP = &quot;Sensor problem call Tech &quot;;</span>
+<span class="pc bpc" id="L207" title="2 of 4 branches missed.">		} else if (sensor_STAT == 1 &amp;&amp; Sensor &gt;= Sensor_SP) {</span>
+<span class="fc" id="L208">			ALM_DSCRIP = &quot;Alarm cleared&quot;;</span>
+<span class="fc" id="L209">			sensor_alarm_flag = 0;</span>
+		}
+		//System.out.println(SensorTag + &quot; &quot; + Sensor + &quot; &quot; + Sensor_eng);
+		//System.out.println(SensorTag + &quot; &quot; + ALM_DSCRIP);
+		//System.out.println(&quot;Alarm Flag:&quot; + &quot; &quot; + sensor_alarm_flag);
+		//System.out.println(&quot;================================&quot;);
+<span class="fc" id="L215">		return sensor_alarm_flag;</span>
+	}
+
+	@Override
+	public int detectPermssive() {
+<span class="nc" id="L220">		return 0;</span>
+	}
+
+	@Override
+	public int detectHighAlarm() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L226">		return 0;</span>
+	}
+
+	@Override
+	public int detectHighShutdown() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L232">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L238">		return 0;</span>
+	}
+
+	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L244">		return 0;</span>
+	}
+}
+
+//=================================The compressor Permissive leaf============================//
+
+// The compressor permissive module is considered a leaf object since it has no
+// other elements
+class AuxVibPermissive implements ComAuxSys {
+
+	private String sensorTag; // sensor tag number/compressor stage
+	private int sensor_permis_flag; // Annunciator Permissive flag
+	private int sensor_STAT; // sensor integrity status;
+	private int C_STAT; // COMPRESSOR STATUS = 1 running, 0 stopped, 2 failed to stop
+	private String PERM_DSCRIP; // Annunciator permissive description
+
+<span class="fc" id="L260">	public AuxVibPermissive(String sensorTag, int sensor_STAT, int sensor_permis_flag, int C_STAT, String PERM_DSCRIP) {</span>
+<span class="fc" id="L261">		this.sensorTag = sensorTag;</span>
+<span class="fc" id="L262">		this.sensor_STAT = sensor_STAT;</span>
+<span class="fc" id="L263">		this.sensor_permis_flag = sensor_permis_flag;</span>
+<span class="fc" id="L264">		this.C_STAT = C_STAT;</span>
+<span class="fc" id="L265">		this.PERM_DSCRIP = PERM_DSCRIP;</span>
+<span class="fc" id="L266">	}</span>
+
+	@Override
+	public int detectPermssive() {
+		// When the machine is not running, check each vibration sensors transmitter
+		// status and
+		// set VPH to high to prevent the machine from starting until the sensor is
+		// fixed.
+		// Do not trip the machine if the machine is running and the sensor goes bad.
+		// The alarm logic will notify the operator by setting the sensor alarm flag.
+		//System.out.println(&quot;Input data permissive leaf:&quot; + sensorTag + &quot;Sensor integrity:&quot; + &quot; &quot; + sensor_STAT + &quot; &quot;
+				//+ &quot;Compressor Status:&quot; + &quot; &quot; + C_STAT + &quot; &quot; + PERM_DSCRIP);
+		{
+<span class="fc bfc" id="L279" title="All 4 branches covered.">			if (C_STAT == 0 &amp;&amp; sensor_STAT != 1) {</span>
+<span class="fc" id="L280">				PERM_DSCRIP = &quot;Permissive not granted check sensor &quot;;</span>
+<span class="fc" id="L281">				sensor_permis_flag = 0;</span>
+			}
+
+<span class="pc bpc" id="L284" title="1 of 4 branches missed.">			else if (C_STAT == 1 || sensor_STAT == 1) {</span>
+<span class="fc" id="L285">				PERM_DSCRIP = &quot;Permissive granted&quot;;</span>
+<span class="fc" id="L286">				sensor_permis_flag = 1;</span>
+			}
+			//System.out.println(sensorTag + &quot; &quot; + PERM_DSCRIP);
+			//System.out.println(sensorTag + &quot; &quot; + &quot;PERMISSIVE  STATUS =&quot; + sensor_permis_flag);
+			//System.out.println(&quot;================================&quot;);
+<span class="fc" id="L291">			return sensor_permis_flag;</span>
+		}
+	}
+
+	@Override
+	public int detectHighAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L298">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L304">		return 0;</span>
+	}
+
+	@Override
+	public int detectHighShutdown() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L310">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L316">		return 0;</span>
+	}
+
+	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L322">		return 0;</span>
+	}
+
+}
+
+//========================================= Shutdown high=====================================//
+
+// The compressor Vibration Alarms module is considered a leaf object since it
+// has no final elements
+class Highshutdown implements ComAuxSys {
+
+	private String sensorTag; // sensor tag name.
+	private int sensor; // sensor reading
+	private int sensor_SP; // operator alarm set-point
+	private int sensor_shutdown_flag; // annunciator alarm flag
+	private int sensor_STAT; // sensor integrity status;
+	private String SD_DSCRIP; // annunciator alarm description
+	private String sensor_eng; // sensor engineering unit.
+
+	public Highshutdown(String sensorTag, int sensor, int sensor_SP, int sensor_shutdown_flag, int sensor_STAT,
+			String SD_DSCRIP, String sensor_eng)
+
+<span class="fc" id="L344">	{</span>
+<span class="fc" id="L345">		this.sensorTag = sensorTag;</span>
+<span class="fc" id="L346">		this.sensor = sensor;</span>
+<span class="fc" id="L347">		this.sensor_SP = sensor_SP;</span>
+<span class="fc" id="L348">		this.sensor_shutdown_flag = sensor_shutdown_flag;</span>
+<span class="fc" id="L349">		this.sensor_STAT = sensor_STAT;</span>
+<span class="fc" id="L350">		this.SD_DSCRIP = SD_DSCRIP;</span>
+<span class="fc" id="L351">		this.sensor_eng = sensor_eng;</span>
+<span class="fc" id="L352">	}</span>
+
+	@Override
+	public int detectHighShutdown() {
+		//System.out.println(&quot;Input data to high shutdown:&quot; + sensorTag + &quot;  &quot; + sensor + &quot; &quot; + sensor_eng
+				//+ &quot;  Setpoint: &quot; + sensor_SP + &quot; &quot; + sensor_eng + &quot;  &quot; + &quot;Sensor integrity:&quot; + &quot; &quot; + sensor_STAT + &quot; &quot;
+				//+ SD_DSCRIP);
+
+		// if the sensor reading is valid if the alarm exceeds the set point and set the
+		// alarm flag,
+<span class="pc bpc" id="L362" title="1 of 4 branches missed.">		if (sensor_STAT == 1 &amp;&amp; sensor &gt;= sensor_SP) {</span>
+<span class="fc" id="L363">			SD_DSCRIP = &quot;High Shutdown Tripped&quot;;</span>
+<span class="fc" id="L364">			sensor_shutdown_flag = 1;</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">		} else if (sensor_STAT != 1) {</span>
+<span class="nc" id="L366">			SD_DSCRIP = &quot;Sensor problem call Tech &quot;;</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">		} else if (sensor &lt; sensor_SP) {</span>
+<span class="fc" id="L368">			SD_DSCRIP = &quot;High Shutdown Reset&quot;;</span>
+<span class="fc" id="L369">			sensor_shutdown_flag = 0;</span>
+		}
+		//System.out.println(sensorTag + &quot; &quot; + sensor + &quot; &quot; + sensor_eng);
+		//System.out.println(sensorTag + &quot; &quot; + SD_DSCRIP);
+		//System.out.println(&quot;Shutdown Flag:&quot; + &quot; &quot; + sensor_shutdown_flag);
+		//System.out.println(&quot;================================&quot;);
+<span class="fc" id="L375">		return sensor_shutdown_flag;</span>
+	}
+
+	@Override
+	public int detectHighAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L381">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L387">		return 0;</span>
+	}
+
+	@Override
+	public int detectPermssive() {
+<span class="nc" id="L392">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L398">		return 0;</span>
+	}
+
+	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L404">		return 0;</span>
+	}
+}
+//========================================= Shutdown Low=====================================//
+
+// The compressor Low shutdown module.
+class Lowshutdown implements ComAuxSys {
+
+	private String sensorTag;// sensor tag number/compressor stage
+	private int sensor; // Sensor reading
+	private int sensor_SP; // Operator Set point
+	private int sensor_shutdown_flag; // Annunciator Alarm flag
+	private int sensor_STAT; // sensor integrity status;
+	private String SD_DSCRIP; // Annunciator alarm description
+	private String sensor_eng; // Annunciator alarm description
+
+	public Lowshutdown(String sensorTag, int sensor, int sensor_SP, int sensor_shutdown_flag, int sensor_STAT,
+			String SD_DSCRIP, String sensor_eng)
+
+<span class="fc" id="L423">	{</span>
+<span class="fc" id="L424">		this.sensorTag = sensorTag;</span>
+<span class="fc" id="L425">		this.sensor = sensor;</span>
+<span class="fc" id="L426">		this.sensor_SP = sensor_SP;</span>
+<span class="fc" id="L427">		this.sensor_shutdown_flag = sensor_shutdown_flag;</span>
+<span class="fc" id="L428">		this.sensor_STAT = sensor_STAT;</span>
+<span class="fc" id="L429">		this.SD_DSCRIP = SD_DSCRIP;</span>
+<span class="fc" id="L430">		this.sensor_eng = sensor_eng;</span>
+<span class="fc" id="L431">	}</span>
+
+	@Override
+	public int detectLowShutdown() {
+		//System.out.println(&quot;Input data to lOW shutdown:&quot; + sensorTag + &quot;  &quot; + sensor + &quot; &quot; + sensor_eng + &quot;  Setpoint: &quot;
+				//+ sensor_SP + &quot; &quot; + sensor_eng + &quot;  &quot; + &quot;Sensor integrity:&quot; + &quot; &quot; + sensor_STAT + &quot; &quot; + SD_DSCRIP);
+
+<span class="pc bpc" id="L438" title="1 of 4 branches missed.">		if (sensor_STAT == 1 &amp;&amp; sensor &lt;= sensor_SP) {</span>
+<span class="fc" id="L439">			SD_DSCRIP = &quot;Low Shutdown Tripped&quot;;</span>
+<span class="fc" id="L440">			sensor_shutdown_flag = 1;</span>
+<span class="pc bpc" id="L441" title="1 of 2 branches missed.">		} else if (sensor_STAT != 1) {</span>
+<span class="nc" id="L442">			SD_DSCRIP = &quot;Sensor problem call Tech &quot;;</span>
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">		} else if (sensor &gt; sensor_SP) {</span>
+<span class="fc" id="L444">			SD_DSCRIP = &quot;Low Shutdown RESET&quot;;</span>
+<span class="fc" id="L445">			sensor_shutdown_flag = 0;</span>
+		}
+		//System.out.println(sensorTag + &quot; &quot; + sensor + &quot; &quot; + sensor_eng);
+		//System.out.println(sensorTag + &quot; &quot; + SD_DSCRIP);
+		//System.out.println(&quot;Shutdown Flag:&quot; + &quot; &quot; + sensor_shutdown_flag);
+		//System.out.println(&quot;================================&quot;);
+<span class="fc" id="L451">		return sensor_shutdown_flag;</span>
+	}
+
+	@Override
+	public int detectHighAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L457">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L463">		return 0;</span>
+	}
+
+	@Override
+	public int detectPermssive() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L469">		return 0;</span>
+	}
+
+	public int detectHighShutdown() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L474">		return 0;</span>
+	}
+
+	@Override
+	public int comDriveStartStop() {
+//		// TODO Auto-generated method stub
+<span class="nc" id="L480">		return 0;</span>
+	}
+}
+
+//===================================Compressor Drive=====================================//
+
+// The compressor code for drive.
+class ComDrive implements ComAuxSys {
+
+	private String comRequest;// Command to
+	private int cmdStart; // Sensor reading
+	private int cmdStop; // Operator Set point
+	private int permissClear; // Annunciator Alarm flag
+	private int shutDwnClear; // sensor integrity status;
+	private int C_Status;
+	private String DriverFeedBack; // Annunciator alarm description
+	private String cmdMessage; // Annunciator alarm description
+
+	public ComDrive(String comRequest, int cmdStart, int cmdStop, int permissClear, int shutDwnClear, int C_Status,
+			String DriverFeedBack)
+
+<span class="fc" id="L501">	{</span>
+<span class="fc" id="L502">		this.comRequest = comRequest;</span>
+<span class="fc" id="L503">		this.cmdStart = cmdStart;</span>
+<span class="fc" id="L504">		this.cmdStop = cmdStop;</span>
+<span class="fc" id="L505">		this.permissClear = permissClear;</span>
+<span class="fc" id="L506">		this.shutDwnClear = shutDwnClear;</span>
+<span class="fc" id="L507">		this.C_Status = C_Status;</span>
+		// this.cmdMessage = cmdMessage;
+<span class="fc" id="L509">		this.DriverFeedBack = DriverFeedBack;</span>
+<span class="fc" id="L510">	}</span>
+
+	@Override
+	public int comDriveStartStop() {
+		// if not stop command is engaged and permissives and shutdowns are cleared and the start command is issued. 
+
+<span class="pc bpc" id="L516" title="1 of 8 branches missed.">		if (cmdStop==0 &amp;&amp; permissClear == 1 &amp;&amp; shutDwnClear == 0 &amp;&amp; cmdStart == 1) {</span>
+<span class="fc" id="L517">			C_Status = 1;</span>
+<span class="fc" id="L518">			cmdMessage = &quot;Com Driver is energized&quot;;</span>
+		} 
+<span class="fc bfc" id="L520" title="All 2 branches covered.">		else if (shutDwnClear != 0) {</span>
+<span class="fc" id="L521">			C_Status = 0;</span>
+<span class="fc" id="L522">			cmdMessage = &quot;Compressor can not be started shutdown is active&quot;;	</span>
+		} 
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">		else if ( shutDwnClear == 1 ) {</span>
+<span class="nc" id="L525">			C_Status = 0;</span>
+<span class="nc" id="L526">			cmdMessage = &quot;Com Driver is de-energized - shutdown triggered&quot;;</span>
+			} 
+<span class="fc bfc" id="L528" title="All 2 branches covered.">		else if (cmdStop == 1) {</span>
+<span class="fc" id="L529">			C_Status = 0;</span>
+<span class="fc" id="L530">			cmdMessage = &quot;Com Driver is de-energized - manual stop command&quot;;</span>
+			} 
+<span class="pc bpc" id="L532" title="2 of 4 branches missed.">		else if (C_Status == 0 &amp;&amp; permissClear != 1) {</span>
+<span class="fc" id="L533">				C_Status = 0;</span>
+<span class="fc" id="L534">				cmdMessage = &quot;Compressor can not be started permissive is not okay&quot;;</span>
+			}
+		else {
+<span class="nc" id="L537">			C_Status = 0;</span>
+<span class="nc" id="L538">			cmdMessage = &quot;Compressor ready for start command&quot;;</span>
+			
+		}
+<span class="fc" id="L541">		DriverFeedBack=cmdMessage;</span>
+		//System.out.println(&quot;Opertor Command Drive:&quot; + &quot; &quot; + comRequest);
+		//System.out.println(&quot;Compressor Driver Status:&quot; + cmdMessage);
+		//System.out.println(&quot;================================&quot;);
+				
+
+<span class="fc" id="L547">		return C_Status;</span>
+	}
+
+	@Override
+	public int detectHighAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L553">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowAlarm() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L559">		return 0;</span>
+	}
+
+	@Override
+	public int detectPermssive() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L565">		return 0;</span>
+	}
+
+	public int detectHighShutdown() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L570">		return 0;</span>
+	}
+
+	@Override
+	public int detectLowShutdown() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L576">		return 0;</span>
+	}
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComAutoLoad.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ComController</a> &gt; <a href="index.source.html" class="el_package">com.controller.sweng894</a> &gt; <span class="el_source">ComAutoLoad.java</span></div><h1>ComAutoLoad.java</h1><pre class="source lang-java linenums">package com.controller.sweng894;
+
+//Determine if it is okay to load the machine
+<span class="fc" id="L4">public class ComAutoLoad {</span>
+
+	public static int[] comAutoLoadPermissives(int comStatus, boolean startupPeriodDone, int shutdownWord) {
+<span class="fc" id="L7">		int autoloadingPermissive = 0;</span>
+<span class="fc" id="L8">		int[] ActuatorsValues = new int[10]; // Cu2rrent Ramp value</span>
+<span class="fc bfc" id="L9" title="All 2 branches covered.">		if (shutdownWord == 0) {</span>
+<span class="fc bfc" id="L10" title="All 2 branches covered.">			if (comStatus == 1) {</span>
+<span class="fc bfc" id="L11" title="All 2 branches covered.">				if (startupPeriodDone == true) {</span>
+<span class="fc" id="L12">					autoloadingPermissive = 1;</span>
+				}
+<span class="pc bpc" id="L14" title="4 of 6 branches missed.">			} else if (shutdownWord == 1 || comStatus == 0 || startupPeriodDone == false) {</span>
+<span class="fc" id="L15">				autoloadingPermissive = 0;</span>
+			}
+<span class="fc" id="L17">			ActuatorsValues[9] = autoloadingPermissive;</span>
+		}
+<span class="fc" id="L19">		return ActuatorsValues;</span>
+	}
+
+// Determine loading ramp rate
+	public static int[] comAutoLoadingRamp(int comStatus, int okayToload, int PI500, int PSL500, int PI2500,
+			int PSH2500, int PY500, int PYS500RamUp, int PY2500, int PYS2500RamUp, int PY100, int PYS100RamUp,
+			int loadSetPoint) throws Exception {
+		// System.out.println(&quot;autoload setpoint from user interface&quot; + &quot; &quot;
+		// +loadSetPoint+&quot;PSIG&quot;);
+<span class="fc" id="L28">		int[] ValvesOutput = new int[10];</span>
+<span class="fc" id="L29">		ValvesOutput[0] = PY500;</span>
+<span class="fc" id="L30">		ValvesOutput[1] = PY100;</span>
+<span class="fc" id="L31">		ValvesOutput[2] = PY2500;</span>
+<span class="fc" id="L32">		int SuctionRamRateValid = 0;</span>
+
+<span class="fc" id="L34">		boolean PY100_DONE = false;</span>
+<span class="fc" id="L35">		boolean PY500_DONE = false;</span>
+<span class="fc" id="L36">		boolean PY2500_DONE = false;</span>
+
+		//
+
+		// Determine the ramp-rate of the suction valve
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if (PYS500RamUp &gt;= PYS100RamUp) {</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">			if (PYS500RamUp &gt;= 2 * PYS100RamUp) {</span>
+<span class="fc" id="L43">				SuctionRamRateValid = 1; // suction ramp rate is valid.</span>
+			} else {
+<span class="fc" id="L45">				PYS500RamUp = 10;</span>
+<span class="fc" id="L46">				PYS100RamUp = 5;</span>
+<span class="fc" id="L47">				SuctionRamRateValid = 1;</span>
+			}
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		} else if (PYS500RamUp &lt; PYS100RamUp) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">			if (PYS500RamUp &lt; 10) {</span>
+<span class="fc" id="L51">				PYS100RamUp = PYS500RamUp * 2;</span>
+<span class="fc" id="L52">				SuctionRamRateValid = 1; // suction ramp rate is valid.</span>
+			} else {
+<span class="fc" id="L54">				PYS100RamUp = PYS500RamUp * 2;</span>
+<span class="fc" id="L55">				SuctionRamRateValid = 1;</span>
+			}
+		}
+<span class="fc" id="L58">		ValvesOutput[9] = SuctionRamRateValid;</span>
+
+		// auto load the machine by ramp open the suction valve, ramp close the
+		// recirculation valve, and ramp open the discharge valve.
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		for (int i = 0; i &lt;= 50; i++) {</span>
+<span class="fc" id="L63">			Thread.sleep(00);</span>
+<span class="fc" id="L64">			boolean loadingComplete = false;</span>
+			// check if loading is done
+<span class="pc bpc" id="L66" title="5 of 6 branches missed.">			if (PY2500_DONE == true &amp;&amp; PY500_DONE == true &amp;&amp;PY100_DONE==true) {</span>
+<span class="nc" id="L67">				loadingComplete = true;</span>
+<span class="nc" id="L68">				ValvesOutput [5]=1;</span>
+				//System.out.println(&quot;loading Done&quot; + ValvesOutput [5]);
+			} else {
+<span class="fc" id="L71">				loadingComplete = false;</span>
+<span class="fc" id="L72">				ValvesOutput [5]=0;</span>
+			}
+			// check loading point.
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">			if (PI2500 &gt;= loadSetPoint) {</span>
+<span class="nc" id="L76">				ValvesOutput[8] = 1;</span>
+			} else {
+<span class="fc" id="L78">				ValvesOutput[8] = 0;</span>
+			}
+
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">			if (okayToload == 1) {</span>
+				// suction valve
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">				if (PY500 &lt; 100 &amp;&amp; PY500_DONE == false) {</span>
+<span class="fc" id="L84">					ValvesOutput[0] = (PY500 + PYS500RamUp);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">				} else if (PY500 &gt;= 100) {</span>
+<span class="nc" id="L86">					ValvesOutput[0] = 100;</span>
+<span class="nc" id="L87">					PY500_DONE = true;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">				} else if (PY500 == 100) {</span>
+<span class="nc" id="L89">					PY500_DONE = true;</span>
+				}
+			}
+			// recirculation valve &amp;&amp; ValvesOutput[8] == 0
+<span class="pc bpc" id="L93" title="3 of 6 branches missed.">			if (okayToload == 1 &amp;&amp; loadingComplete == false &amp;&amp;ValvesOutput[8] == 0 ) {</span>
+<span class="pc bpc" id="L94" title="1 of 4 branches missed.">				if (PY100 &gt; 0 &amp;&amp; PY100_DONE == false) {</span>
+<span class="fc" id="L95">					ValvesOutput[1] = (PY100 - PYS100RamUp);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">				} else if (ValvesOutput[8] == 1) {</span>
+<span class="nc" id="L97">					PY100_DONE = true;</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">				} else if (PY100 &lt;= 0) {</span>
+<span class="fc" id="L99">					ValvesOutput[1] = 0;</span>
+<span class="fc" id="L100">					PY100_DONE = true;</span>
+				}
+<span class="nc bnc" id="L102" title="All 2 branches missed.">			}else if (ValvesOutput[8] == 1) {</span>
+				 
+<span class="nc" id="L104">						PY100_DONE = true;</span>
+			}
+
+			// discharge valve
+<span class="pc bpc" id="L108" title="3 of 6 branches missed.">			if (okayToload == 1 &amp;&amp; loadingComplete == false &amp;&amp; ValvesOutput[8] == 0) {</span>
+<span class="pc bpc" id="L109" title="2 of 4 branches missed.">				if (PY2500 &lt; 100 &amp;&amp; PY2500_DONE == false) {</span>
+<span class="fc" id="L110">					ValvesOutput[2] = (PY2500 + PYS2500RamUp);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">				} else if (ValvesOutput[8] == 1) {</span>
+<span class="nc" id="L112">					PY2500_DONE = true;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">				} else if (PY2500 &gt;= 100) {</span>
+<span class="nc" id="L114">					ValvesOutput[2] = 100;</span>
+<span class="nc" id="L115">					PY2500_DONE = true;</span>
+				}
+<span class="nc bnc" id="L117" title="All 2 branches missed.">			}else if (ValvesOutput[8] == 1) {</span>
+				 
+<span class="nc" id="L119">				PY2500_DONE = true;</span>
+	       }
+		}
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		if (comStatus == 0) {</span>
+<span class="fc" id="L123">			ValvesOutput[0] = 0;</span>
+<span class="fc" id="L124">			ValvesOutput[1] = 100;</span>
+<span class="fc" id="L125">			ValvesOutput[2] = 0;</span>
+		}
+<span class="fc" id="L127">		return ValvesOutput;</span>
+	}
+
+//Determine if it is okay to unload the machine
+
+	public static int[] comAutoUnLoadPermissives(int AuotStop, int comStatus, boolean startupPeriodDone,
+			int shutdownWord, int autoLoadingDone) {
+<span class="fc" id="L134">		int autoUnloadingPermissive = 0;</span>
+<span class="fc" id="L135">		int[] UnloadPermissive = new int[10];</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		if (AuotStop == 1) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">			if (shutdownWord == 0) {</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">				if (comStatus == 1) {</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">					if (startupPeriodDone == true)</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">						if (autoLoadingDone == 1) {</span>
+<span class="fc" id="L141">							autoUnloadingPermissive = 1;</span>
+						}
+<span class="nc bnc" id="L143" title="All 10 branches missed.">				} else if (AuotStop == 0 || shutdownWord == 1 || comStatus == 0 || startupPeriodDone == false</span>
+						|| autoLoadingDone == 0) {
+<span class="nc" id="L145">					autoUnloadingPermissive = 0;</span>
+				}
+<span class="fc" id="L147">				UnloadPermissive[9] = autoUnloadingPermissive;</span>
+			}
+
+		}
+<span class="fc" id="L151">		return UnloadPermissive;</span>
+	}
+
+/// Unload the machine	
+	public static int[] comAutoUnLoadingRamp(int comStatus, int okayToUnload, int PI500, int PI2500, int PY500,
+			int PYS500RamDwn, int PY2500, int PYS2500RamDwn, int PY100, int PYS100RamDwn) throws Exception {
+		// System.out.println(&quot;autoload setpoint from user interface&quot; + &quot; &quot;
+		// +loadSetPoint+&quot;PSIG&quot;);
+<span class="fc" id="L159">		int[] UnloadValvesOutput = new int[10];</span>
+<span class="fc" id="L160">		UnloadValvesOutput[0] = PY500;</span>
+<span class="fc" id="L161">		UnloadValvesOutput[1] = PY100;</span>
+<span class="fc" id="L162">		UnloadValvesOutput[2] = PY2500;</span>
+		// int SuctionRamRateValid = 0;
+		// int DischargeRamRateValid = 0;
+
+<span class="fc" id="L166">		boolean PY100_DONE = false;</span>
+<span class="fc" id="L167">		boolean PY500_DONE = false;</span>
+<span class="fc" id="L168">		boolean PY2500_DONE = false;</span>
+
+		//
+
+		// Determine the ramp-rate of the suction valve
+
+		// auto load the machine by ramp open the suction valve, ramp close the
+		// recirculation valve, and ramp open the discharge valve.
+<span class="fc bfc" id="L176" title="All 2 branches covered.">		for (int i = 0; i &lt;= 50; i++) {</span>
+<span class="fc" id="L177">			Thread.sleep(00);</span>
+<span class="fc" id="L178">			boolean unloadingComplete = false;</span>
+			// check if loading is done
+<span class="pc bpc" id="L180" title="1 of 6 branches missed.">			if (PY2500_DONE == true &amp;&amp; PY500_DONE == true &amp;&amp; PY100_DONE == true) {</span>
+<span class="fc" id="L181">				unloadingComplete = true;</span>
+<span class="fc" id="L182">				UnloadValvesOutput [7]=1;</span>
+			} else {
+<span class="fc" id="L184">				unloadingComplete = false;</span>
+<span class="fc" id="L185">				UnloadValvesOutput [7]=0;</span>
+			}
+
+<span class="fc bfc" id="L188" title="All 2 branches covered.">			if (okayToUnload == 1) {</span>
+				// suction valve
+<span class="pc bpc" id="L190" title="1 of 4 branches missed.">				if (PY500 &gt;= 1 &amp;&amp; PY500_DONE == false) {</span>
+<span class="fc" id="L191">					UnloadValvesOutput[0] = (PY500 - PYS500RamDwn);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">				} else if (PY500 &lt; 0) {</span>
+<span class="fc" id="L193">					UnloadValvesOutput[0] = 0;</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">				} else if (PY500 == 0) {</span>
+<span class="fc" id="L195">					PY500_DONE = true;</span>
+				}
+			}
+			// recirculation valve
+<span class="fc bfc" id="L199" title="All 4 branches covered.">			if (okayToUnload == 1 &amp;&amp; unloadingComplete == false) {</span>
+<span class="pc bpc" id="L200" title="1 of 4 branches missed.">				if (PY100 &lt; 100 &amp;&amp; PY100_DONE == false) {</span>
+<span class="fc" id="L201">					UnloadValvesOutput[1] = (PY100 + PYS100RamDwn);</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">				} else if (PY100 &gt;= 100) {</span>
+<span class="fc" id="L203">					UnloadValvesOutput[1] = 100;</span>
+<span class="fc" id="L204">					PY100_DONE = true;</span>
+				}
+			}
+
+			// discharge valve
+<span class="fc bfc" id="L209" title="All 4 branches covered.">			if (okayToUnload == 1 &amp;&amp; unloadingComplete == false) {</span>
+<span class="pc bpc" id="L210" title="1 of 4 branches missed.">				if (PY2500 &gt;= 1 &amp;&amp; PY2500_DONE == false) {</span>
+<span class="fc" id="L211">					UnloadValvesOutput[2] = (PY2500 - PYS2500RamDwn);</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">				} else if (PY2500 &lt;= 0) {</span>
+<span class="fc" id="L213">					UnloadValvesOutput[2] = 0;</span>
+<span class="fc" id="L214">					PY2500_DONE = true;</span>
+				}
+			}
+		}
+<span class="fc bfc" id="L218" title="All 2 branches covered.">		if (comStatus == 0) {</span>
+<span class="fc" id="L219">			UnloadValvesOutput[0] = 0;</span>
+<span class="fc" id="L220">			UnloadValvesOutput[1] = 100;</span>
+<span class="fc" id="L221">			UnloadValvesOutput[2] = 0;</span>
+		}
+<span class="fc" id="L223">		return UnloadValvesOutput;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
